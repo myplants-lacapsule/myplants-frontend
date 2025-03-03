@@ -2,27 +2,22 @@ import {
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
-  Text,
-  TouchableOpacity,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import AuthenticationButton from '../components/AuthenticationButton.js';
 
-export default function SignUpScreen({ navigation }) {
-  const handleSubmit = () => {
-    navigation.navigate("TabNavigator");
-  };
+export default function SignUpScreen() {
+	const navigation = useNavigation();
 
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <TouchableOpacity
-        onPress={() => handleSubmit()}
-        style={styles.button}
-        activeOpacity={0.8}
-      >
-        <Text style={styles.textButton}>Sign up</Text>
-      </TouchableOpacity>
+      <AuthenticationButton
+        title="Sign up"
+        onPress={() => navigation.navigate("SignUp")}
+      />
     </KeyboardAvoidingView>
   );
 }
@@ -34,7 +29,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-	button: {
+  button: {
     backgroundColor: "lightblue",
   },
 });

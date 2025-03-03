@@ -1,39 +1,31 @@
 import {
+  Image,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
-  Text,
-  TouchableOpacity,
+	View
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import AuthenticationButton from '../components/AuthenticationButton.js';
 
-export default function WelcomeScreen({ navigation }) {
-  const handleSignIn = () => {
-    navigation.navigate("SignIn");
-  };
-
-  const handleSignUp = () => {
-    navigation.navigate("SignUp");
-  };
+export default function WelcomeScreen() {
+	const navigation = useNavigation();
 
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <TouchableOpacity
-        onPress={() => handleSignIn()}
-        style={styles.button}
-        activeOpacity={0.8}
-      >
-        <Text style={styles.textButton}>Sign in</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => handleSignUp()}
-        style={styles.button}
-        activeOpacity={0.8}
-      >
-        <Text style={styles.textButton}>Sign up</Text>
-      </TouchableOpacity>
+      <Image style={styles.image} source={require("../assets/favicon.png")} />
+      <View style={styles.buttonContainer}>
+        <AuthenticationButton 
+				title='Sign in'
+				onPress={() => navigation.navigate('SignIn')}
+				/>
+				<AuthenticationButton
+				title='Sign up'
+				onPress={() => navigation.navigate('SignUp')}/>
+      </View>
     </KeyboardAvoidingView>
   );
 }
@@ -41,11 +33,12 @@ export default function WelcomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "pink",
+    backgroundColor: "#D3D3D3",
     alignItems: "center",
     justifyContent: "center",
   },
-  button: {
-    backgroundColor: "lightblue",
-  },
+  image: {},
+	buttonContainer: {
+		width: "80%",
+	},
 });
