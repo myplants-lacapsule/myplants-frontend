@@ -1,6 +1,6 @@
-import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import AuthenticationButton from "../components/AuthenticationButton.js";
+import RegisterButton from "../components/RegisterButton.js";
 
 export default function SignUpScreen() {
   const navigation = useNavigation();
@@ -10,10 +10,12 @@ export default function SignUpScreen() {
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <AuthenticationButton
-        title="Sign up"
-        onPress={() => navigation.navigate("TabNavigator")}
-      />
+      <View style={styles.buttonContainer}>
+        <RegisterButton
+          title="Sign up"
+          onPress={() => navigation.navigate("TabNavigator")}
+        />
+      </View>
     </KeyboardAvoidingView>
   );
 }
@@ -21,9 +23,13 @@ export default function SignUpScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "lightyellow",
+    backgroundColor: "#F1F0E9",
     alignItems: "center",
     justifyContent: "center",
+  },
+  buttonContainer: {
+    height: "10px",
+    width: "80%",
   },
   button: {
     backgroundColor: "lightblue",
