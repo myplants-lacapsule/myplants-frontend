@@ -16,8 +16,10 @@ export default function RegisterInput({ placeholder, onChangeText, value, style,
 
 const styles = StyleSheet.create({
   input: {
+		height: 45,
 		width: '96%',
 		margin: '2%',
+		paddingTop: 10,
     borderWidth: 1,
 		borderRadius: 5,
 		borderColor: '#65924B',
