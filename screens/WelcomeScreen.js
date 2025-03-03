@@ -48,7 +48,4 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "lightblue",
   },
-  textButton: {
-    color: "darkblue",
-  },
 });
