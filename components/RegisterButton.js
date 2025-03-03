@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
-export default function AuthenticationButton({ title, onPress, style }) {
+export default function RegisterButton({ title, onPress, style }) {
   return (
       <TouchableOpacity
         onPress={onPress}
@@ -14,7 +14,17 @@ export default function AuthenticationButton({ title, onPress, style }) {
 
 const styles = StyleSheet.create({
 	button: {
-		width: '100%',
+		width: '96%',
+		margin: '2%',
+		paddingTop: 10,
+		alignItems: 'center',
+		borderRadius: 5,
     backgroundColor: "#95AE7D",
   },
+	textButton: {
+		color: '#FBFBFB',
+		height: 35,
+		fontWeight: '600',
+    fontSize: 16,
+	},
 });
