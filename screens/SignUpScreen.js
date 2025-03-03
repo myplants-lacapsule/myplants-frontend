@@ -1,13 +1,9 @@
-import {
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import AuthenticationButton from '../components/AuthenticationButton.js';
+import AuthenticationButton from "../components/AuthenticationButton.js";
 
 export default function SignUpScreen() {
-	const navigation = useNavigation();
+  const navigation = useNavigation();
 
   return (
     <KeyboardAvoidingView
@@ -16,7 +12,7 @@ export default function SignUpScreen() {
     >
       <AuthenticationButton
         title="Sign up"
-        onPress={() => navigation.navigate("SignUp")}
+        onPress={() => navigation.navigate("TabNavigator")}
       />
     </KeyboardAvoidingView>
   );
