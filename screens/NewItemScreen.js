@@ -5,13 +5,21 @@ import { useNavigation } from "@react-navigation/native";
 import { login } from "../reducers/user.js";
 import RegisterButton from "../components/RegisterButton.js";
 import RegisterInput from "../components/RegisterInput.js";
+import ToggleButton from "../components/ToggleButton.js";
+import PlantConditionPicker from "../components/PlantConditionPicker";
 
 export default function NewItemScreen() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  const [signInEmail, setSignInEmail] = useState("");
-  const [signInPassword, setSignInPassword] = useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
+  const [height, setHeight] = useState("");
+  const [isVente, setIsVente] = useState(true);
+  const [isPlant, setIsPlant] = useState(true);
+  const [plantCondition, setPlantCondition] = useState(true);
+
 
   const handleConnection = () => {
     fetch("http://192.168.100.50:3000/users/signin", {
@@ -36,44 +44,52 @@ export default function NewItemScreen() {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View style={styles.registerContainer}>
+        <ToggleButton
+          value={isVente}
+          onValueChange={(newValue) => setIsVente(newValue)}
+          trueLabel="Vente"
+          falseLabel="Don"
+        />
         <RegisterInput
-          placeholder="Title"
+          placeholder="Titre"
           autoCapitalize="none"
           keyboardType="email-address"
-          textContentType="emailAddress"
-          autoComplete="email"
-          value={signInEmail}
-          onChangeText={setSignInEmail}
+          value={title}
+          onChangeText={setTitle}
           returnKeyType="next"
         />
         <RegisterInput
           placeholder="Description"
-          textContentType="password"
-          autoComplete="password"
-          value={signInPassword}
-          onChangeText={setSignInPassword}
-          returnKeyType="done"
+          value={description}
+          onChangeText={setDescription}
+          returnKeyType="next"
         />
+        {isVente && (
+          <RegisterInput
+            placeholder="Prix"
+            value={price}
+            onChangeText={setPrice}
+            returnKeyType="next"
+          />
+        )}
         <RegisterInput
-          placeholder="Price"
-          textContentType="password"
-          autoComplete="password"
-          value={signInPassword}
-          onChangeText={setSignInPassword}
-          returnKeyType="done"
+          placeholder="Hauteur"
+          value={height}
+          onChangeText={setHeight}
+          returnKeyType="next"
         />
-        <RegisterInput
-          placeholder="Height"
-          textContentType="password"
-          autoComplete="password"
-          value={signInPassword}
-          onChangeText={setSignInPassword}
-          returnKeyType="done"
+
+        <ToggleButton
+          value={isPlant}
+          onValueChange={(newValue) => setIsPlant(newValue)}
+          trueLabel="Plante"
+          falseLabel="Accessoires"
         />
-        {/*  <View style={styles.toggleContainer}>
-          <Text style={styles.label}>{isVente ? "Vente" : "Don"}</Text>
-          <Switch onValueChange={toggleSwitch} value={isVente} />
-        </View> */}
+
+        <PlantConditionPicker
+          selectedCondition={plantCondition}
+          onConditionChange={setPlantCondition}
+        />
 
         <RegisterButton
           title="Ajouter mon article "
