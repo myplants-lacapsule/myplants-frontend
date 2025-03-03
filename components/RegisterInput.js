@@ -5,8 +5,8 @@ export default function RegisterInput({ placeholder, onChangeText, value, style,
     <View>
       <TextInput
         placeholder={placeholder}
+				value={value}
         onChangeText={onChangeText}
-        value={value}
         style={[styles.input, style]}
 				secureTextEntry={secureTextEntry}
       />
@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
 		width: '96%',
 		margin: '2%',
 		paddingTop: 10,
+		paddingLeft: 5,
     borderWidth: 1,
 		borderRadius: 5,
 		borderColor: '#65924B',
