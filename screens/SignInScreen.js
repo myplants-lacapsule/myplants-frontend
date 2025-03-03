@@ -25,7 +25,7 @@ export default function SignInScreen() {
           dispatch(login({ email: signInEmail, token: data.token }));
           setSignInEmail("");
           setSignInPassword("");
-					navigation.navigate("TabNavigator");
+          navigation.navigate("TabNavigator");
         }
       });
   };
