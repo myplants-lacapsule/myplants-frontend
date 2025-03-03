@@ -3,8 +3,8 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { login } from "../reducers/user";
-import RegisterButton from "../components/RegisterButton.js";
 import RegisterInput from "../components/RegisterInput.js";
+import RegisterButton from "../components/RegisterButton.js";
 
 export default function SignInScreen() {
   const dispatch = useDispatch();
@@ -44,7 +44,6 @@ export default function SignInScreen() {
           autoComplete="email"
           value={signInEmail}
           onChangeText={setSignInEmail}
-					returnKeyType="next"
         />
         <RegisterInput
           placeholder="Password"
@@ -53,7 +52,6 @@ export default function SignInScreen() {
           autoComplete="password"
           value={signInPassword}
           onChangeText={setSignInPassword}
-					returnKeyType="done"
         />
         <RegisterButton title="Sign in" onPress={handleConnection} />
       </View>

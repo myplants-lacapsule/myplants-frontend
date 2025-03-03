@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#95AE7D",
   },
 	textButton: {
-		color: '#FBFBFB',
+		color: '#F1F0E9',
 		height: 35,
 		fontWeight: '600',
     fontSize: 16,
