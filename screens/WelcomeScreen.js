@@ -1,4 +1,3 @@
-import React from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -8,8 +7,12 @@ import {
 } from "react-native";
 
 export default function WelcomeScreen({ navigation }) {
-  const handleSubmit = () => {
-    navigation.navigate("TabNavigator");
+  const handleSignIn = () => {
+    navigation.navigate("SignIn");
+  };
+
+  const handleSignUp = () => {
+    navigation.navigate("SignUp");
   };
 
   return (
@@ -17,16 +20,15 @@ export default function WelcomeScreen({ navigation }) {
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <Text style={styles.title}>WelcomeScreen</Text>
       <TouchableOpacity
-        onPress={() => handleSubmit()}
+        onPress={() => handleSignIn()}
         style={styles.button}
         activeOpacity={0.8}
       >
         <Text style={styles.textButton}>Sign in</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => handleSubmit()}
+        onPress={() => handleSignUp()}
         style={styles.button}
         activeOpacity={0.8}
       >
@@ -42,9 +44,6 @@ const styles = StyleSheet.create({
     backgroundColor: "pink",
     alignItems: "center",
     justifyContent: "center",
-  },
-  title: {
-    color: "red",
   },
   button: {
     backgroundColor: "lightblue",
