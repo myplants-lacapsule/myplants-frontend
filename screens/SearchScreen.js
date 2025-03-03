@@ -3,7 +3,10 @@ import {
 	Text,
 	View,
 	SafeAreaView,
-	Button
+	Button,
+	TouchableOpacity,
+	Image,
+	ScrollView
 } from "react-native";
 
 import { CameraView, Camera } from 'expo-camera';
@@ -12,6 +15,8 @@ import { useEffect, useState, useRef } from 'react';
 
 import { useIsFocused } from '@react-navigation/native';
 
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+
 export default function SearchScreen() {
 
 	const perenualKey = 'sk-BfUS67c5d3516107b8879';
@@ -19,7 +24,7 @@ export default function SearchScreen() {
 
 	const [showSuggestions, setShowSuggestions] = useState(false);
 	const [showCamera, setShowCamera] = useState(false)
-	const [plantsData, setPlantsData] = useState(null);
+	const [plantsData, setPlantsData] = useState([]);
 
 	const cameraRef = useRef(null);
 	const isFocused = useIsFocused();
@@ -107,9 +112,14 @@ export default function SearchScreen() {
 			if (plantProbability < 0.75 || !plantProbability) {
 				console.log("probabilité trop basse");
 			} else {
-				setPlantsData({ name: 'Ficus', description: 'description de ma plante' });
 				setShowCamera(false)
 				setShowSuggestions(true)
+				return setPlantsData([
+					{ name: 'Monstera', description: 'La Monstera est une plante tropicale connue pour ses grandes feuilles découpées. Elle est appréciée pour sa croissance rapide et son aspect ornemental, idéale pour les intérieurs lumineux.', wateringFrequency: 'Tous les 2 jours', problems: 'Aucun problème', toxicity: false, seasonality: 'Printemps', sunExposure: 'A côté de la fenêtre', photo: 'https://res.cloudinary.com/dxkpvwwnb/image/upload/v1741026373/oc0sho8u3dmwnv0stwnj.jpg' },
+					{ name: 'Ficus', description: "Le ficus est une plante d'intérieur populaire, appréciée pour ses feuilles brillantes et son aspect ornemental. Facile à entretenir, elle préfère une lumière vive et indirecte.", wateringFrequency: 'Tous les 2 jours', problems: 'Aucun problème', toxicity: false, seasonality: 'Printemps', sunExposure: 'A côté de la fenêtre', photo: 'https://res.cloudinary.com/dxkpvwwnb/image/upload/v1741026373/oc0sho8u3dmwnv0stwnj.jpg' },
+					{ name: 'Monstera', description: 'description de ma Monstera', wateringFrequency: 'Tous les 2 jours', problems: 'Aucun problème', toxicity: false, seasonality: 'Printemps', sunExposure: 'A côté de la fenêtre', photo: 'https://res.cloudinary.com/dxkpvwwnb/image/upload/v1741026373/oc0sho8u3dmwnv0stwnj.jpg' },
+				]);
+
 			}
 			// try {
 			// 	const responsePerenual = await fetch(`https://perenual.com/api/v2/species-list?key=${perenualKey}&q=${plantName}`);
@@ -157,22 +167,52 @@ export default function SearchScreen() {
 			// 			console.error("Erreur lors de la récupération des données de la plante :", error);
 			// 		}
 			// 	}
-
 		} catch (error) {
 			console.error("Error taking picture:", error);
 		}
 
 	}
 
+	// construire toutes les cards avec le .map
+	const allDataPlants = plantsData.map((data, i) => {
+		return <View key={i} style={styles.card}>
+			<Image source={{ uri: data.photo }} style={styles.image} onPress={addToBack} />
+			<View style={styles.containText}>
+				<View style={styles.firstrow}>
+					<Text style={styles.title}>{data.name}</Text>
+					<FontAwesome name="check-circle" size={25} color="#2D5334" onPress={addToBack}/>
+				</View>
+				<Text style={styles.description}>{data.description}</Text>
+			</View>
+		</View>
+	})
+
+	const addToBack = () => {
+		console.log("addToBack");
+	}
+
 	return (
 		<SafeAreaView style={styles.container}>
-			<View style={styles.containsearch}>
+			{!showCamera && <View style={styles.containsearch}>
 				<Button title="Search"></Button>
 				<Button title="Photo" onPress={getPermission}></Button>
-			</View>
-			{(hasPermission === true || isFocused) && showCamera && <CameraView style={styles.camera} ref={(ref) => (cameraRef.current = ref)}><Button onPress={takePicture} title="prendre une photo"></Button></CameraView>}
-			{/* {hasPermission === false || isFocused && <Text>Pas de permission</Text>} */}
-			{showSuggestions && <View><Text>{plantsData.name}</Text><Text>{plantsData.description}</Text></View>}
+			</View>}
+
+			{(hasPermission === true || isFocused) && showCamera &&
+				<View>
+					<CameraView style={styles.camera} ref={(ref) => (cameraRef.current = ref)}>
+						<TouchableOpacity style={styles.snapButton} onPress={takePicture}>
+							<View style={styles.cameraContainer}>
+								<FontAwesome name="camera" size={30} color="black" />
+							</View>
+						</TouchableOpacity>
+					</CameraView>
+				</View>
+			}
+
+			{showSuggestions && !showCamera &&
+				<View style={styles.cardContainer}>{allDataPlants}</View>}
+
 		</SafeAreaView>
 	)
 }
@@ -180,9 +220,10 @@ export default function SearchScreen() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		backgroundColor: "#F1F0E9",
 	},
 	containsearch: {
-		height: '20%',
+		height: '15%',
 		display: 'flex',
 		flexDirection: 'row',
 		justifyContent: 'center',
@@ -190,8 +231,64 @@ const styles = StyleSheet.create({
 	},
 	camera: {
 		width: '100%',
-		height: '80%',
+		height: '100%',
 		justifyContent: 'flex-end',
 		alignItems: 'center',
+	},
+	cameraContainer: {
+		height: 100,
+		width: 100,
+		borderRadius: '100%',
+		borderColor: 'red',
+		backgroundColor: '#F8F3D9',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	snapButton: {
+		alignItems: "center",
+		justifyContent: "center",
+		marginBottom: '30',
+	},
+	cardContainer: {
+		flexWrap: 'wrap',
+		justifyContent: 'center',
+		padding: 10,
+		gap: 10,
+	},
+	card: {
+		flexDirection: 'row',
+		width: '100%',
+		height: '150',
+		backgroundColor: '#FBFBFB',
+		alignItems: 'center',
+		justifyContent: 'center',
+		borderRadius: 8,
+		borderColor: '#D0DDD0',
+	},
+	image: {
+		width: '25%',
+		height: '95%',
+		padding: 5,
+		borderRadius: 10,
+	},
+	containText: {
+		width: '70%',
+		height: '100%',
+		justifyContent: 'center',
+		gap: 5,
+		padding: 10,
+	},
+	firstrow:{
+		flexDirection: 'row',
+		justifyContent: 'space-between'
+	},
+	title: {
+		fontWeight: 'bold',
+		color: '#2D5334',
+		fontSize: 20,
+
+	},
+	description: {
+
 	},
 });
