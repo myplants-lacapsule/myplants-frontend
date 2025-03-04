@@ -1,20 +1,31 @@
-import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet, View, Text } from "react-native";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { login } from "../reducers/user";
+import { API_URL } from 'react-native-dotenv';
 import RegisterInput from "../components/RegisterInput.js";
 import RegisterButton from "../components/RegisterButton.js";
 
 export default function SignInScreen() {
   const dispatch = useDispatch();
-	const navigation = useNavigation();
+  const navigation = useNavigation();
 
   const [signInEmail, setSignInEmail] = useState("");
   const [signInPassword, setSignInPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleConnection = () => {
-    fetch(`http://192.168.100.225:3000/users/signin`, {
+    if (!signInEmail) {
+      setError("Adresse email incorrecte");
+      return;
+    }
+    if (!signInPassword) {
+      setError("Mot de passe incorrect");
+      return;
+    }
+
+    fetch(`${API_URL}/users/signin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: signInEmail, password: signInPassword }),
@@ -25,9 +36,12 @@ export default function SignInScreen() {
           dispatch(login({ email: signInEmail, token: data.token }));
           setSignInEmail("");
           setSignInPassword("");
+          setError("");
           navigation.navigate("TabNavigator");
+        } else {
+          setError("Cet utilisateur n'existe pas");
         }
-      });
+      })
   };
 
   return (
@@ -46,14 +60,15 @@ export default function SignInScreen() {
           onChangeText={setSignInEmail}
         />
         <RegisterInput
-          placeholder="Password"
+          placeholder="Mot de passe"
           secureTextEntry={true}
           textContentType="password"
           autoComplete="password"
           value={signInPassword}
           onChangeText={setSignInPassword}
         />
-        <RegisterButton title="Sign in" onPress={handleConnection} />
+        <RegisterButton title="Se connecter" onPress={handleConnection} />
+				{error ? <Text style={styles.errorText}>{error}</Text> : null}
       </View>
     </KeyboardAvoidingView>
   );
@@ -68,5 +83,11 @@ const styles = StyleSheet.create({
   },
   registerContainer: {
     width: "80%",
+  },
+	errorText: {
+		width: '80%',
+		color: "red",
+		marginLeft: 7,
+    marginBottom: 10,
   },
 });
