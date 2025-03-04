@@ -83,7 +83,7 @@ export default function SearchScreen() {
 		});
 
 		try {
-			const response = await fetch(`http://192.168.100.151:3000/plants/upload`, {
+			const response = await fetch(`${API_URL}/plants/upload`, {
 				method: 'POST',
 				body: formData,
 			})

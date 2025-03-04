@@ -94,7 +94,7 @@ export default function NewItemScreen() {
     });
 
     const response = await fetch(
-      "http://192.168.100.225:3000/items/newItem/" + userToken,
+      `${API_URL}/items/newItem/` + userToken,
       {
         method: "POST",
         body: formData,

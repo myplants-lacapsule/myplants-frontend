@@ -17,7 +17,7 @@ export default function HomeScreen() {
   }, []);
 
   const fetchPlants = () => {
-    fetch(`http://192.168.100.50:3000/plants/${userInStore.token}`)
+    fetch(`${API_URL}/plants/${userInStore.token}`)
       .then((response) => response.json())
       .then((data) => {
         if (data && data.data) {

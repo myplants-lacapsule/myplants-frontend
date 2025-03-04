@@ -25,7 +25,7 @@ export default function SignInScreen() {
       return;
     }
 
-    fetch(`http://192.168.100.50:3000/users/signin`, {
+    fetch(`${API_URL}/users/signin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: signInEmail, password: signInPassword }),
