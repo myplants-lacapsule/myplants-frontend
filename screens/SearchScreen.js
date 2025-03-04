@@ -6,7 +6,8 @@ import {
 	Button,
 	TouchableOpacity,
 	Image,
-	ScrollView
+	ScrollView,
+	TextInput
 } from "react-native";
 
 import { CameraView, Camera } from 'expo-camera';
@@ -23,6 +24,8 @@ import AddPlantButton from '../components/AddPlantButton'
 
 import { useNavigation } from "@react-navigation/native";
 
+import { API_URL } from 'react-native-dotenv';
+
 export default function SearchScreen() {
 
 	const perenualKey = 'sk-BfUS67c5d3516107b8879';
@@ -35,7 +38,8 @@ export default function SearchScreen() {
 	const [showSuggestions, setShowSuggestions] = useState(false);
 	const [showCamera, setShowCamera] = useState(false)
 	const [plantsData, setPlantsData] = useState({});
-	console.log(plantsData)
+	// console.log(plantsData)
+	const [inputResearch, setInputResearch] = useState('');
 
 	const cameraRef = useRef(null);
 	const isFocused = useIsFocused();
@@ -47,6 +51,14 @@ export default function SearchScreen() {
 		setHasPermission(status && status?.status === 'granted');
 		setShowCamera(true) // set l'état pour afficher la caméra
 	}
+
+	useEffect(() => {
+		if (!isFocused) {
+			setShowCamera(false)
+			setInputResearch('')
+		}
+	}, [isFocused, inputResearch])
+
 
 	// fonction pour la prise de photo
 	const takePicture = async () => {
@@ -88,15 +100,14 @@ export default function SearchScreen() {
 		}
 	}
 
+
 	const identificationPlantId = async (cloudinaryUrl) => {
 		var myHeaders = new Headers();
 		myHeaders.append("Api-Key", plantidKey);
 		myHeaders.append("Content-Type", "application/json");
 
 		var raw = JSON.stringify({
-			"images": [
-				cloudinaryUrl,
-			],
+			"images": [cloudinaryUrl],
 			"similar_images": true
 		});
 
@@ -115,18 +126,13 @@ export default function SearchScreen() {
 			}
 
 			const data = await response.json();
-
 			const plantProbability = data.result.is_plant.probability
 			const plantName = data.result.classification.suggestions[0].name
-			console.log(plantName)
-			console.log(plantProbability)
 
 			if (plantProbability < 0.75 || !plantProbability) {
-				console.log("probabilité trop basse");
+				alert('Aucune plante trouvée, veuillez recommencer la photo')
 			} else {
-				setShowCamera(false)
-				setShowSuggestions(true)
-				return setPlantsData(
+				setPlantsData(
 					{
 						name: plantName,
 						description: "Le ficus est une plante d'intérieur populaire, appréciée pour ses feuilles brillantes et son aspect ornemental. Facile à entretenir, elle préfère une lumière vive et indirecte.",
@@ -136,12 +142,9 @@ export default function SearchScreen() {
 						seasonality: 'Printemps',
 						sunExposure: "A besoin d'être exposé au soleil",
 						photo: cloudinaryUrl,
-					},
-					// { name: 'Monstera', description: 'La Monstera est une plante tropicale connue pour ses grandes feuilles découpées. Elle est appréciée pour sa croissance rapide et son aspect ornemental, idéale pour les intérieurs lumineux.', wateringFrequency: 'Tous les 2 jours', problems: 'Aucun problème', toxicity: false, seasonality: 'Printemps', sunExposure: 'A côté de la fenêtre', photo: 'https://res.cloudinary.com/dxkpvwwnb/image/upload/v1741026373/oc0sho8u3dmwnv0stwnj.jpg' },
-					// { name: 'Ficus', description: "Le ficus est une plante d'intérieur populaire, appréciée pour ses feuilles brillantes et son aspect ornemental. Facile à entretenir, elle préfère une lumière vive et indirecte.", wateringFrequency: 'Tous les 2 jours', problems: 'Aucun problème', toxicity: false, seasonality: 'Printemps', sunExposure: 'A côté de la fenêtre', photo: 'https://res.cloudinary.com/dxkpvwwnb/image/upload/v1741026373/oc0sho8u3dmwnv0stwnj.jpg' },
-					// { name: 'Monstera', description: 'description de ma Monstera', wateringFrequency: 'Tous les 2 jours', problems: 'Aucun problème', toxicity: false, seasonality: 'Printemps', sunExposure: 'A côté de la fenêtre', photo: 'https://res.cloudinary.com/dxkpvwwnb/image/upload/v1741026373/oc0sho8u3dmwnv0stwnj.jpg' },
-				);
-
+					})
+				setShowCamera(false)
+				setShowSuggestions(true)
 			}
 			// try {
 			// 	const responsePerenual = await fetch(`https://perenual.com/api/v2/species-list?key=${perenualKey}&q=${plantName}`);
@@ -190,19 +193,57 @@ export default function SearchScreen() {
 			// 		}
 			// 	}
 		} catch (error) {
-			console.error("Error taking picture:", error);
+			console.error("Error lors de la prise de la photo", error);
 		}
-
 	}
 
-	// construire les cards avec le .map
-	// const allDataPlants = plantsData.map((data, i) => {
-	// 	return <View>
+	const identificationPlantIdByText = async () => {
 
-	// 	</View>
-	// })
-	const addToBack = async () => {
+		var myHeaders = new Headers();
+		myHeaders.append("Api-Key", plantidKey);
+		myHeaders.append("Content-Type", "application/json");
 
+		var requestOptions = {
+			method: 'GET',
+			headers: myHeaders,
+			redirect: 'follow'
+		};
+
+		try {
+			const response = await fetch(`https://plant.id/api/v3/kb/plants/name_search?q=${inputResearch}`, requestOptions)
+			if (!response.ok) {
+				throw new Error('Network response was not ok');
+			}
+
+			const data = await response.json()
+
+			if (data.entities.length > 0) {
+				const plantName = data.entities[0].entity_name
+				setPlantsData(
+					{
+						name: plantName,
+						description: "Le ficus est une plante d'intérieur populaire, appréciée pour ses feuilles brillantes et son aspect ornemental. Facile à entretenir, elle préfère une lumière vive et indirecte.",
+						wateringFrequency: 'Tous les 2 jours',
+						problems: 'TEST',
+						toxicity: 'Aucune toxicité',
+						seasonality: 'Printemps',
+						sunExposure: "A besoin d'être exposé au soleil",
+						photo: 'https://res.cloudinary.com/dxkpvwwnb/image/upload/v1741097480/gnrpwalmsqpavpdq5u32.jpg',
+					})
+
+				setInputResearch('')
+				await addPlantToBackend(plantsData);
+			} else {
+				alert('Plante non trouvée')
+				setInputResearch('')
+			}
+
+		} catch (error) {
+			console.error('There was a problem with the fetch operation:', error);
+		}
+	}
+
+	const addPlantToBackend = async (plantsData) => {
 		try {
 			const response = await fetch(`${API_URL}/plants/newPlant/${userInStore.token}`, {
 				method: 'POST',
@@ -215,22 +256,24 @@ export default function SearchScreen() {
 					toxicity: plantsData.toxicity,
 					seasonality: plantsData.seasonality,
 					sunExposure: plantsData.sunExposure,
-					photo: cloudinaryUrl,
+					photo: plantsData.photo,
 				}),
 			})
+			console.log("plantsdata dans la fonction back", plantsData)
 			if (!response.ok) {
 				throw new Error('Network response was not ok');
 			}
-
 			const newPlant = await response.json();
+			console.log("newPlant ", newPlant)
 
 			if (newPlant.result) {
 				setShowSuggestions(false);
 				setShowCamera(false)
 				setPlantsData({});
 				navigation.navigate("Accueil");
+			} else{
+				console.log(false)
 			}
-
 		} catch (error) {
 			console.error('There was a problem with the fetch operation:', error);
 		}
@@ -239,8 +282,15 @@ export default function SearchScreen() {
 	return (
 		<SafeAreaView style={styles.container}>
 			{!showCamera && !showSuggestions && <View style={styles.containsearch}>
-				<Button title="Search"></Button>
-				<Button title="Photo" onPress={getPermission}></Button>
+				<View style={styles.containTextSearch}>
+					<TouchableOpacity onPress={identificationPlantIdByText} style={styles.searchicon}>
+						<FontAwesome name="search" size={30} color="#2D5334" />
+					</TouchableOpacity>
+					<TextInput style={styles.textInputResearch} placeholder='Rechercher une plante' onChangeText={(value) => setInputResearch(value)} value={inputResearch} />
+				</View>
+				<TouchableOpacity style={styles.takePhoto} onPress={getPermission}>
+					<FontAwesome name="camera" size={30} color="white" />
+				</TouchableOpacity>
 			</View>}
 
 			{(hasPermission === true || isFocused) && showCamera &&
@@ -256,22 +306,16 @@ export default function SearchScreen() {
 			}
 
 			{showSuggestions && !showCamera &&
-				<View style={styles.cardContainer}><View style={styles.card}>
-					<Image source={{ uri: plantsData.photo }} style={styles.image} />
-					<View style={styles.containText}>
-						<View style={styles.firstrow}>
-							<Text style={styles.title}>{plantsData.name}</Text>
-							{/* {!isPlantAddedToBack ? (<TouchableOpacity onPress={addToBack}>
-						<FontAwesome name="check" size={25} color="#2D5334" />
-					</TouchableOpacity>
-					) : (
-						<FontAwesome name="check-circle" size={25} color="#2D5334" />
-					)} */}
-
+				<View style={styles.cardContainer}>
+					<View style={styles.card}>
+						<Image source={{ uri: plantsData.photo }} style={styles.image} />
+						<View style={styles.containText}>
+							<View style={styles.firstrow}>
+								<Text style={styles.title}>{plantsData.name}</Text>
+							</View>
+							<Text style={styles.description}>{plantsData.description}</Text>
 						</View>
-						<Text style={styles.description}>{plantsData.description}</Text>
 					</View>
-				</View>
 					<View style={styles.badges}>
 						<View style={styles.badgeWatering}>
 							<FontAwesome name="tint" size={25} color="white" /><Text style={styles.textBadges}>{plantsData.wateringFrequency}</Text>
@@ -280,7 +324,7 @@ export default function SearchScreen() {
 							<FontAwesome name="bath" size={25} color="white" /><Text style={styles.textBadges}>{plantsData.toxicity}</Text>
 						</View>
 					</View>
-					<TouchableOpacity style={styles.btn} onPress={addToBack}>
+					<TouchableOpacity style={styles.btn} onPress={() => addPlantToBackend(plantsData)}>
 						<AddPlantButton />
 					</TouchableOpacity>
 				</View>
@@ -299,8 +343,37 @@ const styles = StyleSheet.create({
 		height: '15%',
 		display: 'flex',
 		flexDirection: 'row',
-		justifyContent: 'center',
+		justifyContent: 'space-evenly',
 		alignItems: 'center',
+	},
+	containTextSearch: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	textInputResearch: {
+		backgroundColor: '#FBFBFB',
+		width: '280',
+		height: '60',
+		alignItems: 'center',
+		justifyContent: 'center',
+		borderRadius: 30,
+		borderColor: '#2D5334',
+		borderWidth: 2,
+		paddingLeft: 60,
+	},
+	searchicon: {
+		left: 20,
+		zIndex: 30,
+		position: 'absolute'
+	},
+	takePhoto: {
+		backgroundColor: '#2D5334',
+		width: 90,
+		height: 60,
+		borderRadius: 30,
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 	camera: {
 		width: '100%',
