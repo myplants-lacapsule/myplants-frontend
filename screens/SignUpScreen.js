@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { login } from "../reducers/user";
+import { API_URL } from 'react-native-dotenv';
 import RegisterInput from "../components/RegisterInput.js";
 import RegisterButton from "../components/RegisterButton.js";
 
@@ -44,7 +45,7 @@ export default function SignUpScreen() {
       return;
     }
 
-    fetch("http://192.168.100.50:3000/users/signup", {
+    fetch(`${API_URL}/users/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
