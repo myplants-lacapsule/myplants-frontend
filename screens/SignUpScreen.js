@@ -1,4 +1,10 @@
-import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  View,
+  Text,
+} from "react-native";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
@@ -13,14 +19,37 @@ export default function SignUpScreen() {
   const [signUpUsername, setSignUpUsername] = useState("");
   const [signUpEmail, setSignUpEmail] = useState("");
   const [signUpPassword, setSignUpPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const validateEmail = (email) => {
+    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return pattern.test(String(email).toLowerCase());
+  };
 
   const handleRegister = () => {
+    if (!signUpUsername) {
+      setError("Nom d'utilisateur incorrect");
+      return;
+    }
+    if (!signUpEmail || !validateEmail(signUpEmail)) {
+      setError("Adresse email incorrecte");
+      return;
+    }
+    if (!signUpPassword) {
+      setError("Mot de passe incorrect");
+      return;
+    }
+    if (signUpPassword.length < 8) {
+      setError("Le mot de passe doit contenir au moins 8 caractères");
+      return;
+    }
+
     fetch("http://192.168.100.50:3000/users/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         username: signUpUsername,
-				email: signUpEmail,
+        email: signUpEmail.toLowerCase(),
         password: signUpPassword,
       }),
     })
@@ -29,11 +58,14 @@ export default function SignUpScreen() {
         if (data.result) {
           dispatch(login({ username: signUpUsername, token: data.token }));
           setSignUpUsername("");
-					setSignUpEmail("");
+          setSignUpEmail("");
           setSignUpPassword("");
-					navigation.navigate("TabNavigator");
+          setError("");
+          navigation.navigate("TabNavigator");
+        } else {
+          setError("Une erreur est survenue");
         }
-      });
+      })
   };
 
   return (
@@ -54,7 +86,7 @@ export default function SignUpScreen() {
           textContentType="emailAddress"
           autoComplete="email"
           value={signUpEmail}
-          onChangeText={setSignUpEmail}
+          onChangeText={(text) => setSignUpEmail(text.toLowerCase())}
         />
         <RegisterInput
           placeholder="Mot de passe"
@@ -62,9 +94,10 @@ export default function SignUpScreen() {
           autoComplete="password"
           value={signUpPassword}
           onChangeText={setSignUpPassword}
-					secureTextEntry={true}
+          secureTextEntry={true}
         />
         <RegisterButton title="S'inscrire" onPress={handleRegister} />
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
       </View>
     </KeyboardAvoidingView>
   );
@@ -79,5 +112,11 @@ const styles = StyleSheet.create({
   },
   registerContainer: {
     width: "80%",
+  },
+  errorText: {
+		width: '80%',
+		color: "red",
+		marginLeft: 7,
+    marginBottom: 10,
   },
 });
