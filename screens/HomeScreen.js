@@ -5,7 +5,8 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
-        <Text style={styles.hello}>Bonjour, !</Text>
+        <Text style={styles.hello}>Bonjour,</Text>
+				<Text style={styles.hello}>Pauline !</Text>d
         <View style={styles.iconContainer}>
           <FontAwesome5 style={styles.icon} name="bell" solid={true} />
           <FontAwesome5 style={styles.icon} name="user-circle" solid={true} />
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
   },
   hello: {
     color: "#2D5334",
-		fontSize: 20,
+		fontSize: 30,
 		fontFamily: "Merriweather",
   },
   iconContainer: {
