@@ -25,7 +25,7 @@ export default function SignInScreen() {
       return;
     }
 
-    fetch(`${API_URL}/users/signin`, {
+    fetch(`http://192.168.100.50:3000/users/signin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: signInEmail, password: signInPassword }),
@@ -33,7 +33,7 @@ export default function SignInScreen() {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          dispatch(login({ email: signInEmail, token: data.token }));
+          dispatch(login({ username: data.username, token: data.token }));
           setSignInEmail("");
           setSignInPassword("");
           setError("");
@@ -51,7 +51,7 @@ export default function SignInScreen() {
     >
       <View style={styles.registerContainer}>
         <RegisterInput
-          placeholder="Email"
+          placeholder="Adresse email"
           autoCapitalize="none"
           keyboardType="email-address"
           textContentType="emailAddress"
@@ -84,10 +84,10 @@ const styles = StyleSheet.create({
   registerContainer: {
     width: "80%",
   },
-	errorText: {
-		width: '80%',
-		color: "red",
-		marginLeft: 7,
+  errorText: {
+    width: '80%',
+    color: "red",
+    marginLeft: 7,
     marginBottom: 10,
   },
 });
