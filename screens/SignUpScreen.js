@@ -43,12 +43,12 @@ export default function SignUpScreen() {
     >
       <View style={styles.registerContainer}>
         <RegisterInput
-          placeholder="Username"
+          placeholder="Nom d'utilisateur"
           value={signUpUsername}
           onChangeText={setSignUpUsername}
         />
         <RegisterInput
-          placeholder="Email"
+          placeholder="Adresse email"
           autoCapitalize="none"
           keyboardType="email-address"
           textContentType="emailAddress"
@@ -57,14 +57,14 @@ export default function SignUpScreen() {
           onChangeText={setSignUpEmail}
         />
         <RegisterInput
-          placeholder="Password"
+          placeholder="Mot de passe"
           textContentType="password"
           autoComplete="password"
           value={signUpPassword}
           onChangeText={setSignUpPassword}
 					secureTextEntry={true}
         />
-        <RegisterButton title="Sign up" onPress={handleRegister} />
+        <RegisterButton title="S'inscrire" onPress={handleRegister} />
       </View>
     </KeyboardAvoidingView>
   );

@@ -8,7 +8,7 @@ import RegisterButton from "../components/RegisterButton.js";
 
 export default function SignInScreen() {
   const dispatch = useDispatch();
-	const navigation = useNavigation();
+  const navigation = useNavigation();
 
   const [signInEmail, setSignInEmail] = useState("");
   const [signInPassword, setSignInPassword] = useState("");
@@ -25,7 +25,7 @@ export default function SignInScreen() {
           dispatch(login({ email: signInEmail, token: data.token }));
           setSignInEmail("");
           setSignInPassword("");
-					navigation.navigate("TabNavigator");
+          navigation.navigate("TabNavigator");
         }
       });
   };
@@ -46,14 +46,14 @@ export default function SignInScreen() {
           onChangeText={setSignInEmail}
         />
         <RegisterInput
-          placeholder="Password"
+          placeholder="Mot de passe"
           secureTextEntry={true}
           textContentType="password"
           autoComplete="password"
           value={signInPassword}
           onChangeText={setSignInPassword}
         />
-        <RegisterButton title="Sign in" onPress={handleConnection} />
+        <RegisterButton title="Se connecter" onPress={handleConnection} />
       </View>
     </KeyboardAvoidingView>
   );
