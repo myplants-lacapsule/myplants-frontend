@@ -3,7 +3,7 @@ import {
 	StyleSheet,
 	Text,
 	View,
-	TouchableOpacity
+	TouchableOpacity,
 } from "react-native";
 import MapView from "react-native-maps";
 import { useNavigation } from "@react-navigation/native";
@@ -30,21 +30,24 @@ export default function MapScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "purple",
     alignItems: "center",
     justifyContent: "center",
   },
   button: {
     position: "absolute",
     bottom: 30,
-    right: 20,
+    right: 30,
     backgroundColor: "#2D5334",
-    padding: 15,
-    borderRadius: 50,
-    elevation: 5,
+    width: 70, 
+    height: 70, 
+    borderRadius: 35, 
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 10,
   },
   buttonText: {
     color: "#fff",
     fontWeight: "bold",
+    fontSize: 30,
   },
 });

@@ -14,7 +14,7 @@ export default function SignInScreen() {
   const [signInPassword, setSignInPassword] = useState("");
 
   const handleConnection = () => {
-    fetch(`http://192.168.100.151:3000/users/signin`, {
+    fetch(`http://192.168.100.225:3000/users/signin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: signInEmail, password: signInPassword }),
