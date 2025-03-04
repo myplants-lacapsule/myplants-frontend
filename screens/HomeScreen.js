@@ -1,10 +1,35 @@
 import { StyleSheet, Text, View } from "react-native";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { API_URL } from "react-native-dotenv";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import CustomButton from "../components/CustomButton";
 
 export default function HomeScreen() {
-	const userInStore = useSelector((state) => state.user.value);
+  const userInStore = useSelector((state) => state.user.value);
+  const [plantsData, setPlantsData] = useState([]);
+
+	useEffect(() => {
+    fetchPlants();
+  }, []);
+
+  const fetchPlants = () => {
+    fetch(`${API_URL}/plants/${userInStore.token}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data) {
+          setPlantsData(data.data);
+        }
+      });
+  };
+
+  const userPlants = plantsData.map((data, i) => {
+    return (
+      <View key={i} {...data}>
+        <Text>{data.name}</Text>
+      </View>
+    );
+  });
 
   return (
     <View style={styles.container}>
@@ -31,6 +56,7 @@ export default function HomeScreen() {
         iconName="plus-circle"
         text="Ajouter une plante"
       />
+      {userPlants}
     </View>
   );
 }
@@ -74,5 +100,13 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 25,
     fontFamily: "OpenSans-Regular",
+  },
+  plantItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  plantName: {
+    fontSize: 18,
   },
 });

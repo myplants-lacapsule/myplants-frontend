@@ -114,6 +114,6 @@ export default function App() {
 const styles = StyleSheet.create({
   tabBarLabel: {
     fontFamily: 'OpenSans-Regular',
-    fontSize: 20,
+    fontSize: 12,
   },
 });
