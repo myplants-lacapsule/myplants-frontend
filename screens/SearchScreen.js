@@ -17,10 +17,16 @@ import { useIsFocused } from '@react-navigation/native';
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
+import AddPlantButton from '../components/AddPlantButton'
+
+import { useNavigation } from "@react-navigation/native";
+
 export default function SearchScreen() {
 
 	const perenualKey = 'sk-BfUS67c5d3516107b8879';
 	const plantidKey = 'yt5qbNhx3aSWTU3MI8ncS7YOhmOaNXBuDBjX8P6V06kEAfgFIa';
+
+	const navigation = useNavigation();
 
 	const [showSuggestions, setShowSuggestions] = useState(false);
 	const [showCamera, setShowCamera] = useState(false)
@@ -108,6 +114,7 @@ export default function SearchScreen() {
 			const plantProbability = data.result.is_plant.probability
 			const plantName = data.result.classification.suggestions[0].name
 			console.log(plantName)
+			console.log(plantProbability)
 
 			if (plantProbability < 0.75 || !plantProbability) {
 				console.log("probabilité trop basse");
@@ -115,9 +122,19 @@ export default function SearchScreen() {
 				setShowCamera(false)
 				setShowSuggestions(true)
 				return setPlantsData([
-					{ name: 'Monstera', description: 'La Monstera est une plante tropicale connue pour ses grandes feuilles découpées. Elle est appréciée pour sa croissance rapide et son aspect ornemental, idéale pour les intérieurs lumineux.', wateringFrequency: 'Tous les 2 jours', problems: 'Aucun problème', toxicity: false, seasonality: 'Printemps', sunExposure: 'A côté de la fenêtre', photo: 'https://res.cloudinary.com/dxkpvwwnb/image/upload/v1741026373/oc0sho8u3dmwnv0stwnj.jpg' },
-					{ name: 'Ficus', description: "Le ficus est une plante d'intérieur populaire, appréciée pour ses feuilles brillantes et son aspect ornemental. Facile à entretenir, elle préfère une lumière vive et indirecte.", wateringFrequency: 'Tous les 2 jours', problems: 'Aucun problème', toxicity: false, seasonality: 'Printemps', sunExposure: 'A côté de la fenêtre', photo: 'https://res.cloudinary.com/dxkpvwwnb/image/upload/v1741026373/oc0sho8u3dmwnv0stwnj.jpg' },
-					{ name: 'Monstera', description: 'description de ma Monstera', wateringFrequency: 'Tous les 2 jours', problems: 'Aucun problème', toxicity: false, seasonality: 'Printemps', sunExposure: 'A côté de la fenêtre', photo: 'https://res.cloudinary.com/dxkpvwwnb/image/upload/v1741026373/oc0sho8u3dmwnv0stwnj.jpg' },
+					{
+						name: plantName,
+						description: "Le ficus est une plante d'intérieur populaire, appréciée pour ses feuilles brillantes et son aspect ornemental. Facile à entretenir, elle préfère une lumière vive et indirecte.",
+						wateringFrequency: 'Tous les 2 jours',
+						problems: 'Aucun problème',
+						toxicity: 'Aucune toxicité',
+						seasonality: 'Printemps',
+						sunExposure: "A besoin d'être exposé au soleil",
+						photo: cloudinaryUrl,
+					},
+					// { name: 'Monstera', description: 'La Monstera est une plante tropicale connue pour ses grandes feuilles découpées. Elle est appréciée pour sa croissance rapide et son aspect ornemental, idéale pour les intérieurs lumineux.', wateringFrequency: 'Tous les 2 jours', problems: 'Aucun problème', toxicity: false, seasonality: 'Printemps', sunExposure: 'A côté de la fenêtre', photo: 'https://res.cloudinary.com/dxkpvwwnb/image/upload/v1741026373/oc0sho8u3dmwnv0stwnj.jpg' },
+					// { name: 'Ficus', description: "Le ficus est une plante d'intérieur populaire, appréciée pour ses feuilles brillantes et son aspect ornemental. Facile à entretenir, elle préfère une lumière vive et indirecte.", wateringFrequency: 'Tous les 2 jours', problems: 'Aucun problème', toxicity: false, seasonality: 'Printemps', sunExposure: 'A côté de la fenêtre', photo: 'https://res.cloudinary.com/dxkpvwwnb/image/upload/v1741026373/oc0sho8u3dmwnv0stwnj.jpg' },
+					// { name: 'Monstera', description: 'description de ma Monstera', wateringFrequency: 'Tous les 2 jours', problems: 'Aucun problème', toxicity: false, seasonality: 'Printemps', sunExposure: 'A côté de la fenêtre', photo: 'https://res.cloudinary.com/dxkpvwwnb/image/upload/v1741026373/oc0sho8u3dmwnv0stwnj.jpg' },
 				]);
 
 			}
@@ -175,25 +192,45 @@ export default function SearchScreen() {
 
 	// construire toutes les cards avec le .map
 	const allDataPlants = plantsData.map((data, i) => {
-		return <View key={i} style={styles.card}>
-			<Image source={{ uri: data.photo }} style={styles.image} onPress={addToBack} />
-			<View style={styles.containText}>
-				<View style={styles.firstrow}>
-					<Text style={styles.title}>{data.name}</Text>
-					<FontAwesome name="check-circle" size={25} color="#2D5334" onPress={addToBack}/>
+		return <View>
+			<View key={i} style={styles.card}>
+				<Image source={{ uri: data.photo }} style={styles.image} />
+				<View style={styles.containText}>
+					<View style={styles.firstrow}>
+						<Text style={styles.title}>{data.name}</Text>
+						{/* {!isPlantAddedToBack ? (<TouchableOpacity onPress={addToBack}>
+						<FontAwesome name="check" size={25} color="#2D5334" />
+					</TouchableOpacity>
+					) : (
+						<FontAwesome name="check-circle" size={25} color="#2D5334" />
+					)} */}
+
+					</View>
+					<Text style={styles.description}>{data.description}</Text>
 				</View>
-				<Text style={styles.description}>{data.description}</Text>
 			</View>
+			<View style={styles.badges}>
+				<View style={styles.badgeWatering}>
+					<FontAwesome name="tint" size={25} color="white" /><Text style={styles.textBadges}>{data.wateringFrequency}</Text>
+				</View>
+				<View style={styles.badgeToxicity}>
+					<FontAwesome name="bath" size={25} color="white" /><Text style={styles.textBadges}>{data.toxicity}</Text>
+				</View>
+			</View>
+			<TouchableOpacity style={styles.btn} onPress={addToBack}>
+				<AddPlantButton />
+			</TouchableOpacity>
 		</View>
 	})
-
 	const addToBack = () => {
-		console.log("addToBack");
+		navigation.navigate("HomeScreen");
+		setIsPlantAddedToBack(true)
+		console.log(true)
 	}
 
 	return (
 		<SafeAreaView style={styles.container}>
-			{!showCamera && <View style={styles.containsearch}>
+			{!showCamera && !showSuggestions && <View style={styles.containsearch}>
 				<Button title="Search"></Button>
 				<Button title="Photo" onPress={getPermission}></Button>
 			</View>}
@@ -258,7 +295,7 @@ const styles = StyleSheet.create({
 	card: {
 		flexDirection: 'row',
 		width: '100%',
-		height: '150',
+		height: 'auto',
 		backgroundColor: '#FBFBFB',
 		alignItems: 'center',
 		justifyContent: 'center',
@@ -266,19 +303,19 @@ const styles = StyleSheet.create({
 		borderColor: '#D0DDD0',
 	},
 	image: {
-		width: '25%',
+		width: '40%',
 		height: '95%',
 		padding: 5,
 		borderRadius: 10,
 	},
 	containText: {
-		width: '70%',
+		width: '50%',
 		height: '100%',
 		justifyContent: 'center',
 		gap: 5,
 		padding: 10,
 	},
-	firstrow:{
+	firstrow: {
 		flexDirection: 'row',
 		justifyContent: 'space-between'
 	},
@@ -290,5 +327,35 @@ const styles = StyleSheet.create({
 	},
 	description: {
 
+	},
+	badges: {
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: "space-between",
+		padding: 20,
+	},
+	badgeWatering: {
+		backgroundColor: '#3674B5',
+		borderRadius: 80,
+		padding: 8,
+		width: '45%',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	badgeToxicity: {
+		backgroundColor: '#BC4749',
+		borderRadius: 80,
+		padding: 8,
+		width: '45%',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	textBadges: {
+		color: 'white'
+	},
+	btn:{
+		alignItems: 'center',
+		justifyContent: 'center'
 	},
 });
