@@ -33,7 +33,7 @@ export default function SignInScreen() {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          dispatch(login({ email: signInEmail, token: data.token }));
+          dispatch(login({ username: data.username, token: data.token }));
           setSignInEmail("");
           setSignInPassword("");
           setError("");
