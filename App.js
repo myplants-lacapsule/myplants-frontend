@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -30,7 +31,7 @@ const TabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ color, size }) => {
+        tabBarIcon: ({ color, size, focused }) => {
           let iconName = "";
           let IconComponent = FontAwesome;
 
@@ -43,11 +44,15 @@ const TabNavigator = () => {
             iconName = "map";
           }
 
-          return <IconComponent name={iconName} size={size} color={color} />;
+          return <IconComponent name={iconName} size={size} color={color} style={{ opacity: focused ? 1 : 0.5 }} />;
         },
-
+				tabBarLabel: ({ focused, color }) => (
+          <Text style={{ color, opacity: focused ? 1 : 0.5 }}>
+            {route.name}
+          </Text>
+        ),
         tabBarActiveTintColor: "#F1F0E9",
-        tabBarInactiveTintColor: 'black',
+        tabBarInactiveTintColor: '#F1F0E9',
         tabBarStyle: {
           backgroundColor: "#2D5334",
           borderTopLeftRadius: 10,
