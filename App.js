@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Text } from "react-native";
+import { Text, StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import * as Font from 'expo-font';
-import AppLoading from 'expo-app-loading';
+import * as SplashScreen from 'expo-splash-screen';
 
 import WelcomeScreen from "./screens/WelcomeScreen";
 import SignInScreen from "./screens/SignInScreen";
@@ -46,8 +46,8 @@ const TabNavigator = () => {
 
           return <IconComponent name={iconName} size={size} color={color} style={{ opacity: focused ? 1 : 0.5 }} />;
         },
-				tabBarLabel: ({ focused, color }) => (
-          <Text style={{ color, opacity: focused ? 1 : 0.5 }}>
+        tabBarLabel: ({ focused, color }) => (
+          <Text style={[styles.tabBarLabel, { color, opacity: focused ? 1 : 0.5 }]}>
             {route.name}
           </Text>
         ),
@@ -71,20 +71,29 @@ const TabNavigator = () => {
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
-  const loadFonts = async () => {
-    await Font.loadAsync({
-      'Merriweather': require('./assets/fonts/Merriweather/Merriweather-Regular.ttf'),
-      'Merriweather-Bold': require('./assets/fonts/Merriweather/Merriweather-Bold.ttf'),
-    });
-    setFontsLoaded(true);
-  };
-
   useEffect(() => {
-    loadFonts();
+    const loadFontsAndHideSplashScreen = async () => {
+      try {
+        await SplashScreen.preventAutoHideAsync();
+        await Font.loadAsync({
+          'Merriweather': require('./assets/fonts/Merriweather/Merriweather-Regular.ttf'),
+          'Merriweather-Bold': require('./assets/fonts/Merriweather/Merriweather-Bold.ttf'),
+          'OpenSans-Regular': require('./assets/fonts/Open_Sans/OpenSans-Regular.ttf'),
+          'OpenSans-Bold': require('./assets/fonts/Open_Sans/OpenSans-Bold.ttf'),
+        });
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setFontsLoaded(true);
+        await SplashScreen.hideAsync();
+      }
+    };
+
+    loadFontsAndHideSplashScreen();
   }, []);
 
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return null;
   }
 
   return (
@@ -101,3 +110,10 @@ export default function App() {
     </Provider>
   );
 }
+
+const styles = StyleSheet.create({
+  tabBarLabel: {
+    fontFamily: 'OpenSans-Regular',
+    fontSize: 12,
+  },
+});
