@@ -1,35 +1,45 @@
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 import { API_URL } from "react-native-dotenv";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import CustomButton from "../components/CustomButton";
+import Card from "../components/Card";
 
 export default function HomeScreen() {
+  const navigation = useNavigation();
   const userInStore = useSelector((state) => state.user.value);
   const [plantsData, setPlantsData] = useState([]);
 
-	useEffect(() => {
+  useEffect(() => {
     fetchPlants();
   }, []);
 
   const fetchPlants = () => {
-    fetch(`${API_URL}/plants/${userInStore.token}`)
+    fetch(`http://192.168.100.50:3000/plants/${userInStore.token}`)
       .then((response) => response.json())
       .then((data) => {
-        if (data) {
+        if (data && data.data) {
           setPlantsData(data.data);
+        } else {
+          setPlantsData([]);
         }
+      })
+      .catch((error) => {
+        console.error("Error fetching plants:", error);
+        setPlantsData([]);
       });
   };
 
-  const userPlants = plantsData.map((data, i) => {
-    return (
-      <View key={i} {...data}>
-        <Text>{data.name}</Text>
-      </View>
+  const userPlants =
+    plantsData.length > 0 ? (
+      plantsData.map((data, i) => <Card key={i} {...data} />)
+    ) : (
+      <Text style={styles.noCardMessage}>
+        Vous n'avez pas encore de plantes.
+      </Text>
     );
-  });
 
   return (
     <View style={styles.container}>
@@ -50,13 +60,16 @@ export default function HomeScreen() {
           />
         </View>
       </View>
-      <Text style={styles.title}>Mes plantes</Text>
-      <CustomButton
-        style={styles.text}
-        iconName="plus-circle"
-        text="Ajouter une plante"
-      />
-      {userPlants}
+      <Text style={styles.myplants}>Mes plantes</Text>
+      <View style={styles.buttonContainer}>
+        <CustomButton
+          iconName="plus-circle"
+          text="Ajouter une plante"
+          onPress={() => navigation.navigate("Ajouter une plante")}
+          style={styles.buttonText}
+        />
+      </View>
+      <ScrollView style={styles.cardContainer}>{userPlants}</ScrollView>
     </View>
   );
 }
@@ -71,7 +84,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
-    padding: 20,
+    padding: 15,
     marginTop: "10%",
   },
   hello: {
@@ -84,29 +97,38 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    paddingRight: 5,
     width: 80,
     height: 45,
   },
   icon: {
     color: "#2D5334",
   },
-  title: {
+  myplants: {
     color: "#2D5334",
     fontSize: 30,
-    marginTop: 30,
+    marginTop: 5,
     paddingLeft: 15,
     fontFamily: "Merriweather-Bold",
   },
-  text: {
+  buttonContainer: {
+    marginVertical: 15,
+  },
+  buttonText: {
     fontSize: 25,
     fontFamily: "OpenSans-Regular",
   },
-  plantItem: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-  },
-  plantName: {
-    fontSize: 18,
+	noCardMessage: {
+		color: "#2D5334",
+		fontSize: 14,
+		fontFamily: "Merriweather",
+		alignSelf: "center",
+		marginTop: "50%",
+	},
+  cardContainer: {
+    display: "flex",
+    flexDirection: "column",
+    width: "97%",
+    alignSelf: "center",
   },
 });

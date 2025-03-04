@@ -19,9 +19,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#2D5334",
-    paddingVertical: 12,
+    paddingVertical: 10,
     borderRadius: 25,
-    marginBottom: 30,
+    marginVertical: 5,
+		width: '50%',
+		alignSelf: 'center',
   },
   iconContainer: {
     marginRight: 10,

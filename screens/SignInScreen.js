@@ -25,7 +25,7 @@ export default function SignInScreen() {
       return;
     }
 
-    fetch(`${API_URL}/users/signin`, {
+    fetch(`http://192.168.100.50:3000/users/signin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: signInEmail, password: signInPassword }),
@@ -51,7 +51,7 @@ export default function SignInScreen() {
     >
       <View style={styles.registerContainer}>
         <RegisterInput
-          placeholder="Email"
+          placeholder="Adresse email"
           autoCapitalize="none"
           keyboardType="email-address"
           textContentType="emailAddress"
