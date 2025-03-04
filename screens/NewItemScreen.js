@@ -6,10 +6,11 @@ import { login } from "../reducers/user.js";
 import RegisterButton from "../components/RegisterButton.js";
 import RegisterInput from "../components/RegisterInput.js";
 import ToggleButton from "../components/ToggleButton.js";
-import PlantConditionPicker from "../components/PlantConditionPicker";
 import CustomButton from "../components/CustomButton.js";
 import * as ImagePicker from "expo-image-picker";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 
 export default function NewItemScreen() {
@@ -22,10 +23,26 @@ export default function NewItemScreen() {
   const [height, setHeight] = useState("");
   const [isVente, setIsVente] = useState(true);
   const [isPlant, setIsPlant] = useState(true);
-  const [plantCondition, setPlantCondition] = useState(true);
-
+  const [plantCondition, setPlantCondition] = useState("");
   const [imageUri, setImageUri] = useState(null);
 
+  const user = useSelector((state) => state.user.value);
+  const userToken = user.token;
+
+  console.log("title:", title);
+  console.log("description:", description);
+  console.log("price:", price);
+  console.log("height:", height);
+  console.log("isVente:", isVente);
+  console.log("isPlant:", isPlant);
+  console.log("plantCondition:", plantCondition);
+  console.log("imageUri:", imageUri);
+
+  
+
+  useEffect(() => {
+    console.log("imageUri updated:", imageUri);
+  }, [imageUri]);
 
   // Fonction pour prendre une photo avec la caméra
   const takePhoto = async () => {
@@ -38,13 +55,61 @@ export default function NewItemScreen() {
     }
     const result = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
-      quality: 1,
+      quality: 0.3,
     });
-    console.log(result);
+    console.log("Result from ImagePicker:", result);
     if (!result.canceled && result.assets && result.assets.length > 0) {
       setImageUri(result.assets[0].uri);
     }
   };
+
+  // Fonction pour envoyer les données du formulaire
+  const handleSubmit = async () => {
+ 
+
+    // Vérification des champs obligatoires
+    if (!title || !description || (isVente && !price) || !height || !imageUri) {
+      Alert.alert(
+        "Erreur",
+        "Veuillez remplir tous les champs et prendre une photo."
+      );
+      return;
+    }
+    // Création de l'objet FormData
+    
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("price", price);
+    formData.append("height", height);
+    formData.append("isVente", isVente);
+    formData.append("isPlant", isPlant);
+    formData.append("plantCondition", plantCondition);
+
+    //Ajout de la photo au FormData
+    formData.append("photoFromFront", {
+    uri: imageUri,
+    name: "photo.jpg",
+    type: "image/jpeg", 
+    });
+
+    const response = await fetch(
+      "http://192.168.100.225:3000/items/newItem/" + userToken,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+    const result = await response.json();
+    console.log("result", result);
+
+    if (result.result) {
+      Alert.alert("Succès", "Votre article a été ajouté !");
+      // Optionnel : réinitialiser le formulaire ou naviguer vers un autre écran
+    } else {
+      Alert.alert("Erreur", result.error);
+    }
+  }
 
   return (
     <SafeAreaView style={styles.safeContainer}>
@@ -104,11 +169,16 @@ export default function NewItemScreen() {
               trueLabel="Plante"
               falseLabel="Accessoires"
             />
-            <PlantConditionPicker
-              selectedCondition={plantCondition}
-              onConditionChange={setPlantCondition}
+            <RegisterInput
+              placeholder="Etat"
+              value={plantCondition}
+              onChangeText={setPlantCondition}
+              returnKeyType="next"
             />
-            <RegisterButton title="Ajouter mon article " />
+            <RegisterButton
+              title="Ajouter mon article "
+              onPress={handleSubmit}
+            />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
