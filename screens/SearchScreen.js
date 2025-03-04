@@ -13,6 +13,8 @@ import { CameraView, Camera } from 'expo-camera';
 
 import { useEffect, useState, useRef } from 'react';
 
+import { useSelector } from "react-redux";
+
 import { useIsFocused } from '@react-navigation/native';
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -24,13 +26,16 @@ import { useNavigation } from "@react-navigation/native";
 export default function SearchScreen() {
 
 	const perenualKey = 'sk-BfUS67c5d3516107b8879';
-	const plantidKey = 'yt5qbNhx3aSWTU3MI8ncS7YOhmOaNXBuDBjX8P6V06kEAfgFIa';
+	const plantidKey = 'pvThvN3lWpXcKxgeg4LL98pKkQMOQ6vTyGFj2ReUkYDrpHLVoN';
+
+	const userInStore = useSelector((state) => state.user.value)
 
 	const navigation = useNavigation();
 
 	const [showSuggestions, setShowSuggestions] = useState(false);
 	const [showCamera, setShowCamera] = useState(false)
-	const [plantsData, setPlantsData] = useState([]);
+	const [plantsData, setPlantsData] = useState({});
+	console.log(plantsData)
 
 	const cameraRef = useRef(null);
 	const isFocused = useIsFocused();
@@ -66,7 +71,7 @@ export default function SearchScreen() {
 		});
 
 		try {
-			const response = await fetch('http://192.168.100.151:3000/plants/upload', {
+			const response = await fetch(`http://192.168.100.151:3000/plants/upload`, {
 				method: 'POST',
 				body: formData,
 			})
@@ -121,7 +126,7 @@ export default function SearchScreen() {
 			} else {
 				setShowCamera(false)
 				setShowSuggestions(true)
-				return setPlantsData([
+				return setPlantsData(
 					{
 						name: plantName,
 						description: "Le ficus est une plante d'intérieur populaire, appréciée pour ses feuilles brillantes et son aspect ornemental. Facile à entretenir, elle préfère une lumière vive et indirecte.",
@@ -135,7 +140,7 @@ export default function SearchScreen() {
 					// { name: 'Monstera', description: 'La Monstera est une plante tropicale connue pour ses grandes feuilles découpées. Elle est appréciée pour sa croissance rapide et son aspect ornemental, idéale pour les intérieurs lumineux.', wateringFrequency: 'Tous les 2 jours', problems: 'Aucun problème', toxicity: false, seasonality: 'Printemps', sunExposure: 'A côté de la fenêtre', photo: 'https://res.cloudinary.com/dxkpvwwnb/image/upload/v1741026373/oc0sho8u3dmwnv0stwnj.jpg' },
 					// { name: 'Ficus', description: "Le ficus est une plante d'intérieur populaire, appréciée pour ses feuilles brillantes et son aspect ornemental. Facile à entretenir, elle préfère une lumière vive et indirecte.", wateringFrequency: 'Tous les 2 jours', problems: 'Aucun problème', toxicity: false, seasonality: 'Printemps', sunExposure: 'A côté de la fenêtre', photo: 'https://res.cloudinary.com/dxkpvwwnb/image/upload/v1741026373/oc0sho8u3dmwnv0stwnj.jpg' },
 					// { name: 'Monstera', description: 'description de ma Monstera', wateringFrequency: 'Tous les 2 jours', problems: 'Aucun problème', toxicity: false, seasonality: 'Printemps', sunExposure: 'A côté de la fenêtre', photo: 'https://res.cloudinary.com/dxkpvwwnb/image/upload/v1741026373/oc0sho8u3dmwnv0stwnj.jpg' },
-				]);
+				);
 
 			}
 			// try {
@@ -190,42 +195,45 @@ export default function SearchScreen() {
 
 	}
 
-	// construire toutes les cards avec le .map
-	const allDataPlants = plantsData.map((data, i) => {
-		return <View>
-			<View key={i} style={styles.card}>
-				<Image source={{ uri: data.photo }} style={styles.image} />
-				<View style={styles.containText}>
-					<View style={styles.firstrow}>
-						<Text style={styles.title}>{data.name}</Text>
-						{/* {!isPlantAddedToBack ? (<TouchableOpacity onPress={addToBack}>
-						<FontAwesome name="check" size={25} color="#2D5334" />
-					</TouchableOpacity>
-					) : (
-						<FontAwesome name="check-circle" size={25} color="#2D5334" />
-					)} */}
+	// construire les cards avec le .map
+	// const allDataPlants = plantsData.map((data, i) => {
+	// 	return <View>
 
-					</View>
-					<Text style={styles.description}>{data.description}</Text>
-				</View>
-			</View>
-			<View style={styles.badges}>
-				<View style={styles.badgeWatering}>
-					<FontAwesome name="tint" size={25} color="white" /><Text style={styles.textBadges}>{data.wateringFrequency}</Text>
-				</View>
-				<View style={styles.badgeToxicity}>
-					<FontAwesome name="bath" size={25} color="white" /><Text style={styles.textBadges}>{data.toxicity}</Text>
-				</View>
-			</View>
-			<TouchableOpacity style={styles.btn} onPress={addToBack}>
-				<AddPlantButton />
-			</TouchableOpacity>
-		</View>
-	})
-	const addToBack = () => {
-		navigation.navigate("HomeScreen");
-		setIsPlantAddedToBack(true)
-		console.log(true)
+	// 	</View>
+	// })
+	const addToBack = async () => {
+
+		try {
+			const response = await fetch(`${API_URL}/plants/newPlant/${userInStore.token}`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					name: plantsData.name,
+					description: plantsData.description,
+					wateringFrequency: plantsData.wateringFrequency,
+					problems: plantsData.problems,
+					toxicity: plantsData.toxicity,
+					seasonality: plantsData.seasonality,
+					sunExposure: plantsData.sunExposure,
+					photo: cloudinaryUrl,
+				}),
+			})
+			if (!response.ok) {
+				throw new Error('Network response was not ok');
+			}
+
+			const newPlant = await response.json();
+
+			if (newPlant.result) {
+				setShowSuggestions(false);
+				setShowCamera(false)
+				setPlantsData({});
+				navigation.navigate("Accueil");
+			}
+
+		} catch (error) {
+			console.error('There was a problem with the fetch operation:', error);
+		}
 	}
 
 	return (
@@ -248,7 +256,35 @@ export default function SearchScreen() {
 			}
 
 			{showSuggestions && !showCamera &&
-				<View style={styles.cardContainer}>{allDataPlants}</View>}
+				<View style={styles.cardContainer}><View style={styles.card}>
+					<Image source={{ uri: plantsData.photo }} style={styles.image} />
+					<View style={styles.containText}>
+						<View style={styles.firstrow}>
+							<Text style={styles.title}>{plantsData.name}</Text>
+							{/* {!isPlantAddedToBack ? (<TouchableOpacity onPress={addToBack}>
+						<FontAwesome name="check" size={25} color="#2D5334" />
+					</TouchableOpacity>
+					) : (
+						<FontAwesome name="check-circle" size={25} color="#2D5334" />
+					)} */}
+
+						</View>
+						<Text style={styles.description}>{plantsData.description}</Text>
+					</View>
+				</View>
+					<View style={styles.badges}>
+						<View style={styles.badgeWatering}>
+							<FontAwesome name="tint" size={25} color="white" /><Text style={styles.textBadges}>{plantsData.wateringFrequency}</Text>
+						</View>
+						<View style={styles.badgeToxicity}>
+							<FontAwesome name="bath" size={25} color="white" /><Text style={styles.textBadges}>{plantsData.toxicity}</Text>
+						</View>
+					</View>
+					<TouchableOpacity style={styles.btn} onPress={addToBack}>
+						<AddPlantButton />
+					</TouchableOpacity>
+				</View>
+			}
 
 		</SafeAreaView>
 	)
@@ -354,7 +390,7 @@ const styles = StyleSheet.create({
 	textBadges: {
 		color: 'white'
 	},
-	btn:{
+	btn: {
 		alignItems: 'center',
 		justifyContent: 'center'
 	},

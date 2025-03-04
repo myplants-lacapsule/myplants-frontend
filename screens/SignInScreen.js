@@ -84,10 +84,10 @@ const styles = StyleSheet.create({
   registerContainer: {
     width: "80%",
   },
-	errorText: {
-		width: '80%',
-		color: "red",
-		marginLeft: 7,
+  errorText: {
+    width: '80%',
+    color: "red",
+    marginLeft: 7,
     marginBottom: 10,
   },
 });
