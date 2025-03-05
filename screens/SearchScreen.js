@@ -125,7 +125,7 @@ export default function SearchScreen() {
       const plantName = data.result.classification.suggestions[0].name;
 
       if (plantProbability < 0.75 || !plantProbability) {
-        alert("Aucune plante trouvée, veuillez recommencer la photo");
+        alert("Plant not found, please try again");
       } else {
         setPlantsData({
           name: plantName,
@@ -188,7 +188,7 @@ export default function SearchScreen() {
       // 		}
       // 	}
     } catch (error) {
-      console.error("Error lors de la prise de la photo", error);
+      console.error("Error when taking the picture", error);
     }
   };
 
@@ -232,7 +232,7 @@ export default function SearchScreen() {
         setInputResearch("");
         await addPlantToBackend(plantsData);
       } else {
-        alert("Plante non trouvée");
+        alert("Plant not found");
         setInputResearch("");
       }
     } catch (error) {
@@ -270,7 +270,7 @@ export default function SearchScreen() {
         setShowSuggestions(false);
         setShowCamera(false);
         setPlantsData({});
-        navigation.navigate("Accueil");
+        navigation.navigate("Home");
       } else {
         console.log(false);
       }

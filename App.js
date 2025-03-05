@@ -14,6 +14,9 @@ import SignUpScreen from "./screens/SignUpScreen";
 import HomeScreen from "./screens/HomeScreen";
 import SearchScreen from "./screens/SearchScreen";
 import MapScreen from "./screens/MapScreen";
+import NotificationScreen from "./screens/NotificationScreen";
+import UserScreen from "./screens/UserScreen";
+import PlantScreen from "./screens/PlantScreen";
 import NewItemScreen from "./screens/NewItemScreen";
 import AddLocationScreen from "./screens/AddLocationScreen";
 
@@ -36,12 +39,12 @@ const TabNavigator = () => {
           let iconName = "";
           let IconComponent = FontAwesome;
 
-          if (route.name === "Accueil") {
+          if (route.name === "Home") {
             iconName = "home";
-          } else if (route.name === "Ajouter une plante") {
+          } else if (route.name === "Add a plant") {
             iconName = "seedling";
             IconComponent = FontAwesome5;
-          } else if (route.name === "Vente/don") {
+          } else if (route.name === "Sale/donation") {
             iconName = "map";
           }
 
@@ -71,9 +74,9 @@ const TabNavigator = () => {
         headerShown: false,
       })}
     >
-      <Tab.Screen name="Accueil" component={HomeScreen} />
-      <Tab.Screen name="Ajouter une plante" component={SearchScreen} />
-      <Tab.Screen name="Vente/don" component={MapScreen} />
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Add a plant" component={SearchScreen} />
+      <Tab.Screen name="Sale/donation" component={MapScreen} />
     </Tab.Navigator>
   );
 };
@@ -110,10 +113,13 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Welcome" component={WelcomeScreen} />
-          <Stack.Screen name="SignIn" component={SignInScreen} />
-          <Stack.Screen name="SignUp" component={SignUpScreen} />
+          <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+          <Stack.Screen name="SignInScreen" component={SignInScreen} />
+          <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
+					<Stack.Screen name="NotificationScreen" component={NotificationScreen} />
+					<Stack.Screen name="UserScreen" component={UserScreen} />
+					<Stack.Screen name="PlantScreen" component={PlantScreen} />
           <Stack.Screen name="NewItemScreen" component={NewItemScreen} />
           <Stack.Screen
             name="AddLocationScreen"

@@ -59,7 +59,7 @@ export default function NewItemScreen() {
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
     if (!permissionResult.granted) {
       Alert.alert(
-        "Vous devez autoriser l'accès à la caméra pour prendre une photo."
+        "You must authorize access to the camera to take a picture."
       );
       return;
     }
@@ -78,8 +78,8 @@ export default function NewItemScreen() {
     // Vérification des champs obligatoires
     if (!title || !description || (isVente && !price) || !height || !imageUri) {
       Alert.alert(
-        "Erreur",
-        "Veuillez remplir tous les champs et prendre une photo."
+        "Error",
+        "Please fill in all fields and take a picture."
       );
       return;
     }
@@ -112,10 +112,10 @@ export default function NewItemScreen() {
 
 
     if (result.result) {
-      Alert.alert("Succès", "Votre article a été ajouté !");
-      navigation.navigate("Vente/don");
+      Alert.alert("Success", "Your item has been added!");
+      // Optionnel : réinitialiser le formulaire ou naviguer vers un autre écran
     } else {
-      Alert.alert("Erreur", result.error);
+      Alert.alert("Error", result.error);
     }
   };
 
@@ -130,7 +130,7 @@ export default function NewItemScreen() {
             <BackButton/>
             <CustomButton
               onPress={takePhoto}
-              text="Ajouter une photo"
+              text="Add a picture"
               iconName="camera"
             />
 
@@ -141,11 +141,11 @@ export default function NewItemScreen() {
             <ToggleButton
               value={isVente}
               onValueChange={(newValue) => setIsVente(newValue)}
-              trueLabel="Vente"
-              falseLabel="Don"
+              trueLabel="Sale"
+              falseLabel="Donation"
             />
             <RegisterInput
-              placeholder="Titre"
+              placeholder="Title"
               autoCapitalize="none"
               keyboardType="email-address"
               value={title}
@@ -160,14 +160,14 @@ export default function NewItemScreen() {
             />
             {isVente && (
               <RegisterInput
-                placeholder="Prix"
+                placeholder="Price"
                 value={price}
                 onChangeText={setPrice}
                 returnKeyType="next"
               />
             )}
             <RegisterInput
-              placeholder="Hauteur"
+              placeholder="Height"
               value={height}
               onChangeText={setHeight}
               returnKeyType="next"
@@ -175,17 +175,17 @@ export default function NewItemScreen() {
             <ToggleButton
               value={isPlant}
               onValueChange={(newValue) => setIsPlant(newValue)}
-              trueLabel="Plante"
+              trueLabel="Plant"
               falseLabel="Accessoires"
             />
             <RegisterInput
-              placeholder="Etat"
+              placeholder="Plant condition"
               value={plantCondition}
               onChangeText={setPlantCondition}
               returnKeyType="next"
             />
             <RegisterButton
-              title="Ajouter mon article "
+              title="Add my item"
               onPress={handleSubmit}
             />
           </View>

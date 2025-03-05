@@ -6,7 +6,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 function AddPlantButton() {
     return (
-        <View style={styles.btn}><FontAwesome name="check" size={32} color={'white'} /><Text style={styles.textbtn}>Ajouter à mon inventaire</Text></View>
+        <View style={styles.btn}><FontAwesome name="check" size={32} color={'white'} /><Text style={styles.textbtn}>Add to my inventory</Text></View>
     )
 }
 
