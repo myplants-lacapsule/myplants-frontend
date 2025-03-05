@@ -20,8 +20,6 @@ import { useIsFocused, useNavigation } from "@react-navigation/native";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-import { EXPO_PUBLIC_API_URL } from "react-native-dotenv";
-
 import AddPlantButton from "../components/AddPlantButton";
 import CameraSearch from '../components/CameraSearch'
 import SearchBar from "../components/SearchBar";
@@ -79,7 +77,7 @@ export default function SearchScreen() {
     });
 
     try {
-      const response = await fetch(`${EXPO_PUBLIC_API_URL}/plants/upload`, {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/upload`, {
         method: "POST",
         body: formData,
       });
@@ -245,7 +243,7 @@ export default function SearchScreen() {
   const addPlantToBackend = async (plantsData) => {
     try {
       const response = await fetch(
-        `${EXPO_PUBLIC_API_URL}/plants/newPlant/${userInStore.token}`,
+        `${process.env.EXPO_PUBLIC_API_URL}/plants/newPlant/${userInStore.token}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
