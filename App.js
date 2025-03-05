@@ -100,11 +100,12 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Welcome" component={WelcomeScreen} />
+          <Text>My Plants</Text>
+         {/*  <Stack.Screen name="Welcome" component={WelcomeScreen} />
           <Stack.Screen name="SignIn" component={SignInScreen} />
           <Stack.Screen name="SignUp" component={SignUpScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
-          <Stack.Screen name="NewItemScreen" component={NewItemScreen} />
+          <Stack.Screen name="NewItemScreen" component={NewItemScreen} /> */}
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
