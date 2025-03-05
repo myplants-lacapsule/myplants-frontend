@@ -1,8 +1,11 @@
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 
-export default function Card({ photo, name, description }) {
-  const truncatedDescription = description.length > 120 ? description.substring(0, 120) + "..." : description;
+export default function itemCard({ photo, name, description }) {
+  const truncatedDescription =
+    description.length > 120
+      ? description.substring(0, 120) + "..."
+      : description;
 
   return (
     <View style={styles.container}>
@@ -56,12 +59,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "Merriweather-Bold",
   },
-	descriptionContainer: {
-
-  },
+  descriptionContainer: {},
   description: {
     fontFamily: "OpenSans-Regular",
     fontSize: 14,
-		flexWrap: 'wrap',
+    flexWrap: "wrap",
   },
 });

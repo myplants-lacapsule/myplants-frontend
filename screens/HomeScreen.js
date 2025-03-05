@@ -4,36 +4,38 @@ import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import CustomButton from "../components/CustomButton";
-import Card from "../components/Card";
+import PlantCard from "../components/PlantCard";
 
 export default function HomeScreen() {
   const navigation = useNavigation();
   const userInStore = useSelector((state) => state.user.value);
+
   const [plantsData, setPlantsData] = useState([]);
 
   useEffect(() => {
-    fetchPlants();
+    const fetchPlants = () => {
+			fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/${userInStore.token}`)
+				.then((response) => response.json())
+				.then((data) => {
+					if (data && data.data) {
+						setPlantsData(data.data);
+					} else {
+						setPlantsData([]);
+					}
+				})
+				.catch((error) => {
+					console.error("Error fetching plants:", error);
+					setPlantsData([]);
+				});
+		};
+	
+		fetchPlants();
   }, []);
 
-  const fetchPlants = () => {
-    fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/${userInStore.token}`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data && data.data) {
-          setPlantsData(data.data);
-        } else {
-          setPlantsData([]);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching plants:", error);
-        setPlantsData([]);
-      });
-  };
-
+  
   const userPlants =
     plantsData.length > 0 ? (
-      plantsData.map((data, i) => <Card key={i} {...data} />)
+      plantsData.map((data, i) => <PlantCard key={i} {...data} />)
     ) : (
       <Text style={styles.noCardMessage}>
         Vous n'avez pas encore de plantes.

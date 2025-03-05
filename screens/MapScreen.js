@@ -1,19 +1,34 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from "react-native";
+import {
+  ActivityIndicator,
+  Modal,
+  // ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+// import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+// import ItemCard from "../components/itemCard";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 
 export default function MapScreen() {
   const navigation = useNavigation();
+  // const userInStore = useSelector((state) => state.user.value);
+
+  // const [itemsData, setItemsData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
   const [currentPosition, setCurrentPosition] = useState(null);
   const [initialRegion, setInitialRegion] = useState({
     latitude: 46.603354,
     longitude: 1.888334,
-    latitudeDelta: 5, 
+    latitudeDelta: 5,
     longitudeDelta: 15,
   });
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -40,11 +55,37 @@ export default function MapScreen() {
     })();
   }, []);
 
-  const handlePress = () => {
+  const handleMarkerPress = () => {
+    setModalVisible(true);
+  };
+
+  // useEffect(() => {
+  //   const fetchItems = () => {
+  //     fetch(`${process.env.EXPO_PUBLIC_API_URL}/items/${userInStore.token}`)
+  //       .then((response) => response.json())
+  //       .then((data) => {
+  //         if (data && data.data) {
+  //           setItemsData(data.data);
+  //         } else {
+  //           setItemsData([]);
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error fetching items:", error);
+  //         setItemsData([]);
+  //       });
+  //   };
+
+  //   fetchItems();
+  // }, []);
+
+  // const userItems = itemsData.map((data, i) => <ItemCard key={i} {...data} />);
+
+  const handleAddPress = () => {
     navigation.navigate("NewItemScreen");
   };
 
-  if (loading) {
+	if (loading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#2D5334" />
@@ -55,19 +96,35 @@ export default function MapScreen() {
 
   return (
     <View style={{ flex: 1 }}>
-      <MapView
-        style={{ flex: 1 }}
-        initialRegion={initialRegion}
-      >
+      <MapView style={{ flex: 1 }} initialRegion={initialRegion}>
         {currentPosition && (
-          <Marker
-            coordinate={currentPosition}
-            pinColor="red"
-          />
+          <Marker coordinate={currentPosition} pinColor="red" />
         )}
+        <Marker
+          coordinate={{ latitude: 48.8606, longitude: 2.3774 }}
+          pinColor="blue"
+          onPress={handleMarkerPress}
+        />
       </MapView>
-      <TouchableOpacity style={styles.button} onPress={handlePress}>
-        <Text style={styles.buttonText}>+</Text>
+      <Modal visible={modalVisible} animationType="fade" transparent>
+        <View style={styles.modal}>
+          {/* <ScrollView style={styles.cardContainer}>{userItems}</ScrollView> */}
+					<Text>Articles à vendre</Text>
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={() => setModalVisible(false)}
+          >
+            <FontAwesome5
+              style={styles.closeButtonIcon}
+              name="times-circle"
+              size={25}
+              solid={true}
+            />
+          </TouchableOpacity>
+        </View>
+      </Modal>
+      <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
+        <Text style={styles.addButtonText}>+</Text>
       </TouchableOpacity>
     </View>
   );
@@ -88,10 +145,38 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 10,
     fontSize: 18,
-		fontFamily: "OpenSans-Regular",
+    fontFamily: "OpenSans-Regular",
     color: "#2D5334",
   },
-  button: {
+  modal: {
+    width: "95%",
+    padding: 5,
+    borderRadius: 5,
+    backgroundColor: "#F1F0E9",
+  },
+  itemCard: {
+    backgroundColor: "#FBFBFB",
+    height: 150,
+    padding: 7,
+    margin: 5,
+    borderRadius: 10,
+    flexDirection: "row",
+    borderWidth: 1,
+    borderColor: "#D0DDD0",
+  },
+  photoContainer: {
+    borderRadius: 5,
+    width: "35%",
+    backgroundColor: "pink",
+  },
+  infoContainer: {
+    backgroundColor: "lightblue",
+  },
+  nameContainer: { backgroundColor: "lightgreen" },
+  descriptionContainer: {},
+  closeButton: {},
+  closeButtonIcon: {},
+  addButton: {
     position: "absolute",
     bottom: 30,
     right: 30,
@@ -103,8 +188,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     elevation: 10,
   },
-  buttonText: {
-    color: "#fff",
+  addButtonText: {
+    color: "#FBFBFB",
     fontWeight: "bold",
     fontSize: 30,
   },
