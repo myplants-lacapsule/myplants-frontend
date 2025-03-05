@@ -28,19 +28,19 @@ export default function SignUpScreen() {
 
   const handleRegister = () => {
     if (!signUpUsername) {
-      setError("Nom d'utilisateur incorrect");
+      setError("Incorrect username");
       return;
     }
     if (!signUpEmail || !validateEmail(signUpEmail)) {
-      setError("Adresse email incorrecte");
+      setError("Incorrect email address");
       return;
     }
     if (!signUpPassword) {
-      setError("Mot de passe incorrect");
+      setError("Incorrect password");
       return;
     }
     if (signUpPassword.length < 8) {
-      setError("Le mot de passe doit contenir au moins 8 caractères");
+      setError("Password must be at least 8 characters long");
       return;
     }
 
@@ -63,7 +63,7 @@ export default function SignUpScreen() {
           setError("");
           navigation.navigate("TabNavigator");
         } else {
-          setError("Une erreur est survenue");
+          setError("An error has occurred");
         }
       });
   };
@@ -75,12 +75,12 @@ export default function SignUpScreen() {
     >
       <View style={styles.registerContainer}>
         <RegisterInput
-          placeholder="Nom d'utilisateur"
+          placeholder="Username"
           value={signUpUsername}
           onChangeText={setSignUpUsername}
         />
         <RegisterInput
-          placeholder="Adresse email"
+          placeholder="Email address"
           autoCapitalize="none"
           keyboardType="email-address"
           textContentType="emailAddress"
@@ -89,14 +89,14 @@ export default function SignUpScreen() {
           onChangeText={(text) => setSignUpEmail(text.toLowerCase())}
         />
         <RegisterInput
-          placeholder="Mot de passe"
+          placeholder="Password"
           textContentType="password"
           autoComplete="password"
           value={signUpPassword}
           onChangeText={setSignUpPassword}
           secureTextEntry={true}
         />
-        <RegisterButton title="S'inscrire" onPress={handleRegister} />
+        <RegisterButton title="Sign up" onPress={handleRegister} />
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
       </View>
     </KeyboardAvoidingView>

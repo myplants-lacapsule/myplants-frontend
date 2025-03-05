@@ -38,14 +38,14 @@ export default function HomeScreen() {
       plantsData.map((data, i) => <PlantCard key={i} {...data} />)
     ) : (
       <Text style={styles.noCardMessage}>
-        Vous n'avez pas encore de plantes.
+        You don't have any plants yet. Add one!
       </Text>
     );
 
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
-        <Text style={styles.hello}>Bonjour, {userInStore.username} !</Text>
+        <Text style={styles.hello}>Hello, {userInStore.username} !</Text>
         <View style={styles.iconContainer}>
           <FontAwesome5
             style={styles.icon}
@@ -61,12 +61,12 @@ export default function HomeScreen() {
           />
         </View>
       </View>
-      <Text style={styles.myplants}>Mes plantes</Text>
+      <Text style={styles.myplants}>My plants</Text>
       <View style={styles.buttonContainer}>
         <CustomButton
           iconName="plus-circle"
-          text="Ajouter une plante"
-          onPress={() => navigation.navigate("Ajouter une plante")}
+          text="Add a plant"
+          onPress={() => navigation.navigate("Add a plant")}
           style={styles.buttonText}
         />
       </View>

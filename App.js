@@ -36,12 +36,12 @@ const TabNavigator = () => {
           let iconName = "";
           let IconComponent = FontAwesome;
 
-          if (route.name === "Accueil") {
+          if (route.name === "Home") {
             iconName = "home";
-          } else if (route.name === "Ajouter une plante") {
+          } else if (route.name === "Add a plant") {
             iconName = "seedling";
             IconComponent = FontAwesome5;
-          } else if (route.name === "Vente/don") {
+          } else if (route.name === "Sale/donation") {
             iconName = "map";
           }
 
@@ -71,9 +71,9 @@ const TabNavigator = () => {
         headerShown: false,
       })}
     >
-      <Tab.Screen name="Accueil" component={HomeScreen} />
-      <Tab.Screen name="Ajouter une plante" component={SearchScreen} />
-      <Tab.Screen name="Vente/don" component={MapScreen} />
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Add a plant" component={SearchScreen} />
+      <Tab.Screen name="Sale/donation" component={MapScreen} />
     </Tab.Navigator>
   );
 };

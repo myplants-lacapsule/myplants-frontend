@@ -89,7 +89,7 @@ export default function MapScreen() {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#2D5334" />
-        <Text style={styles.loadingText}>Chargement...</Text>
+        <Text style={styles.loadingText}>Loading ...</Text>
       </View>
     );
   }
@@ -109,7 +109,7 @@ export default function MapScreen() {
       <Modal visible={modalVisible} animationType="fade" transparent>
         <View style={styles.modal}>
           {/* <ScrollView style={styles.cardContainer}>{userItems}</ScrollView> */}
-					<Text>Articles à vendre</Text>
+					<Text>Items for sale</Text>
           <TouchableOpacity
             style={styles.closeButton}
             onPress={() => setModalVisible(false)}
