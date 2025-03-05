@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import {
   ActivityIndicator,
   Modal,
@@ -8,6 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import React, { useState, useEffect } from "react";
 // import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
@@ -29,6 +29,15 @@ export default function MapScreen() {
     latitudeDelta: 5,
     longitudeDelta: 15,
   });
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#2D5334" />
+        <Text style={styles.loadingText}>Chargement...</Text>
+      </View>
+    );
+  }
 
   useEffect(() => {
     (async () => {
@@ -85,15 +94,6 @@ export default function MapScreen() {
     navigation.navigate("NewItemScreen");
   };
 
-	if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#2D5334" />
-        <Text style={styles.loadingText}>Loading ...</Text>
-      </View>
-    );
-  }
-
   return (
     <View style={{ flex: 1 }}>
       <MapView style={{ flex: 1 }} initialRegion={initialRegion}>
@@ -109,7 +109,7 @@ export default function MapScreen() {
       <Modal visible={modalVisible} animationType="fade" transparent>
         <View style={styles.modal}>
           {/* <ScrollView style={styles.cardContainer}>{userItems}</ScrollView> */}
-					<Text>Items for sale</Text>
+					<Text>Articles à vendre</Text>
           <TouchableOpacity
             style={styles.closeButton}
             onPress={() => setModalVisible(false)}
