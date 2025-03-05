@@ -3,25 +3,24 @@ import { TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-export default function BackButton() {
+export default function ReturnButton() {
   const navigation = useNavigation();
 
-  const handleBack = () => {
+  const handlePress = () => {
     navigation.goBack();
   };
 
   return (
-    <TouchableOpacity style={styles.backButton} onPress={handleBack}>
+    <TouchableOpacity style={styles.button} onPress={handlePress}>
       <FontAwesome name="arrow-left" size={24} color="#2D5334" />
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  backButton: {
+  button: {
     padding: 10,
-    borderRadius: 5,
     alignSelf: "flex-start",
-    margin: 10,
+		backgroundColor: 'lightblue'
   },
 });
