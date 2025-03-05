@@ -31,7 +31,6 @@ export default function AddLocationScreen() {
             street,
             city,
             postalCode,
-            country,
           }),
         }
       );

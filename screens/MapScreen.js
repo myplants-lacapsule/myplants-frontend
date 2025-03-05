@@ -16,10 +16,9 @@ import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import { useSelector } from "react-redux";
 
-
 export default function MapScreen() {
   const navigation = useNavigation();
-	const user = useSelector((state) => state.user.value);
+  const user = useSelector((state) => state.user.value);
   const userToken = user.token;
 
   // const [itemsData, setItemsData] = useState([]);
@@ -37,12 +36,7 @@ export default function MapScreen() {
   const checkUserLocation = async () => {
     try {
       const response = await fetch(
-        `${process.env.EXPO_PUBLIC_API_URL}/users/getUserLocation`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ token: userToken }),
-        }
+        `${process.env.EXPO_PUBLIC_API_URL}/users/getUserLocation/${userToken}`
       );
       const result = await response.json();
       return result;
@@ -55,24 +49,23 @@ export default function MapScreen() {
   // Fonction déclenchée lorsque l'utilisateur appuie sur le bouton "+"
   const handleAddPress = async () => {
     const locationData = await checkUserLocation();
-    if (
-      locationData &&
-      (locationData.latitude === null || locationData.longitude === null)
-    ) {
-      // Pas de coordonnées => Demander à l'utilisateur de renseigner son adresse
-      navigation.navigate("AddLocationScreen");
-    } else {
-      // Coordonnées existantes => Aller directement au formulaire d'ajout d'article
-      navigation.navigate("NewItemScreen");
-    }
-	};
 
-	// Fonction déclenchée lorsque l'utilisateur appuie sur un marqueur
+    if (!locationData || !locationData.latitude || !locationData.longitude)
+      {
+        // Pas de coordonnées => Demander à l'utilisateur de renseigner son adresse
+        navigation.navigate("AddLocationScreen");
+      } else {
+        // Coordonnées existantes => Aller directement au formulaire d'ajout d'article
+        navigation.navigate("NewItemScreen");
+      }
+  };
+
+  // Fonction déclenchée lorsque l'utilisateur appuie sur un marqueur
   const handleMarkerPress = () => {
     setModalVisible(true);
   };
 
-	// Récupération de la position actuelle de l'utilisateur
+  // Récupération de la position actuelle de l'utilisateur
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -119,12 +112,12 @@ export default function MapScreen() {
   // }, []);
 
   // const userItems = itemsData.map((data, i) => <ItemCard key={i} {...data} onPress={handleItemScreen/>);
-	// const handleItemScreen = () => {
-	// 	navigation.navigate("ItemScreen");
-	// };
+  // const handleItemScreen = () => {
+  // 	navigation.navigate("ItemScreen");
+  // };
 
-	// Affichage d'un écran de chargement si les données ne sont pas encore chargées
-	if (loading) {
+  // Affichage d'un écran de chargement si les données ne sont pas encore chargées
+  if (loading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#2D5334" />
@@ -148,7 +141,7 @@ export default function MapScreen() {
       <Modal visible={modalVisible} animationType="fade" transparent>
         <View style={styles.modal}>
           {/* <ScrollView style={styles.cardContainer}>{userItems}</ScrollView> */}
-					<Text>Articles à vendre</Text>
+          <Text>Articles à vendre</Text>
           <TouchableOpacity
             style={styles.closeButton}
             onPress={() => setModalVisible(false)}
@@ -232,4 +225,4 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 30,
   },
-})
+});
