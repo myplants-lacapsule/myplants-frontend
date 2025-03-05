@@ -2,7 +2,6 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-import { EXPO_PUBLIC_API_URL } from "react-native-dotenv";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import CustomButton from "../components/CustomButton";
 import Card from "../components/Card";
@@ -17,7 +16,7 @@ export default function HomeScreen() {
   }, []);
 
   const fetchPlants = () => {
-    fetch(`${EXPO_PUBLIC_API_URL}/plants/${userInStore.token}`)
+    fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/${userInStore.token}`)
       .then((response) => response.json())
       .then((data) => {
         if (data && data.data) {

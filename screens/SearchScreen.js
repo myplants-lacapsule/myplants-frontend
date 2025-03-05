@@ -24,7 +24,6 @@ import AddPlantButton from "../components/AddPlantButton";
 
 import { useNavigation } from "@react-navigation/native";
 
-import { EXPO_PUBLIC_API_URL } from "react-native-dotenv";
 
 export default function SearchScreen() {
   const perenualKey = "sk-BfUS67c5d3516107b8879";
@@ -80,7 +79,7 @@ export default function SearchScreen() {
     });
 
     try {
-      const response = await fetch(`${EXPO_PUBLIC_API_URL}/plants/upload`, {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/upload`, {
         method: "POST",
         body: formData,
       });
@@ -246,7 +245,7 @@ export default function SearchScreen() {
   const addPlantToBackend = async (plantsData) => {
     try {
       const response = await fetch(
-        `${EXPO_PUBLIC_API_URL}/plants/newPlant/${userInStore.token}`,
+        `${process.env.EXPO_PUBLIC_API_URL}/plants/newPlant/${userInStore.token}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

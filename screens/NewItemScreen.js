@@ -101,7 +101,7 @@ export default function NewItemScreen() {
     });
 
     const response = await fetch(
-      `${EXPO_PUBLIC_API_URL}/items/newItem/` + userToken,
+      `${process.env.EXPO_PUBLIC_API_URL}/items/newItem/` + userToken,
       {
         method: "POST",
         body: formData,
