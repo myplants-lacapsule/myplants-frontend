@@ -11,36 +11,38 @@ export default function HomeScreen() {
   const userInStore = useSelector((state) => state.user.value);
 
   const [plantsData, setPlantsData] = useState([]);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
     const fetchPlants = () => {
-			fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/${userInStore.token}`)
-				.then((response) => response.json())
-				.then((data) => {
-					if (data && data.data) {
-						setPlantsData(data.data);
-					} else {
-						setPlantsData([]);
-					}
-				})
-				.catch((error) => {
-					console.error("Error fetching plants:", error);
-					setPlantsData([]);
-				});
-		};
-	
-		fetchPlants();
+      fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/${userInStore.token}`)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data && data.data) {
+            setPlantsData(data.data);
+          } else {
+            setPlantsData([]);
+          }
+          setDataLoaded(true);
+        })
+        .catch((error) => {
+          console.error("Error fetching plants:", error);
+          setPlantsData([]);
+          setDataLoaded(true);
+        });
+    };
+
+    fetchPlants();
   }, []);
 
-  
   const userPlants =
-    plantsData.length > 0 ? (
-      plantsData.map((data, i) => <PlantCard key={i} {...data} />)
-    ) : (
-      <Text style={styles.noCardMessage}>
-        You don't have any plants yet. Add one!
-      </Text>
-    );
+    plantsData.length > 0
+      ? plantsData.map((data, i) => <PlantCard key={i} {...data} />)
+      : dataLoaded && (
+          <Text style={styles.noCardMessage}>
+            You don't have any plants yet. Add one!
+          </Text>
+        );
 
   return (
     <View style={styles.container}>
