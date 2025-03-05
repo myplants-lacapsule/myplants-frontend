@@ -15,6 +15,7 @@ import HomeScreen from "./screens/HomeScreen";
 import SearchScreen from "./screens/SearchScreen";
 import MapScreen from "./screens/MapScreen";
 import NewItemScreen from "./screens/NewItemScreen";
+import AddLocationScreen from "./screens/AddLocationScreen";
 
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
@@ -114,6 +115,10 @@ export default function App() {
           <Stack.Screen name="SignUp" component={SignUpScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
           <Stack.Screen name="NewItemScreen" component={NewItemScreen} />
+          <Stack.Screen
+            name="AddLocationScreen"
+            component={AddLocationScreen}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

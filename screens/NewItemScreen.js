@@ -23,6 +23,7 @@ import * as ImagePicker from "expo-image-picker";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import BackButton from "../components/BackButton.js";
 
 export default function NewItemScreen() {
   const dispatch = useDispatch();
@@ -108,11 +109,11 @@ export default function NewItemScreen() {
       }
     );
     const result = await response.json();
-    console.log("result", result);
+
 
     if (result.result) {
       Alert.alert("Succès", "Votre article a été ajouté !");
-      // Optionnel : réinitialiser le formulaire ou naviguer vers un autre écran
+      navigation.navigate("Vente/don");
     } else {
       Alert.alert("Erreur", result.error);
     }
@@ -126,6 +127,7 @@ export default function NewItemScreen() {
       >
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <View style={styles.registerContainer}>
+            <BackButton/>
             <CustomButton
               onPress={takePhoto}
               text="Ajouter une photo"
