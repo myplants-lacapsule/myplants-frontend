@@ -23,6 +23,7 @@ import * as ImagePicker from "expo-image-picker";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import BackButton from "../components/BackButton.js";
 
 export default function NewItemScreen() {
   const dispatch = useDispatch();
@@ -108,7 +109,7 @@ export default function NewItemScreen() {
       }
     );
     const result = await response.json();
-    console.log("result", result);
+
 
     if (result.result) {
       Alert.alert("Success", "Your item has been added!");
@@ -126,6 +127,7 @@ export default function NewItemScreen() {
       >
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <View style={styles.registerContainer}>
+            <BackButton/>
             <CustomButton
               onPress={takePhoto}
               text="Add a picture"

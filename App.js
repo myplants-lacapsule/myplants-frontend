@@ -18,6 +18,7 @@ import NotificationScreen from "./screens/NotificationScreen";
 import UserScreen from "./screens/UserScreen";
 import PlantScreen from "./screens/PlantScreen";
 import NewItemScreen from "./screens/NewItemScreen";
+import AddLocationScreen from "./screens/AddLocationScreen";
 
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
@@ -120,6 +121,10 @@ export default function App() {
 					<Stack.Screen name="UserScreen" component={UserScreen} />
 					<Stack.Screen name="PlantScreen" component={PlantScreen} />
           <Stack.Screen name="NewItemScreen" component={NewItemScreen} />
+          <Stack.Screen
+            name="AddLocationScreen"
+            component={AddLocationScreen}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
