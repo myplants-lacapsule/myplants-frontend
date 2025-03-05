@@ -1,4 +1,16 @@
-import { KeyboardAvoidingView, Platform, StyleSheet, View, Switch, Text, TouchableOpacity, Alert, Image, ScrollView, SafeAreaView} from "react-native";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  View,
+  Switch,
+  Text,
+  TouchableOpacity,
+  Alert,
+  Image,
+  ScrollView,
+  SafeAreaView,
+} from "react-native";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
@@ -11,7 +23,6 @@ import * as ImagePicker from "expo-image-picker";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
-
 
 export default function NewItemScreen() {
   const dispatch = useDispatch();
@@ -38,8 +49,6 @@ export default function NewItemScreen() {
   console.log("plantCondition:", plantCondition);
   console.log("imageUri:", imageUri);
 
-  
-
   useEffect(() => {
     console.log("imageUri updated:", imageUri);
   }, [imageUri]);
@@ -65,8 +74,6 @@ export default function NewItemScreen() {
 
   // Fonction pour envoyer les données du formulaire
   const handleSubmit = async () => {
- 
-
     // Vérification des champs obligatoires
     if (!title || !description || (isVente && !price) || !height || !imageUri) {
       Alert.alert(
@@ -76,7 +83,7 @@ export default function NewItemScreen() {
       return;
     }
     // Création de l'objet FormData
-    
+
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
@@ -88,13 +95,13 @@ export default function NewItemScreen() {
 
     //Ajout de la photo au FormData
     formData.append("photoFromFront", {
-    uri: imageUri,
-    name: "photo.jpg",
-    type: "image/jpeg", 
+      uri: imageUri,
+      name: "photo.jpg",
+      type: "image/jpeg",
     });
 
     const response = await fetch(
-      `${API_URL}/items/newItem/` + userToken,
+      `${EXPO_PUBLIC_API_URL}/items/newItem/` + userToken,
       {
         method: "POST",
         body: formData,
@@ -109,7 +116,7 @@ export default function NewItemScreen() {
     } else {
       Alert.alert("Erreur", result.error);
     }
-  }
+  };
 
   return (
     <SafeAreaView style={styles.safeContainer}>
@@ -218,7 +225,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     fontSize: 16,
   },
-  
+
   preview: {
     width: 200,
     height: 200,

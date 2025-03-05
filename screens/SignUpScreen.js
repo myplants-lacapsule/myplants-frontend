@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { login } from "../reducers/user";
-import { API_URL } from 'react-native-dotenv';
+import { EXPO_PUBLIC_API_URL } from "react-native-dotenv";
 import RegisterInput from "../components/RegisterInput.js";
 import RegisterButton from "../components/RegisterButton.js";
 
@@ -45,7 +45,7 @@ export default function SignUpScreen() {
       return;
     }
 
-    fetch(`${API_URL}/users/signup`, {
+    fetch(`${EXPO_PUBLIC_API_URL}/users/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -66,7 +66,7 @@ export default function SignUpScreen() {
         } else {
           setError("Une erreur est survenue");
         }
-      })
+      });
   };
 
   return (
@@ -115,9 +115,9 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   errorText: {
-		width: '80%',
-		color: "red",
-		marginLeft: 7,
+    width: "80%",
+    color: "red",
+    marginLeft: 7,
     marginBottom: 10,
   },
 });
