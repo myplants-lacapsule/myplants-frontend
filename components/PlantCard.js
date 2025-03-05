@@ -1,7 +1,7 @@
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 
-export default function PlantCard({ photo, name, description }) {
+export default function PlantCard({ photo, name, description = "" }) {
   const truncatedDescription =
     description.length > 120
       ? description.substring(0, 120) + "..."

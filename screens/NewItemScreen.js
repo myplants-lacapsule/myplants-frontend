@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   Alert,
   Image,
-  ScrollView,
   SafeAreaView,
 } from "react-native";
 import { useState } from "react";
@@ -23,7 +22,7 @@ import * as ImagePicker from "expo-image-picker";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
-import BackButton from "../components/BackButton.js";
+import ReturnButton from "../components/ReturnButton.js";
 
 export default function NewItemScreen() {
   const dispatch = useDispatch();
@@ -58,9 +57,7 @@ export default function NewItemScreen() {
   const takePhoto = async () => {
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
     if (!permissionResult.granted) {
-      Alert.alert(
-        "You must authorize access to the camera to take a picture."
-      );
+      Alert.alert("You must authorize access to the camera to take a picture.");
       return;
     }
     const result = await ImagePicker.launchCameraAsync({
@@ -77,10 +74,7 @@ export default function NewItemScreen() {
   const handleSubmit = async () => {
     // Vérification des champs obligatoires
     if (!title || !description || (isVente && !price) || !height || !imageUri) {
-      Alert.alert(
-        "Error",
-        "Please fill in all fields and take a picture."
-      );
+      Alert.alert("Error", "Please fill in all fields and take a picture.");
       return;
     }
     // Création de l'objet FormData
@@ -110,7 +104,6 @@ export default function NewItemScreen() {
     );
     const result = await response.json();
 
-
     if (result.result) {
       Alert.alert("Success", "Your item has been added!");
       // Optionnel : réinitialiser le formulaire ou naviguer vers un autre écran
@@ -122,74 +115,76 @@ export default function NewItemScreen() {
   return (
     <SafeAreaView style={styles.safeContainer}>
       <KeyboardAvoidingView
-        style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        <ScrollView contentContainerStyle={styles.scrollContent}>
-          <View style={styles.registerContainer}>
-            <BackButton/>
-            <CustomButton
-              onPress={takePhoto}
-              text="Add a picture"
-              iconName="camera"
-            />
-
-            {/* Affichage de l'aperçu de l'image */}
-            {imageUri && (
-              <Image source={{ uri: imageUri }} style={styles.preview} />
-            )}
+        <View style={styles.container}>
+          <ReturnButton />
+          <View style={styles.pictureContainer}>
+            <Text style={styles.picture}>Picture</Text>
+          </View>
+          {/* Affichage de l'aperçu de l'image */}
+          {imageUri && (
+            <Image source={{ uri: imageUri }} style={styles.preview} />
+          )}
+					        <View style={styles.registerContainer}></View>
+					<CustomButton
+            onPress={takePhoto}
+            text="Add a picture"
+            iconName="camera"
+          />
+					<View style={styles.toggleContainer}>
+            <Text style={styles.plantChoice}>Donation</Text>
             <ToggleButton
               value={isVente}
               onValueChange={(newValue) => setIsVente(newValue)}
-              trueLabel="Sale"
-              falseLabel="Donation"
             />
+            <Text style={styles.accessoryChoice}>Sale</Text>
+          </View>
+          
+          <RegisterInput
+            placeholder="Title"
+            autoCapitalize="none"
+            keyboardType="email-address"
+            value={title}
+            onChangeText={setTitle}
+            returnKeyType="next"
+          />
+          <RegisterInput
+            placeholder="Description"
+            value={description}
+            onChangeText={setDescription}
+            returnKeyType="next"
+          />
+          {isVente && (
             <RegisterInput
-              placeholder="Title"
-              autoCapitalize="none"
-              keyboardType="email-address"
-              value={title}
-              onChangeText={setTitle}
+              placeholder="Price"
+              value={price}
+              onChangeText={setPrice}
               returnKeyType="next"
             />
-            <RegisterInput
-              placeholder="Description"
-              value={description}
-              onChangeText={setDescription}
-              returnKeyType="next"
-            />
-            {isVente && (
-              <RegisterInput
-                placeholder="Price"
-                value={price}
-                onChangeText={setPrice}
-                returnKeyType="next"
-              />
-            )}
-            <RegisterInput
-              placeholder="Height"
-              value={height}
-              onChangeText={setHeight}
-              returnKeyType="next"
-            />
+          )}
+          <RegisterInput
+            placeholder="Height"
+            value={height}
+            onChangeText={setHeight}
+            returnKeyType="next"
+          />
+          <View style={styles.toggleContainer}>
+            <Text style={styles.plantChoice}>Plant</Text>
             <ToggleButton
               value={isPlant}
               onValueChange={(newValue) => setIsPlant(newValue)}
-              trueLabel="Plant"
-              falseLabel="Accessoires"
             />
-            <RegisterInput
-              placeholder="Plant condition"
-              value={plantCondition}
-              onChangeText={setPlantCondition}
-              returnKeyType="next"
-            />
-            <RegisterButton
-              title="Add my item"
-              onPress={handleSubmit}
-            />
+            <Text style={styles.accessoryChoice}>Accessory</Text>
           </View>
-        </ScrollView>
+          <RegisterInput
+            placeholder="Plant condition"
+            value={plantCondition}
+            onChangeText={setPlantCondition}
+            returnKeyType="next"
+          />
+          <RegisterButton title="Add my item" onPress={handleSubmit} />
+        </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -198,36 +193,26 @@ export default function NewItemScreen() {
 const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
+    padding: 10,
     backgroundColor: "#F1F0E9",
   },
   container: {
-    flex: 1,
-    backgroundColor: "#F1F0E9",
-  },
-  scrollContent: {
-    flexGrow: 1,
     justifyContent: "center",
-    alignItems: "stretch",
-    paddingVertical: 20,
-    paddingHorizontal: 40,
+    backgroundColor: "pink",
   },
-
-  registerContainer: {
-    flex: 1,
-    justifyContent: "center",
-    marginTop: 40,
-  },
-
+	pictureContainer: {
+		height: 200,
+		width: 200,
+		backgroundColor: "lightgreen",
+	},
   toggleContainer: {
     flexDirection: "row",
     alignItems: "center",
   },
-
   label: {
     marginRight: 10,
     fontSize: 16,
   },
-
   preview: {
     width: 200,
     height: 200,
