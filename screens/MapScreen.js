@@ -10,7 +10,7 @@ export default function MapScreen() {
   const [initialRegion, setInitialRegion] = useState({
     latitude: 46.603354,
     longitude: 1.888334,
-    latitudeDelta: 5,
+    latitudeDelta: 5, 
     longitudeDelta: 15,
   });
   const [loading, setLoading] = useState(true);
