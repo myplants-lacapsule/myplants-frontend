@@ -19,7 +19,8 @@ import { useSelector } from "react-redux";
 
 export default function MapScreen() {
   const navigation = useNavigation();
-  // const userInStore = useSelector((state) => state.user.value);
+	const user = useSelector((state) => state.user.value);
+  const userToken = user.token;
 
   // const [itemsData, setItemsData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -31,31 +32,6 @@ export default function MapScreen() {
     latitudeDelta: 5,
     longitudeDelta: 15,
   });
-
-  if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#2D5334" />
-        <Text style={styles.loadingText}>Chargement...</Text>
-      </View>
-    );
-  }
-
-  const user = useSelector((state) => state.user.value);
-  const userToken = user.token;
-
-  useEffect(() => {
-    (async () => {
-      const result = await Location.requestForegroundPermissionsAsync();
-      const status = result?.status;
-
-      if (status === "granted") {
-        Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
-          setCurrentPosition(location.coords);
-        });
-      }
-    })();
-  }, []);
 
   // Fonction qui vérifie si l'utilisateur a déjà des coordonnées enregistrées
   const checkUserLocation = async () => {
@@ -77,7 +53,7 @@ export default function MapScreen() {
   };
 
   // Fonction déclenchée lorsque l'utilisateur appuie sur le bouton "+"
-  const handlePress = async () => {
+  const handleAddPress = async () => {
     const locationData = await checkUserLocation();
     if (
       locationData &&
@@ -89,6 +65,14 @@ export default function MapScreen() {
       // Coordonnées existantes => Aller directement au formulaire d'ajout d'article
       navigation.navigate("NewItemScreen");
     }
+	};
+
+	// Fonction déclenchée lorsque l'utilisateur appuie sur un marqueur
+  const handleMarkerPress = () => {
+    setModalVisible(true);
+  };
+
+	// Récupération de la position actuelle de l'utilisateur
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -114,10 +98,6 @@ export default function MapScreen() {
     })();
   }, []);
 
-  const handleMarkerPress = () => {
-    setModalVisible(true);
-  };
-
   // useEffect(() => {
   //   const fetchItems = () => {
   //     fetch(`${process.env.EXPO_PUBLIC_API_URL}/items/${userInStore.token}`)
@@ -138,11 +118,20 @@ export default function MapScreen() {
   //   fetchItems();
   // }, []);
 
-  // const userItems = itemsData.map((data, i) => <ItemCard key={i} {...data} />);
+  // const userItems = itemsData.map((data, i) => <ItemCard key={i} {...data} onPress={handleItemScreen/>);
+	// const handleItemScreen = () => {
+	// 	navigation.navigate("ItemScreen");
+	// };
 
-  const handleAddPress = () => {
-    navigation.navigate("NewItemScreen");
-  };
+	// Affichage d'un écran de chargement si les données ne sont pas encore chargées
+	if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#2D5334" />
+        <Text style={styles.loadingText}>Loading ...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -178,7 +167,7 @@ export default function MapScreen() {
       </TouchableOpacity>
     </View>
   );
-}}
+}
 
 const styles = StyleSheet.create({
   container: {
