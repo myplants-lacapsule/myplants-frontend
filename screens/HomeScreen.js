@@ -54,12 +54,14 @@ export default function HomeScreen() {
             name="bell"
             size={25}
             solid={true}
+						onPress={() => navigation.navigate("NotificationScreen")}
           />
           <FontAwesome5
             style={styles.icon}
             name="user-circle"
             size={40}
             solid={true}
+						onPress={() => navigation.navigate("UserScreen")}
           />
         </View>
       </View>

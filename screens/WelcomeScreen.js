@@ -20,11 +20,11 @@ export default function WelcomeScreen() {
       <View style={styles.buttonContainer}>
         <RegisterButton
           title="Sign in"
-          onPress={() => navigation.navigate("SignIn")}
+          onPress={() => navigation.navigate("SignInScreen")}
         />
         <RegisterButton
           title="Sign up"
-          onPress={() => navigation.navigate("SignUp")}
+          onPress={() => navigation.navigate("SignUpScreen")}
         />
       </View>
     </KeyboardAvoidingView>
