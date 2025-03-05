@@ -10,21 +10,22 @@ import {
   TextInput,
 } from "react-native";
 
-import { CameraView, Camera } from "expo-camera";
+import { Camera } from "expo-camera";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 
 import { useSelector } from "react-redux";
 
-import { useIsFocused } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-import AddPlantButton from "../components/AddPlantButton";
-
-import { useNavigation } from "@react-navigation/native";
-
 import { EXPO_PUBLIC_API_URL } from "react-native-dotenv";
+
+import AddPlantButton from "../components/AddPlantButton";
+import CameraSearch from '../components/CameraSearch'
+import SearchBar from "../components/SearchBar";
+import SuggestionPlantCard from '../components/SuggestionPlantCard'
 
 export default function SearchScreen() {
   const perenualKey = "sk-BfUS67c5d3516107b8879";
@@ -37,10 +38,8 @@ export default function SearchScreen() {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
   const [plantsData, setPlantsData] = useState({});
-  // console.log(plantsData)
   const [inputResearch, setInputResearch] = useState("");
 
-  const cameraRef = useRef(null);
   const isFocused = useIsFocused();
   const [hasPermission, setHasPermission] = useState(false); // état de la permission
 
@@ -59,7 +58,7 @@ export default function SearchScreen() {
   }, [isFocused, inputResearch]);
 
   // fonction pour la prise de photo
-  const takePicture = async () => {
+  const takePicture = async (cameraRef) => {
     try {
       const photo = await cameraRef.current?.takePictureAsync({ quality: 0.3 });
       if (photo) {
@@ -286,20 +285,9 @@ export default function SearchScreen() {
     <SafeAreaView style={styles.container}>
       {!showCamera && !showSuggestions && (
         <View style={styles.containsearch}>
-          <View style={styles.containTextSearch}>
-            <TouchableOpacity
-              onPress={identificationPlantIdByText}
-              style={styles.searchicon}
-            >
-              <FontAwesome name="search" size={30} color="#2D5334" />
-            </TouchableOpacity>
-            <TextInput
-              style={styles.textInputResearch}
-              placeholder="Rechercher une plante"
-              onChangeText={(value) => setInputResearch(value)}
-              value={inputResearch}
-            />
-          </View>
+          <SearchBar inputResearch={inputResearch}
+            setInputResearch={setInputResearch}
+            onSearch={identificationPlantIdByText} />
           <TouchableOpacity style={styles.takePhoto} onPress={getPermission}>
             <FontAwesome name="camera" size={30} color="white" />
           </TouchableOpacity>
@@ -307,52 +295,22 @@ export default function SearchScreen() {
       )}
 
       {(hasPermission === true || isFocused) && showCamera && (
-        <View>
-          <CameraView
-            style={styles.camera}
-            ref={(ref) => (cameraRef.current = ref)}
-          >
-            <TouchableOpacity style={styles.snapButton} onPress={takePicture}>
-              <View style={styles.cameraContainer}>
-                <FontAwesome name="camera" size={30} color="black" />
-              </View>
-            </TouchableOpacity>
-          </CameraView>
-        </View>
+        <CameraSearch takePicture={takePicture} />
       )}
 
       {showSuggestions && !showCamera && (
-        <View style={styles.cardContainer}>
-          <View style={styles.card}>
-            <Image source={{ uri: plantsData.photo }} style={styles.image} />
-            <View style={styles.containText}>
-              <View style={styles.firstrow}>
-                <Text style={styles.title}>{plantsData.name}</Text>
-              </View>
-              <Text style={styles.description}>{plantsData.description}</Text>
-            </View>
-          </View>
-          <View style={styles.badges}>
-            <View style={styles.badgeWatering}>
-              <FontAwesome name="tint" size={25} color="white" />
-              <Text style={styles.textBadges}>
-                {plantsData.wateringFrequency}
-              </Text>
-            </View>
-            <View style={styles.badgeToxicity}>
-              <FontAwesome name="bath" size={25} color="white" />
-              <Text style={styles.textBadges}>{plantsData.toxicity}</Text>
-            </View>
-          </View>
+        <View>
+          < SuggestionPlantCard plantsData={plantsData}/>
+
           <TouchableOpacity
             style={styles.btn}
-            onPress={() => addPlantToBackend(plantsData)}
-          >
+            onPress={() => addPlantToBackend(plantsData)}>
             <AddPlantButton />
           </TouchableOpacity>
         </View>
-      )}
-    </SafeAreaView>
+      )
+      }
+    </SafeAreaView >
   );
 }
 
@@ -367,27 +325,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
-  },
-  containTextSearch: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  textInputResearch: {
-    backgroundColor: "#FBFBFB",
-    width: "280",
-    height: "60",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 30,
-    borderColor: "#2D5334",
-    borderWidth: 2,
-    paddingLeft: 60,
-  },
-  searchicon: {
-    left: 20,
-    zIndex: 30,
-    position: "absolute",
   },
   takePhoto: {
     backgroundColor: "#2D5334",
@@ -416,71 +353,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginBottom: "30",
-  },
-  cardContainer: {
-    flexWrap: "wrap",
-    justifyContent: "center",
-    padding: 10,
-    gap: 10,
-  },
-  card: {
-    flexDirection: "row",
-    width: "100%",
-    height: "auto",
-    backgroundColor: "#FBFBFB",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 8,
-    borderColor: "#D0DDD0",
-  },
-  image: {
-    width: "40%",
-    height: "95%",
-    padding: 5,
-    borderRadius: 10,
-  },
-  containText: {
-    width: "50%",
-    height: "100%",
-    justifyContent: "center",
-    gap: 5,
-    padding: 10,
-  },
-  firstrow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  title: {
-    fontWeight: "bold",
-    color: "#2D5334",
-    fontSize: 20,
-  },
-  description: {},
-  badges: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: 20,
-  },
-  badgeWatering: {
-    backgroundColor: "#3674B5",
-    borderRadius: 80,
-    padding: 8,
-    width: "45%",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  badgeToxicity: {
-    backgroundColor: "#BC4749",
-    borderRadius: 80,
-    padding: 8,
-    width: "45%",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  textBadges: {
-    color: "white",
   },
   btn: {
     alignItems: "center",
