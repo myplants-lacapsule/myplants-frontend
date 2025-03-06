@@ -12,37 +12,35 @@ export default function HomeScreen() {
 
   const [plantsData, setPlantsData] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [noPlantData, setNoPlantData] = useState(false);
 
   useEffect(() => {
-    const fetchPlants = () => {
-      fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/${userInStore.token}`)
-        .then((response) => response.json())
-        .then((data) => {
-          if (data && data.data) {
-            setPlantsData(data.data);
-          } else {
-            setPlantsData([]);
-          }
-          setDataLoaded(true);
-        })
-        .catch((error) => {
-          console.error("Error fetching plants:", error);
-          setPlantsData([]);
-          setDataLoaded(true);
-        });
-    };
-
     fetchPlants();
   }, []);
 
+  const fetchPlants = async () => {
+    try {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/${userInStore.token}`)
+
+      const data = await response.json()
+      
+      if (data.error === "No plant found"){
+        setNoPlantData(true)
+      }
+
+      if (data && data.data) {
+        setPlantsData(data.data);
+        setDataLoaded(true);
+      } 
+
+    } catch (error) {
+      console.error("Error fetching plants:", error);
+    };
+  }
+
   const userPlants =
-    plantsData.length > 0
-      ? plantsData.map((data, i) => <PlantCard key={i} {...data} />)
-      : dataLoaded && (
-          <Text style={styles.noCardMessage}>
-            You don't have any plants yet. Add one!
-          </Text>
-        );
+    plantsData.length > 0 && !noPlantData && dataLoaded ? plantsData.map((data, i) => <PlantCard key={i} {...data} />) :
+     <Text style={styles.noCardMessage}> You don't have any plants yet. Add one! </Text>
 
   return (
     <View style={styles.container}>
@@ -54,14 +52,14 @@ export default function HomeScreen() {
             name="bell"
             size={25}
             solid={true}
-						onPress={() => navigation.navigate("NotificationScreen")}
+            onPress={() => navigation.navigate("NotificationScreen")}
           />
           <FontAwesome5
             style={styles.icon}
             name="user-circle"
             size={40}
             solid={true}
-						onPress={() => navigation.navigate("UserScreen")}
+            onPress={() => navigation.navigate("UserScreen")}
           />
         </View>
       </View>
