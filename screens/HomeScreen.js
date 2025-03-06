@@ -23,24 +23,26 @@ export default function HomeScreen() {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/${userInStore.token}`)
 
       const data = await response.json()
-      
-      if (data.error === "No plant found"){
+
+      if (data.error === "No plant found") {
         setNoPlantData(true)
       }
 
       if (data && data.data) {
         setPlantsData(data.data);
         setDataLoaded(true);
-      } 
+      }
 
     } catch (error) {
       console.error("Error fetching plants:", error);
     };
   }
 
-  const userPlants =
-    plantsData.length > 0 && !noPlantData && dataLoaded ? plantsData.map((data, i) => <PlantCard key={i} {...data} />) :
-     <Text style={styles.noCardMessage}> You don't have any plants yet. Add one! </Text>
+  const hasPlants = plantsData.length > 0 && !noPlantData && dataLoaded;
+
+  const userPlants = hasPlants ? plantsData.map((data, i) => <PlantCard key={i} {...data} />
+  ) : (
+    <Text style={styles.noCardMessage}> You don't have any plants yet. Add one! </Text>)
 
   return (
     <View style={styles.container}>
