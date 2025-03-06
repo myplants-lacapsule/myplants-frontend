@@ -9,13 +9,14 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import ItemCard from "../components/itemCard";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 
 export default function MapScreen() {
+  const isFocused = useIsFocused();
   const navigation = useNavigation();
   const user = useSelector((state) => state.user.value);
   const userToken = user.token;
@@ -58,6 +59,12 @@ export default function MapScreen() {
     })();
   }, []);
 
+  // Appeler fetchItems une fois que le composant MapScreen est chargé
+  useEffect(() => {
+    if (!isFocused) {setUniquePin([])}
+    fetchItems();
+  }, [isFocused]);
+
   // Fonction pour récupérer toutes les annonces depuis le backend
 
   const fetchItems = async () => {
@@ -67,7 +74,6 @@ export default function MapScreen() {
       );
       const data = await response.json();
       if (data.result) {
-  
         // Regrouper les annonces par utilisateur pour n'afficher qu'un seul marker par user
         const pinsMap = {};
         data.items.forEach((item) => {
@@ -87,11 +93,6 @@ export default function MapScreen() {
       console.error("Error fetching items:", error);
     }
   };
-
-  // Appeler fetchItems une fois que le composant MapScreen est chargé
-  useEffect(() => {
-    fetchItems();
-  }, []);
 
   // Affichage de la modale lorsque l'utilisateur appuie sur un marqueur
   const handleMarkerPress = () => {
@@ -184,25 +185,25 @@ export default function MapScreen() {
           />
         ))}
       </MapView>
-			<View style={styles.modalContainer}>
-      <Modal visible={modalVisible} animationType="fade" transparent>
-        <View style={styles.modal}>
-          {/* <ScrollView style={styles.cardContainer}>{userItems}</ScrollView> */}
-          <Text>Articles à vendre</Text>
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={() => setModalVisible(false)}
-          >
-            <FontAwesome5
-              style={styles.closeButtonIcon}
-              name="times-circle"
-              size={25}
-              solid={true}
-            />
-          </TouchableOpacity>
-        </View>
-      </Modal>
-			</View>
+      <View style={styles.modalContainer}>
+        <Modal visible={modalVisible} animationType="fade" transparent>
+          <View style={styles.modal}>
+            {/* <ScrollView style={styles.cardContainer}>{userItems}</ScrollView> */}
+            <Text>Articles à vendre</Text>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalVisible(false)}
+            >
+              <FontAwesome5
+                style={styles.closeButtonIcon}
+                name="times-circle"
+                size={25}
+                solid={true}
+              />
+            </TouchableOpacity>
+          </View>
+        </Modal>
+      </View>
       <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
         <Text style={styles.addButtonText}>+</Text>
       </TouchableOpacity>
