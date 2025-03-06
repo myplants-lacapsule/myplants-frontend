@@ -127,15 +127,14 @@ export default function SearchScreen() {
       const plantName = data.result.classification.suggestions[0].name;
 
       if (plantProbability < 0.75 || !plantProbability) {
-        alert("Aucune plante trouvée, veuillez recommencer la photo");
+        alert("Plant not found, please try again");
       } else {
         await idenficationDetailsPlant(plantName, cloudinaryUrl)
       }
     } catch (error) {
-      console.error("Error lors de la prise de la photo", error);
+      console.error("Error when taking the picture", error);
     }
   };
-
 
   // const identificationPlantIdByText = async (inputResearch) => {
 
@@ -188,9 +187,10 @@ export default function SearchScreen() {
   const idenficationDetailsPlant = async (plantName, cloudinaryUrl) => {
     try {
       //appel 2ème API pour récupérer l'id de la plante
-      const responsePerenual = await fetch(`https://perenual.com/api/v2/species-list?key=${perenualKey}&q=${plantName.toLowerCase()}`);
+      plantName = plantName.toLowerCase();
+      const responsePerenual = await fetch(`https://perenual.com/api/v2/species-list?key=${perenualKey}&q=${plantName}`);
       if (!responsePerenual.ok) {
-        alert('Aucune plante trouvée, veuillez réessayer');
+        alert('No plant found, please try again');
         setInputResearch("");
       }
 
@@ -205,7 +205,7 @@ export default function SearchScreen() {
         if (idPerenual) {
           const fetchPerenualDetails = await fetch(`https://perenual.com/api/v2/species/details/${idPerenual}?key=${perenualKey}`);
           if (!fetchPerenualDetails.ok) {
-            throw new Error('La réponse du réseau n\'est pas correcte');
+            throw new Error('Invalid data received from Perenual API');
           }
 
           const dataPerenual = await fetchPerenualDetails.json();
@@ -276,15 +276,16 @@ export default function SearchScreen() {
             setShowCamera(false)
             setShowSuggestions(true)
           } else {
-            console.error("Données invalides reçues de l'API Perenual");
+          setInputResearch("");
+          alert("Données invalides reçues de l'API Perenual");
           }
 
         } else {
-          alert('Plante non trouvée, veuillez réessayer')
+        alert("Plant not found, please try again");
           setInputResearch("");
         }
       } else {
-        alert('Plante non trouvée, veuillez réessayer')
+        alert("Plant not found, please try again");
         setInputResearch("");
       }
     } catch (error) {
@@ -321,7 +322,7 @@ export default function SearchScreen() {
         setShowSuggestions(false);
         setShowCamera(false);
         setPlantsData({});
-        navigation.navigate("Accueil");
+        navigation.navigate("Home");
       } else {
         console.log(false);
       }

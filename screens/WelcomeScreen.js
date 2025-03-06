@@ -19,12 +19,12 @@ export default function WelcomeScreen() {
       <Image style={styles.image} source={require("../assets/logo.jpg")} />
       <View style={styles.buttonContainer}>
         <RegisterButton
-          title="Se connecter"
-          onPress={() => navigation.navigate("SignIn")}
+          title="Sign in"
+          onPress={() => navigation.navigate("SignInScreen")}
         />
         <RegisterButton
-          title="S'inscrire"
-          onPress={() => navigation.navigate("SignUp")}
+          title="Sign up"
+          onPress={() => navigation.navigate("SignUpScreen")}
         />
       </View>
     </KeyboardAvoidingView>

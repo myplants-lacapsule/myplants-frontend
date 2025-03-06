@@ -22,11 +22,11 @@ export default function SignInScreen() {
 
   const handleConnection = () => {
     if (!signInEmail) {
-      setError("Adresse email incorrecte");
+      setError("Incorrect email address");
       return;
     }
     if (!signInPassword) {
-      setError("Mot de passe incorrect");
+      setError("Incorrect password");
       return;
     }
 
@@ -44,7 +44,7 @@ export default function SignInScreen() {
           setError("");
           navigation.navigate("TabNavigator");
         } else {
-          setError("Cet utilisateur n'existe pas");
+          setError("This user does not exist");
         }
       });
   };
@@ -56,7 +56,7 @@ export default function SignInScreen() {
     >
       <View style={styles.registerContainer}>
         <RegisterInput
-          placeholder="Adresse email"
+          placeholder="Email address"
           autoCapitalize="none"
           keyboardType="email-address"
           textContentType="emailAddress"
@@ -65,14 +65,14 @@ export default function SignInScreen() {
           onChangeText={setSignInEmail}
         />
         <RegisterInput
-          placeholder="Mot de passe"
+          placeholder="Password"
           secureTextEntry={true}
           textContentType="password"
           autoComplete="password"
           value={signInPassword}
           onChangeText={setSignInPassword}
         />
-        <RegisterButton title="Se connecter" onPress={handleConnection} />
+        <RegisterButton title="Sign in" onPress={handleConnection} />
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
       </View>
     </KeyboardAvoidingView>

@@ -4,67 +4,73 @@ import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import CustomButton from "../components/CustomButton";
-import Card from "../components/Card";
+import PlantCard from "../components/PlantCard";
 
 export default function HomeScreen() {
   const navigation = useNavigation();
   const userInStore = useSelector((state) => state.user.value);
+
   const [plantsData, setPlantsData] = useState([]);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
+    const fetchPlants = () => {
+      fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/${userInStore.token}`)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data && data.data) {
+            setPlantsData(data.data);
+          } else {
+            setPlantsData([]);
+          }
+          setDataLoaded(true);
+        })
+        .catch((error) => {
+          console.error("Error fetching plants:", error);
+          setPlantsData([]);
+          setDataLoaded(true);
+        });
+    };
+
     fetchPlants();
   }, []);
 
-  const fetchPlants = () => {
-    fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/${userInStore.token}`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data && data.data) {
-          setPlantsData(data.data);
-        } else {
-          setPlantsData([]);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching plants:", error);
-        setPlantsData([]);
-      });
-  };
-
   const userPlants =
-    plantsData.length > 0 ? (
-      plantsData.map((data, i) => <Card key={i} {...data} />)
-    ) : (
-      <Text style={styles.noCardMessage}>
-        Vous n'avez pas encore de plantes.
-      </Text>
-    );
+    plantsData.length > 0
+      ? plantsData.map((data, i) => <PlantCard key={i} {...data} />)
+      : dataLoaded && (
+          <Text style={styles.noCardMessage}>
+            You don't have any plants yet. Add one!
+          </Text>
+        );
 
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
-        <Text style={styles.hello}>Bonjour, {userInStore.username} !</Text>
+        <Text style={styles.hello}>Hello, {userInStore.username} !</Text>
         <View style={styles.iconContainer}>
           <FontAwesome5
             style={styles.icon}
             name="bell"
             size={25}
             solid={true}
+						onPress={() => navigation.navigate("NotificationScreen")}
           />
           <FontAwesome5
             style={styles.icon}
             name="user-circle"
             size={40}
             solid={true}
+						onPress={() => navigation.navigate("UserScreen")}
           />
         </View>
       </View>
-      <Text style={styles.myplants}>Mes plantes</Text>
+      <Text style={styles.myplants}>My plants</Text>
       <View style={styles.buttonContainer}>
         <CustomButton
           iconName="plus-circle"
-          text="Ajouter une plante"
-          onPress={() => navigation.navigate("Ajouter une plante")}
+          text="Add a plant"
+          onPress={() => navigation.navigate("Add a plant")}
           style={styles.buttonText}
         />
       </View>
