@@ -1,6 +1,7 @@
 import {
   ActivityIndicator,
   Modal,
+  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -59,7 +60,6 @@ export default function MapScreen() {
   }, []);
 
   // Fonction pour récupérer toutes les annonces depuis le backend
-
   const fetchItems = async () => {
     try {
       const response = await fetch(
@@ -67,7 +67,6 @@ export default function MapScreen() {
       );
       const data = await response.json();
       if (data.result) {
-  
         // Regrouper les annonces par utilisateur pour n'afficher qu'un seul marker par user
         const pinsMap = {};
         data.items.forEach((item) => {
@@ -184,25 +183,25 @@ export default function MapScreen() {
           />
         ))}
       </MapView>
-			<View style={styles.modalContainer}>
-      <Modal visible={modalVisible} animationType="fade" transparent>
-        <View style={styles.modal}>
-          {/* <ScrollView style={styles.cardContainer}>{userItems}</ScrollView> */}
-          <Text>Articles à vendre</Text>
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={() => setModalVisible(false)}
-          >
-            <FontAwesome5
-              style={styles.closeButtonIcon}
-              name="times-circle"
-              size={25}
-              solid={true}
-            />
-          </TouchableOpacity>
-        </View>
-      </Modal>
-			</View>
+      <View style={styles.modalContainer}>
+        <Modal visible={modalVisible} animationType="fade" transparent>
+          <View style={styles.modal}>
+            {/* <ScrollView style={styles.cardContainer}>{userItems}</ScrollView> */}
+            <Text>Articles à vendre</Text>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalVisible(false)}
+            >
+              <FontAwesome5
+                style={styles.closeButtonIcon}
+                name="times-circle"
+                size={25}
+                solid={true}
+              />
+            </TouchableOpacity>
+          </View>
+        </Modal>
+      </View>
       <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
         <Text style={styles.addButtonText}>+</Text>
       </TouchableOpacity>
@@ -229,11 +228,11 @@ const styles = StyleSheet.create({
     color: "#2D5334",
   },
   modal: {
-    width: "95%",
-    padding: 5,
-    borderRadius: 5,
-
-    backgroundColor: "pink",
+    position: "absolute",
+    width: "80%",
+    padding: 20,
+    borderRadius: 15,
+    backgroundColor: "white",
   },
   itemCard: {
     backgroundColor: "#FBFBFB",
