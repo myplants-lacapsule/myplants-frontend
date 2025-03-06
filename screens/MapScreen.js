@@ -72,8 +72,7 @@ export default function MapScreen() {
         const pinsMap = {};
         data.items.forEach((item) => {
           const userData = item.createdBy;
-          const userId = userData._id;
-          console.log("User address data:", userData.address);
+          const userId = userData.token;
           // On ajoute le marker si ce user n'est pas déjà dans pinsMap
           if (!pinsMap[userId]) {
             pinsMap[userId] = {

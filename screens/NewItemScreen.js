@@ -108,7 +108,7 @@ export default function NewItemScreen() {
 
     if (result.result) {
       Alert.alert("Success", "Your item has been added!");
-      // Optionnel : réinitialiser le formulaire ou naviguer vers un autre écran
+      
     } else {
       Alert.alert("Error", result.error);
     }
