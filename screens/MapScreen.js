@@ -187,7 +187,7 @@ export default function MapScreen() {
         <Modal visible={modalVisible} animationType="fade" transparent>
           <View style={styles.modal}>
             {/* <ScrollView style={styles.cardContainer}>{userItems}</ScrollView> */}
-            <Text>Articles à vendre</Text>
+            <Text>Articles à vendrehhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh</Text>
             <TouchableOpacity
               style={styles.closeButton}
               onPress={() => setModalVisible(false)}
