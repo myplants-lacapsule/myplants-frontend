@@ -4,6 +4,7 @@ import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 export default function PlantCard(props) {
+  console.log(props)
   const truncatedDescription =
     props.description.length > 120
       ? props.description.substring(0, 120) + "..."
