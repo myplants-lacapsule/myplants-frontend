@@ -1,4 +1,5 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
@@ -7,6 +8,7 @@ import CustomButton from "../components/CustomButton";
 import PlantCard from "../components/PlantCard";
 
 export default function HomeScreen() {
+  const isFocused = useIsFocused();
   const navigation = useNavigation();
   const userInStore = useSelector((state) => state.user.value);
 
@@ -14,9 +16,13 @@ export default function HomeScreen() {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [noPlantData, setNoPlantData] = useState(false);
 
+  // useEffect(() => {
+  //   fetchPlants();
+  // }, []);
+
   useEffect(() => {
     fetchPlants();
-  }, []);
+  }, [isFocused])
 
   const fetchPlants = async () => {
     try {

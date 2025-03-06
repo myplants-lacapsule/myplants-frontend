@@ -1,7 +1,16 @@
 import React, { useState } from "react";
-import { View, TextInput, Button, Alert, StyleSheet } from "react-native";
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  View,
+  Text,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
+import RegisterInput from "../components/RegisterInput.js";
+import RegisterButton from "../components/RegisterButton.js";
 
 export default function AddLocationScreen() {
   const navigation = useNavigation();
@@ -9,15 +18,12 @@ export default function AddLocationScreen() {
   const userToken = user.token;
 
   const [street, setStreet] = useState("");
-  const [city, setCity] = useState("");
   const [postalCode, setPostalCode] = useState("");
+  const [city, setCity] = useState("");
 
   const handleUpdate = async () => {
     if (!street || !city || !postalCode) {
-      Alert.alert(
-        "Erreur",
-        "Veuillez renseigner l'adresse, la ville et le code postal."
-      );
+      Alert.alert("Error", "Please enter address, city and zip code.");
       return;
     }
     try {
@@ -36,57 +42,60 @@ export default function AddLocationScreen() {
       );
       const result = await response.json();
       if (result.result) {
-        Alert.alert("Succès", "Adresse mise à jour", [
+        Alert.alert("Success", "Your address is updated", [
           {
             text: "OK",
             onPress: () => navigation.navigate("NewItemScreen"),
           },
         ]);
       } else {
-        Alert.alert("Erreur", result.error);
+        Alert.alert("Error", result.error);
       }
     } catch (error) {
       console.error("Error updating location:", error);
-      Alert.alert("Erreur", "Une erreur est survenue lors de la mise à jour.");
+      Alert.alert("Error", "An error occurred during the update.");
     }
   };
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        placeholder="Adresse"
-        value={street}
-        onChangeText={setStreet}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Code postal"
-        value={postalCode}
-        onChangeText={setPostalCode}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Ville"
-        value={city}
-        onChangeText={setCity}
-        style={styles.input}
-      />
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <Text style={styles.title}>Please enter your address</Text>
+      <View style={styles.registerContainer}>
+        <RegisterInput
+          placeholder="Address"
+          value={street}
+          onChangeText={setStreet}
+        />
+        <RegisterInput
+          placeholder="ZIP code"
+          value={postalCode}
+          onChangeText={setPostalCode}
+        />
+        <RegisterInput placeholder="City" value={city} onChangeText={setCity} />
 
-      <Button title="Valider" onPress={handleUpdate} />
-    </View>
+        <RegisterButton title="Submit" onPress={handleUpdate} />
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    backgroundColor: "#F1F0E9",
+    alignItems: "center",
     justifyContent: "center",
   },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    marginBottom: 15,
-    padding: 10,
+  registerContainer: {
+    width: "80%",
   },
+	title: {
+		color: '#2D5334',
+		fontSize: 18,
+		fontFamily: 'OpenSans-Regular',
+		paddingBottom: 10,
+	},
 });
