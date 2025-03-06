@@ -30,6 +30,7 @@ export default function MapScreen() {
     latitudeDelta: 5,
     longitudeDelta: 15,
   });
+  const [uniquePin, setUniquePin] = useState([]);
 
   // Récupération de la position actuelle de l'utilisateur
   useEffect(() => {
@@ -57,7 +58,41 @@ export default function MapScreen() {
     })();
   }, []);
 
-	// Fonction qui affiche tous les utilisateurs ayant une annonce à proximité
+  // Fonction pour récupérer toutes les annonces depuis le backend
+
+  const fetchItems = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.EXPO_PUBLIC_API_URL}/items/allItems`
+      );
+      const data = await response.json();
+      if (data.result) {
+  
+        // Regrouper les annonces par utilisateur pour n'afficher qu'un seul marker par user
+        const pinsMap = {};
+        data.items.forEach((item) => {
+          const userData = item.createdBy;
+          const userId = userData._id;
+          console.log("User address data:", userData.address);
+          // On ajoute le marker si ce user n'est pas déjà dans pinsMap
+          if (!pinsMap[userId]) {
+            pinsMap[userId] = {
+              lat: userData.address.lat,
+              long: userData.address.long,
+            };
+          }
+        });
+        setUniquePin(Object.values(pinsMap));
+      }
+    } catch (error) {
+      console.error("Error fetching items:", error);
+    }
+  };
+
+  // Appeler fetchItems une fois que le composant MapScreen est chargé
+  useEffect(() => {
+    fetchItems();
+  }, []);
 
   // Affichage de la modale lorsque l'utilisateur appuie sur un marqueur
   const handleMarkerPress = () => {
@@ -138,11 +173,17 @@ export default function MapScreen() {
         {currentPosition && (
           <Marker coordinate={currentPosition} pinColor="red" />
         )}
-        <Marker
-          coordinate={{ latitude: 48.8606, longitude: 2.3774 }}
-          pinColor="blue"
-          onPress={handleMarkerPress}
-        />
+        {uniquePin.map((pin, i) => (
+          <Marker
+            key={i}
+            coordinate={{
+              latitude: pin.lat,
+              longitude: pin.long,
+            }}
+            pinColor="blue"
+            onPress={handleMarkerPress}
+          />
+        ))}
       </MapView>
       <Modal visible={modalVisible} animationType="fade" transparent>
         <View style={styles.modal}>
