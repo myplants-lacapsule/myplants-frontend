@@ -1,27 +1,26 @@
 import {
   ActivityIndicator,
   Modal,
-  // ScrollView,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-// import ItemCard from "../components/itemCard";
+import ItemCard from "../components/itemCard";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
-import { useSelector } from "react-redux";
 
 export default function MapScreen() {
   const navigation = useNavigation();
   const user = useSelector((state) => state.user.value);
   const userToken = user.token;
 
-  // const [itemsData, setItemsData] = useState([]);
+  const [itemsData, setItemsData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [currentPosition, setCurrentPosition] = useState(null);
@@ -31,39 +30,6 @@ export default function MapScreen() {
     latitudeDelta: 5,
     longitudeDelta: 15,
   });
-
-  // Fonction qui vérifie si l'utilisateur a déjà des coordonnées enregistrées
-  const checkUserLocation = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.EXPO_PUBLIC_API_URL}/users/getUserLocation/${userToken}`
-      );
-      const result = await response.json();
-      return result;
-    } catch (error) {
-      console.error("Error checking location", error);
-      return null;
-    }
-  };
-
-  // Fonction déclenchée lorsque l'utilisateur appuie sur le bouton "+"
-  const handleAddPress = async () => {
-    const locationData = await checkUserLocation();
-
-    if (!locationData || !locationData.latitude || !locationData.longitude)
-      {
-        // Pas de coordonnées => Demander à l'utilisateur de renseigner son adresse
-        navigation.navigate("AddLocationScreen");
-      } else {
-        // Coordonnées existantes => Aller directement au formulaire d'ajout d'article
-        navigation.navigate("NewItemScreen");
-      }
-  };
-
-  // Fonction déclenchée lorsque l'utilisateur appuie sur un marqueur
-  const handleMarkerPress = () => {
-    setModalVisible(true);
-  };
 
   // Récupération de la position actuelle de l'utilisateur
   useEffect(() => {
@@ -91,9 +57,17 @@ export default function MapScreen() {
     })();
   }, []);
 
+	// Fonction qui affiche tous les utilisateurs ayant une annonce à proximité
+
+  // Affichage de la modale lorsque l'utilisateur appuie sur un marqueur
+  const handleMarkerPress = () => {
+    setModalVisible(true);
+  };
+
+  // Récupération des articles à afficher sur la modale
   // useEffect(() => {
   //   const fetchItems = () => {
-  //     fetch(`${process.env.EXPO_PUBLIC_API_URL}/items/${userInStore.token}`)
+  //     fetch(`${process.env.EXPO_PUBLIC_API_URL}/items/${user.token}`)
   //       .then((response) => response.json())
   //       .then((data) => {
   //         if (data && data.data) {
@@ -111,10 +85,42 @@ export default function MapScreen() {
   //   fetchItems();
   // }, []);
 
-  // const userItems = itemsData.map((data, i) => <ItemCard key={i} {...data} onPress={handleItemScreen/>);
+  // Articles à afficher dans la modale
+  // const userItems = itemsData.map((data, i) => (
+  //   <ItemCard key={i} {...data} onPress={handleItemScreen} />
+  // ));
+
+  // Fonction déclenchée lorsque l'utilisateur appuie sur un article dans la modale
   // const handleItemScreen = () => {
-  // 	navigation.navigate("ItemScreen");
+  //   navigation.navigate("ItemScreen");
   // };
+
+  // Fonction déclenchée lorsque l'utilisateur appuie sur le bouton "+"
+  const handleAddPress = async () => {
+    const locationData = await checkUserLocation();
+
+    if (!locationData || !locationData.latitude || !locationData.longitude) {
+      // Pas de coordonnées => Demander à l'utilisateur de renseigner son adresse
+      navigation.navigate("AddLocationScreen");
+    } else {
+      // Coordonnées existantes => Aller directement au formulaire d'ajout d'article
+      navigation.navigate("NewItemScreen");
+    }
+  };
+
+  // Fonction qui vérifie si l'utilisateur a déjà des coordonnées enregistrées
+  const checkUserLocation = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.EXPO_PUBLIC_API_URL}/users/getUserLocation/${userToken}`
+      );
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error("Error checking location", error);
+      return null;
+    }
+  };
 
   // Affichage d'un écran de chargement si les données ne sont pas encore chargées
   if (loading) {
