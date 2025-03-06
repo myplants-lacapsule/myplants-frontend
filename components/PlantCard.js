@@ -1,27 +1,31 @@
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
-export default function PlantCard({ photo, name, description = "" }) {
+import { useNavigation } from "@react-navigation/native";
+
+export default function PlantCard(props) {
   const truncatedDescription =
-    description.length > 120
-      ? description.substring(0, 120) + "..."
-      : description;
+    props.description.length > 120
+      ? props.description.substring(0, 120) + "..."
+      : props.description;
+
+  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
-      <View style={styles.card}>
+      <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('FullDetailsPlant', { plantDetails: {...props} })}>
         <View style={styles.photoContainer}>
-          <Image source={{ uri: photo }} style={styles.photo} />
+          <Image source={{ uri: props.photo }} style={styles.photo} />
         </View>
         <View style={styles.infoContainer}>
           <View style={styles.nameContainer}>
-            <Text style={styles.name}>{name}</Text>
+            <Text style={styles.name}>{props.name}</Text>
           </View>
           <View style={styles.descriptionContainer}>
             <Text style={styles.description}>{truncatedDescription}</Text>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 }
