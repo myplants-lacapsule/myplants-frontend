@@ -26,7 +26,7 @@ import SearchBar from "../components/SearchBar";
 import SuggestionPlantCard from '../components/SuggestionPlantCard'
 
 export default function SearchScreen() {
-  const perenualKey = "sk-BfUS67c5d3516107b8879";
+  const perenualKey = "sk-yd0d67c8592057aad8972";
   const plantidKey = "pvThvN3lWpXcKxgeg4LL98pKkQMOQ6vTyGFj2ReUkYDrpHLVoN";
 
   const userInStore = useSelector((state) => state.user.value);
@@ -35,7 +35,7 @@ export default function SearchScreen() {
 
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
-  const [plantsData, setPlantsData] = useState({});
+  const [plantsData, setPlantsData] = useState(null);
   const [inputResearch, setInputResearch] = useState("");
 
   const isFocused = useIsFocused();
@@ -52,8 +52,12 @@ export default function SearchScreen() {
     if (!isFocused) {
       setShowCamera(false);
       setInputResearch("");
+      setShowSuggestions(false)
+      if (!showSuggestions) {
+        setPlantsData(null)
+      }
     }
-  }, [isFocused, inputResearch]);
+  }, [isFocused, inputResearch, showSuggestions, plantsData]);
 
   // fonction pour la prise de photo
   const takePicture = async (cameraRef) => {
@@ -94,6 +98,7 @@ export default function SearchScreen() {
   };
 
   const identificationPlantId = async (cloudinaryUrl) => {
+
     var myHeaders = new Headers();
     myHeaders.append("Api-Key", plantidKey);
     myHeaders.append("Content-Type", "application/json");
@@ -111,10 +116,7 @@ export default function SearchScreen() {
     };
 
     try {
-      const response = await fetch(
-        "https://plant.id/api/v3/identification",
-        requestOptions
-      );
+      const response = await fetch("https://plant.id/api/v3/identification", requestOptions);
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -127,123 +129,173 @@ export default function SearchScreen() {
       if (plantProbability < 0.75 || !plantProbability) {
         alert("Aucune plante trouvée, veuillez recommencer la photo");
       } else {
-        setPlantsData({
-          name: plantName,
-          description:
-            "Le ficus est une plante d'intérieur populaire, appréciée pour ses feuilles brillantes et son aspect ornemental. Facile à entretenir, elle préfère une lumière vive et indirecte.",
-          wateringFrequency: "Tous les 2 jours",
-          problems: "Aucun problème",
-          toxicity: "Aucune toxicité",
-          seasonality: "Printemps",
-          sunExposure: "A besoin d'être exposé au soleil",
-          photo: cloudinaryUrl,
-        });
-        setShowCamera(false);
-        setShowSuggestions(true);
+        await idenficationDetailsPlant(plantName, cloudinaryUrl)
       }
-      // try {
-      // 	const responsePerenual = await fetch(`https://perenual.com/api/v2/species-list?key=${perenualKey}&q=${plantName}`);
-      // 	if (!responsePerenual.ok) {
-      // 		throw new Error('La réponse du réseau n\'est pas correcte');
-      // 	}
-
-      // 	const dataIdPerenual = await responsePerenual.json();
-
-      // 	const idPerenual = dataIdPerenual.data[0].id;
-
-      // 	console.log(idPerenual)
-
-      // 	if (idPerenual) {
-      // 		setPlantsData({ name: 'Ficus', description: 'description de ma plante' });
-      // 		setShowCamera(false)
-      // 		setShowSuggestions(true)
-      // 	}
-
-      // if (idPerenual) {
-      // 	try {
-      // 		const fetchPerenualDetails = await fetch(`https://perenual.com/api/v2/species/details/${idPerenual}?key=${perenualKey}`);
-      // 		if (!fetchPerenualDetails.ok) {
-      // 			throw new Error('La réponse du réseau n\'est pas correcte');
-      // 		}
-
-      // 		const dataPerenual = await fetchPerenualDetails.json();
-      // 		console.log(dataPerenual)
-
-      // 		// Vérifiez que les données sont valides avant de les utiliser
-      // 		if (dataPerenual) {
-      // 			setPlantsData(dataPerenual);
-      // 			setShowCamera(false)
-      // 			setShowSuggestions(true)
-      // 		} else {
-      // 			console.error("Données invalides reçues de l'API Perenual");
-      // 		}
-      // 	} catch (error) {
-      // 		console.error("Erreur lors de la récupération des détails de la plante :", error);
-      // 	}
-      // } else {
-      // 	console.log("Aucun ID trouvé dans la réponse");
-      // }
-      // 		} catch (error) {
-      // 			console.error("Erreur lors de la récupération des données de la plante :", error);
-      // 		}
-      // 	}
     } catch (error) {
       console.error("Error lors de la prise de la photo", error);
     }
   };
 
-  const identificationPlantIdByText = async () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Api-Key", plantidKey);
-    myHeaders.append("Content-Type", "application/json");
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
+  // const identificationPlantIdByText = async (inputResearch) => {
 
+  //   var myHeaders = new Headers();
+  //   myHeaders.append("Api-Key", plantidKey);
+  //   myHeaders.append("Content-Type", "application/json");
+
+  //   var requestOptions = {
+  //     method: "GET",
+  //     headers: myHeaders,
+  //     redirect: "follow",
+  //   };
+
+  //   try {
+  //     const response = await fetch(
+  //       `https://plant.id/api/v3/kb/plants/name_search?q=${inputResearch}`, requestOptions
+  //     );
+  //     if (!response.ok) {
+  //       throw new Error("Network response was not ok");
+  //     }
+
+  //     const data = await response.json();
+
+  //     if (data.entities.length > 0) {
+  //       const plantName = data.entities[0].entity_name;
+  //       console.log(plantName)
+
+  //       const plantData = {
+  //         name: plantName,
+  //         description: `Le ${plantName} est une plante d'intérieur populaire, appréciée pour ses feuilles brillantes et son aspect ornemental. Facile à entretenir, elle préfère une lumière vive et indirecte.`,
+  //         wateringFrequency: "Tous les 2 jours",
+  //         cuisine: "TEST",
+  //         toxicity: "Aucune toxicité",
+  //         seasonality: "Printemps",
+  //         sunExposure: "A besoin d'être exposé au soleil",
+  //         photo: "https://res.cloudinary.com/dxkpvwwnb/image/upload/v1741097480/gnrpwalmsqpavpdq5u32.jpg",
+  //       }
+  //       setShowSuggestions(true)
+  //       setPlantsData(plantData);
+  //       setInputResearch("");
+  //     } else {
+  //       alert("Plante non trouvée");
+  //       setInputResearch("");
+  //     }
+  //   } catch (error) {
+  //     console.error("There was a problem with the fetch operation:", error);
+  //   }
+  // };
+
+  const idenficationDetailsPlant = async (plantName, cloudinaryUrl) => {
     try {
-      const response = await fetch(
-        `https://plant.id/api/v3/kb/plants/name_search?q=${inputResearch}`,
-        requestOptions
-      );
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+      //appel 2ème API pour récupérer l'id de la plante
+      const responsePerenual = await fetch(`https://perenual.com/api/v2/species-list?key=${perenualKey}&q=${plantName.toLowerCase()}`);
+      if (!responsePerenual.ok) {
+        alert('Aucune plante trouvée, veuillez réessayer');
+        setInputResearch("");
       }
 
-      const data = await response.json();
+      const dataPerenual = await responsePerenual.json();
+      console.log(dataPerenual)
 
-      if (data.entities.length > 0) {
-        const plantName = data.entities[0].entity_name;
-        setPlantsData({
-          name: plantName,
-          description:
-            "Le ficus est une plante d'intérieur populaire, appréciée pour ses feuilles brillantes et son aspect ornemental. Facile à entretenir, elle préfère une lumière vive et indirecte.",
-          wateringFrequency: "Tous les 2 jours",
-          problems: "TEST",
-          toxicity: "Aucune toxicité",
-          seasonality: "Printemps",
-          sunExposure: "A besoin d'être exposé au soleil",
-          photo:
-            "https://res.cloudinary.com/dxkpvwwnb/image/upload/v1741097480/gnrpwalmsqpavpdq5u32.jpg",
-        });
+      // check si la plante est trouvée
+      if (dataPerenual.data.length > 0) {
+        const idPerenual = dataPerenual.data[0].id;
 
-        setInputResearch("");
-        await addPlantToBackend(plantsData);
+        // si l'id est trouvé, on récupère les détails de la plante
+        if (idPerenual) {
+          const fetchPerenualDetails = await fetch(`https://perenual.com/api/v2/species/details/${idPerenual}?key=${perenualKey}`);
+          if (!fetchPerenualDetails.ok) {
+            throw new Error('La réponse du réseau n\'est pas correcte');
+          }
+
+          const dataPerenual = await fetchPerenualDetails.json();
+
+          if (dataPerenual) {
+            let plantDescription = dataPerenual.description;
+
+            let plantWateringFrequency = dataPerenual.watering.toLowerCase();
+            if (plantWateringFrequency === "average") {
+              plantWateringFrequency = "Watering every 3 days";
+            } else if (plantWateringFrequency === "frequent") {
+              plantWateringFrequency = "Frequent watering";
+            } else {
+              plantWateringFrequency = "Not found";
+            }
+
+            const plantToxicityToHuman = dataPerenual.poisonous_to_humans;
+            const plantToToxicityToPets = dataPerenual.poisonous_to_pets;
+            let plantToxicity = '';
+            if (plantToxicityToHuman && plantToToxicityToPets) {
+              plantToxicity = "Toxic to humans and pets"
+            } else if (plantToToxicityToPets && !plantToxicityToHuman) {
+              plantToxicity = "Toxic to animals";
+            } else if (!plantToToxicityToPets && plantToxicityToHuman) {
+              plantToxicity = "Toxic to humans";
+            } else {
+              plantToxicity = "Non-toxic";
+            }
+
+            let plantSeasonality = dataPerenual.harvest_season;
+
+            let plantSunExposure = dataPerenual.sunlight[0];
+            let plantSun = ''
+            if (plantSunExposure === "part shade") {
+              plantSun = "Needs shade";
+            } else if (plantSunExposure === "full sun") {
+              plantSun = "Needs exposure to the sun";
+            } else (
+              plantSun = "Needs exposure to light"
+            )
+
+            const isCuisine = dataPerenual.cuisine;
+            let plantCuisine = '';
+            if (isCuisine) {
+              plantCuisine = "The plant is edible";
+            } else {
+              plantCuisine = "The plant is not edible";
+            }
+
+            console.log(dataPerenual.default_image.regular_url)
+            let plantPhotoApi = '';
+            if (cloudinaryUrl === undefined) {
+              plantPhotoApi = dataPerenual.default_image.regular_url;
+            } else {
+              plantPhotoApi = cloudinaryUrl;
+            }
+
+            setPlantsData({
+              name: plantName,
+              description: plantDescription,
+              wateringFrequency: plantWateringFrequency,
+              cuisine: plantCuisine,
+              toxicity: plantToxicity,
+              seasonality: plantSeasonality,
+              sunExposure: plantSun,
+              photo: plantPhotoApi,
+            });
+            setShowCamera(false)
+            setShowSuggestions(true)
+          } else {
+            console.error("Données invalides reçues de l'API Perenual");
+          }
+
+        } else {
+          alert('Plante non trouvée, veuillez réessayer')
+          setInputResearch("");
+        }
       } else {
-        alert("Plante non trouvée");
+        alert('Plante non trouvée, veuillez réessayer')
         setInputResearch("");
       }
     } catch (error) {
-      console.error("There was a problem with the fetch operation:", error);
+      console.error("Error lors de la prise de la photo", error);
     }
-  };
+  }
 
   const addPlantToBackend = async (plantsData) => {
+    console.log("plantsdata dans addplanttoback", plantsData)
     try {
-      const response = await fetch(
-        `${process.env.EXPO_PUBLIC_API_URL}/plants/newPlant/${userInStore.token}`,
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/newPlant/${userInStore.token}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -251,7 +303,7 @@ export default function SearchScreen() {
             name: plantsData.name,
             description: plantsData.description,
             wateringFrequency: plantsData.wateringFrequency,
-            problems: plantsData.problems,
+            cuisine: plantsData.cuisine,
             toxicity: plantsData.toxicity,
             seasonality: plantsData.seasonality,
             sunExposure: plantsData.sunExposure,
@@ -259,7 +311,6 @@ export default function SearchScreen() {
           }),
         }
       );
-      console.log("plantsdata dans la fonction back", plantsData);
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -275,7 +326,7 @@ export default function SearchScreen() {
         console.log(false);
       }
     } catch (error) {
-      console.error("There was a problem with the fetch operation:", error);
+      console.error("Problème de fetch", error);
     }
   };
 
@@ -283,9 +334,7 @@ export default function SearchScreen() {
     <SafeAreaView style={styles.container}>
       {!showCamera && !showSuggestions && (
         <View style={styles.containsearch}>
-          <SearchBar inputResearch={inputResearch}
-            setInputResearch={setInputResearch}
-            onSearch={identificationPlantIdByText} />
+          <SearchBar inputResearch={inputResearch} setInputResearch={setInputResearch} onSearch={() => idenficationDetailsPlant(inputResearch)} />
           <TouchableOpacity style={styles.takePhoto} onPress={getPermission}>
             <FontAwesome name="camera" size={30} color="white" />
           </TouchableOpacity>
@@ -298,16 +347,12 @@ export default function SearchScreen() {
 
       {showSuggestions && !showCamera && (
         <View>
-          < SuggestionPlantCard plantsData={plantsData}/>
-
-          <TouchableOpacity
-            style={styles.btn}
-            onPress={() => addPlantToBackend(plantsData)}>
+          <SuggestionPlantCard plantsData={plantsData} />
+          <TouchableOpacity style={styles.btn} onPress={() => addPlantToBackend(plantsData)}>
             <AddPlantButton />
           </TouchableOpacity>
         </View>
-      )
-      }
+      )}
     </SafeAreaView >
   );
 }

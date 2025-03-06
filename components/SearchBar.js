@@ -5,9 +5,10 @@ import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 function SearchBar({ inputResearch, setInputResearch, onSearch }) {
+
     return (
         <View style={styles.containTextSearch}>
-            <TouchableOpacity onPress={onSearch} style={styles.searchicon}>
+            <TouchableOpacity onPress={() => onSearch(inputResearch)} style={styles.searchicon}>
                 <FontAwesome name="search" size={30} color="#2D5334" />
             </TouchableOpacity>
             <TextInput style={styles.textInputResearch} placeholder="Rechercher une plante" onChangeText={(value) => setInputResearch(value)} value={inputResearch} />
