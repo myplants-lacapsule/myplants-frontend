@@ -28,7 +28,7 @@ export default function SignUpScreen() {
 
   const handleRegister = () => {
     if (!signUpUsername) {
-      setError("Incorrect username");
+      setError("Empty username");
       return;
     }
     if (!signUpEmail || !validateEmail(signUpEmail)) {
@@ -36,7 +36,7 @@ export default function SignUpScreen() {
       return;
     }
     if (!signUpPassword) {
-      setError("Incorrect password");
+      setError("Empty password");
       return;
     }
     if (signUpPassword.length < 8) {
@@ -63,7 +63,7 @@ export default function SignUpScreen() {
           setError("");
           navigation.navigate("TabNavigator");
         } else {
-          setError("An error has occurred");
+          setError("An error has occurred.");
         }
       });
   };
