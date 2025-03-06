@@ -9,6 +9,7 @@ import {
   Alert,
   Image,
   SafeAreaView,
+  ScrollView,
 } from "react-native";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -115,78 +116,80 @@ export default function NewItemScreen() {
 
   return (
     <SafeAreaView style={styles.safeContainer}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-      >
-        <View style={styles.container}>
-          <ReturnButton destination={MapScreen} />
-          <View style={styles.pictureContainer}>
-            <Text style={styles.picture}>Picture</Text>
-          </View>
-          {/* Affichage de l'aperçu de l'image */}
-          {imageUri && (
-            <Image source={{ uri: imageUri }} style={styles.preview} />
-          )}
-          <View style={styles.registerContainer}></View>
-          <CustomButton
-            onPress={takePhoto}
-            text="Add a picture"
-            iconName="camera"
-          />
-          <View style={styles.toggleContainer}>
-            <Text style={styles.plantChoice}>Donation</Text>
-            <ToggleButton
-              value={isVente}
-              onValueChange={(newValue) => setIsVente(newValue)}
-            />
-            <Text style={styles.accessoryChoice}>Sale</Text>
-          </View>
+      <ReturnButton destination={MapScreen} />
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={{ flex: 1 }}
+        >
+          <View style={styles.container}>
+            <View style={styles.pictureContainer}>
+              {imageUri && (
+                <Image source={{ uri: imageUri }} style={styles.preview} />
+              )}
+            </View>
+            <View style={styles.registerContainer}>
+              <CustomButton
+                onPress={takePhoto}
+                text="Add a picture"
+                iconName="camera"
+              />
+              <View style={styles.toggleContainer}>
+                <Text style={styles.plantChoice}>Donation</Text>
+                <ToggleButton
+                  value={isVente}
+                  onValueChange={(newValue) => setIsVente(newValue)}
+                />
+                <Text style={styles.accessoryChoice}>Sale</Text>
+              </View>
 
-          <RegisterInput
-            placeholder="Title"
-            autoCapitalize="none"
-            keyboardType="email-address"
-            value={title}
-            onChangeText={setTitle}
-            returnKeyType="next"
-          />
-          <RegisterInput
-            placeholder="Description"
-            value={description}
-            onChangeText={setDescription}
-            returnKeyType="next"
-          />
-          {isVente && (
-            <RegisterInput
-              placeholder="Price"
-              value={price}
-              onChangeText={setPrice}
-              returnKeyType="next"
-            />
-          )}
-          <RegisterInput
-            placeholder="Height"
-            value={height}
-            onChangeText={setHeight}
-            returnKeyType="next"
-          />
-          <View style={styles.toggleContainer}>
-            <Text style={styles.plantChoice}>Plant</Text>
-            <ToggleButton
-              value={isPlant}
-              onValueChange={(newValue) => setIsPlant(newValue)}
-            />
-            <Text style={styles.accessoryChoice}>Accessory</Text>
+              <RegisterInput
+                placeholder="Title"
+                autoCapitalize="none"
+                keyboardType="email-address"
+                value={title}
+                onChangeText={setTitle}
+                returnKeyType="next"
+              />
+              <RegisterInput
+                placeholder="Description"
+                value={description}
+                onChangeText={setDescription}
+                returnKeyType="next"
+              />
+              {isVente && (
+                <RegisterInput
+                  placeholder="Price"
+                  value={price}
+                  onChangeText={setPrice}
+                  returnKeyType="next"
+                />
+              )}
+              <RegisterInput
+                placeholder="Height"
+                value={height}
+                onChangeText={setHeight}
+                returnKeyType="next"
+              />
+              <View style={styles.toggleContainer}>
+                <Text style={styles.plantChoice}>Plant</Text>
+                <ToggleButton
+                  value={isPlant}
+                  onValueChange={(newValue) => setIsPlant(newValue)}
+                />
+                <Text style={styles.accessoryChoice}>Accessory</Text>
+              </View>
+              <RegisterInput
+                placeholder="Plant condition"
+                value={plantCondition}
+                onChangeText={setPlantCondition}
+                returnKeyType="done"
+              />
+              <RegisterButton title="Add my item" onPress={handleSubmit} />
+            </View>
           </View>
-          <RegisterInput
-            placeholder="Plant condition"
-            value={plantCondition}
-            onChangeText={setPlantCondition}
-            returnKeyType="next"
-          />
-          <RegisterButton title="Add my item" onPress={handleSubmit} />
-        </View>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -194,17 +197,29 @@ export default function NewItemScreen() {
 const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
-    padding: 10,
+    paddingHorizontal: 10,
     backgroundColor: "#F1F0E9",
   },
   container: {
+    flex: 1,
     justifyContent: "center",
-    backgroundColor: "pink",
+		paddingTop: 25,
   },
   pictureContainer: {
-    height: 200,
-    width: 200,
-    backgroundColor: "lightgreen",
+    height: 240,
+    width: "100%",
+    alignItems: "center",
+  },
+  preview: {
+		height: 240,
+    width: 240,
+    borderRadius: 10,
+    alignSelf: "center",
+  },
+  registerContainer: {
+		height: "70%",
+    width: "100%",
+		paddingTop: 5,
   },
   toggleContainer: {
     flexDirection: "row",
@@ -213,14 +228,5 @@ const styles = StyleSheet.create({
   label: {
     marginRight: 10,
     fontSize: 16,
-  },
-  preview: {
-    width: 200,
-    height: 200,
-    borderRadius: 10,
-    marginVertical: 10,
-    alignSelf: "center",
-    backgroundColor: "red",
-    marginBottom: 30,
   },
 });
