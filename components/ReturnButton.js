@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacity, StyleSheet, View, Text } from "react-native";
+import { TouchableOpacity, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -34,8 +34,7 @@ const styles = StyleSheet.create({
     height: '10%',
     alignItems: 'center',
     flexDirection: 'row',
-    paddingLeft: 20,
-    paddingRight: 20,
+		paddingTop: 20,
   },
   button: {
     width: 50,
