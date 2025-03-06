@@ -3,13 +3,12 @@ import {
   Platform,
   StyleSheet,
   View,
-  Switch,
   Text,
-  TouchableOpacity,
   Alert,
   Image,
   SafeAreaView,
   ScrollView,
+  Switch,
 } from "react-native";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -24,7 +23,6 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import ReturnButton from "../components/ReturnButton.js";
-import MapScreen from "./MapScreen.js";
 
 export default function NewItemScreen() {
   const dispatch = useDispatch();
@@ -42,18 +40,7 @@ export default function NewItemScreen() {
   const user = useSelector((state) => state.user.value);
   const userToken = user.token;
 
-  console.log("title:", title);
-  console.log("description:", description);
-  console.log("price:", price);
-  console.log("height:", height);
-  console.log("isVente:", isVente);
-  console.log("isPlant:", isPlant);
-  console.log("plantCondition:", plantCondition);
-  console.log("imageUri:", imageUri);
-
-  useEffect(() => {
-    console.log("imageUri updated:", imageUri);
-  }, [imageUri]);
+  useEffect(() => {}, [imageUri]);
 
   // Fonction pour prendre une photo avec la caméra
   const takePhoto = async () => {
@@ -75,12 +62,19 @@ export default function NewItemScreen() {
   // Fonction pour envoyer les données du formulaire
   const handleSubmit = async () => {
     // Vérification des champs obligatoires
-    if (!title || !description || (isVente && !price) || !height || !imageUri) {
+    if (
+      !title ||
+      !description ||
+      (isVente && !price) ||
+      !height ||
+      !imageUri ||
+      !plantCondition
+    ) {
       Alert.alert("Error", "Please fill in all fields and take a picture.");
       return;
     }
-    // Création de l'objet FormData
 
+    // Création de l'objet FormData
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
@@ -107,27 +101,28 @@ export default function NewItemScreen() {
     const result = await response.json();
 
     if (result.result) {
-      Alert.alert("Success", "Your item has been added!");
-      
+      Alert.alert("Success", "Your item has been added.", [
+        { onPress: () => navigation.navigate("Sale/donation") },
+      ]);
     } else {
-      Alert.alert("Error", result.error);
+      Alert.alert("Erreur", result.error);
     }
   };
 
   return (
     <SafeAreaView style={styles.safeContainer}>
-      <ReturnButton destination={MapScreen} />
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={{ flex: 1 }}
-        >
-          <View style={styles.container}>
-            <View style={styles.pictureContainer}>
-              {imageUri && (
+      <ReturnButton destination={"Sale/donation"} />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          <View style={styles.bigContainer}>
+            {imageUri && (
+              <View style={styles.pictureContainer}>
                 <Image source={{ uri: imageUri }} style={styles.preview} />
-              )}
-            </View>
+              </View>
+            )}
             <View style={styles.registerContainer}>
               <CustomButton
                 onPress={takePhoto}
@@ -136,17 +131,17 @@ export default function NewItemScreen() {
               />
               <View style={styles.toggleContainer}>
                 <Text style={styles.plantChoice}>Donation</Text>
-                <ToggleButton
+                <Switch
+                  trackColor={{ false: "#95AE7D", true: "#95AE7D" }} // Couleur de la piste
+                  thumbColor={isVente ? "#2D5334" : "#2D5334"} // Couleur du bouton
+                  ios_backgroundColor="#3e3e3e" // Fond iOS désactivé
                   value={isVente}
                   onValueChange={(newValue) => setIsVente(newValue)}
                 />
                 <Text style={styles.accessoryChoice}>Sale</Text>
               </View>
-
               <RegisterInput
                 placeholder="Title"
-                autoCapitalize="none"
-                keyboardType="email-address"
                 value={title}
                 onChangeText={setTitle}
                 returnKeyType="next"
@@ -159,21 +154,24 @@ export default function NewItemScreen() {
               />
               {isVente && (
                 <RegisterInput
-                  placeholder="Price"
+                  placeholder="Price (in euros)"
                   value={price}
                   onChangeText={setPrice}
                   returnKeyType="next"
                 />
               )}
               <RegisterInput
-                placeholder="Height"
+                placeholder="Height (in cm)"
                 value={height}
                 onChangeText={setHeight}
                 returnKeyType="next"
               />
               <View style={styles.toggleContainer}>
                 <Text style={styles.plantChoice}>Plant</Text>
-                <ToggleButton
+                <Switch
+                  trackColor={{ false: "#95AE7D", true: "#95AE7D" }} // Couleur de la piste
+                  thumbColor={isVente ? "#2D5334" : "#2D5334"} // Couleur du bouton
+                  ios_backgroundColor="#3e3e3e" // Fond iOS désactivé
                   value={isPlant}
                   onValueChange={(newValue) => setIsPlant(newValue)}
                 />
@@ -188,8 +186,8 @@ export default function NewItemScreen() {
               <RegisterButton title="Add my item" onPress={handleSubmit} />
             </View>
           </View>
-        </KeyboardAvoidingView>
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -200,30 +198,31 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: "#F1F0E9",
   },
-  container: {
+  bigContainer: {
     flex: 1,
     justifyContent: "center",
-		paddingTop: 25,
+
   },
   pictureContainer: {
-    height: 240,
+    height: 200,
     width: "100%",
     alignItems: "center",
   },
   preview: {
-		height: 240,
-    width: 240,
+    height: 200,
+    width: 200,
     borderRadius: 10,
     alignSelf: "center",
   },
   registerContainer: {
-		height: "70%",
+    height: "70%",
     width: "100%",
-		paddingTop: 5,
+    paddingTop: 5,
   },
   toggleContainer: {
     flexDirection: "row",
     alignItems: "center",
+		paddingLeft: 8,
   },
   label: {
     marginRight: 10,

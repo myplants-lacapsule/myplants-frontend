@@ -184,6 +184,7 @@ export default function MapScreen() {
           />
         ))}
       </MapView>
+			<View style={styles.modalContainer}>
       <Modal visible={modalVisible} animationType="fade" transparent>
         <View style={styles.modal}>
           {/* <ScrollView style={styles.cardContainer}>{userItems}</ScrollView> */}
@@ -201,6 +202,7 @@ export default function MapScreen() {
           </TouchableOpacity>
         </View>
       </Modal>
+			</View>
       <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
         <Text style={styles.addButtonText}>+</Text>
       </TouchableOpacity>
@@ -230,7 +232,8 @@ const styles = StyleSheet.create({
     width: "95%",
     padding: 5,
     borderRadius: 5,
-    backgroundColor: "#F1F0E9",
+
+    backgroundColor: "pink",
   },
   itemCard: {
     backgroundColor: "#FBFBFB",

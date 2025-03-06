@@ -136,59 +136,11 @@ export default function SearchScreen() {
     }
   };
 
-  // const identificationPlantIdByText = async (inputResearch) => {
-
-  //   var myHeaders = new Headers();
-  //   myHeaders.append("Api-Key", plantidKey);
-  //   myHeaders.append("Content-Type", "application/json");
-
-  //   var requestOptions = {
-  //     method: "GET",
-  //     headers: myHeaders,
-  //     redirect: "follow",
-  //   };
-
-  //   try {
-  //     const response = await fetch(
-  //       `https://plant.id/api/v3/kb/plants/name_search?q=${inputResearch}`, requestOptions
-  //     );
-  //     if (!response.ok) {
-  //       throw new Error("Network response was not ok");
-  //     }
-
-  //     const data = await response.json();
-
-  //     if (data.entities.length > 0) {
-  //       const plantName = data.entities[0].entity_name;
-  //       console.log(plantName)
-
-  //       const plantData = {
-  //         name: plantName,
-  //         description: `Le ${plantName} est une plante d'intérieur populaire, appréciée pour ses feuilles brillantes et son aspect ornemental. Facile à entretenir, elle préfère une lumière vive et indirecte.`,
-  //         wateringFrequency: "Tous les 2 jours",
-  //         cuisine: "TEST",
-  //         toxicity: "Aucune toxicité",
-  //         seasonality: "Printemps",
-  //         sunExposure: "A besoin d'être exposé au soleil",
-  //         photo: "https://res.cloudinary.com/dxkpvwwnb/image/upload/v1741097480/gnrpwalmsqpavpdq5u32.jpg",
-  //       }
-  //       setShowSuggestions(true)
-  //       setPlantsData(plantData);
-  //       setInputResearch("");
-  //     } else {
-  //       alert("Plante non trouvée");
-  //       setInputResearch("");
-  //     }
-  //   } catch (error) {
-  //     console.error("There was a problem with the fetch operation:", error);
-  //   }
-  // };
-
   const idenficationDetailsPlant = async (plantName, cloudinaryUrl) => {
     try {
       //appel 2ème API pour récupérer l'id de la plante
-      plantName = plantName.toLowerCase();
-      const responsePerenual = await fetch(`https://perenual.com/api/v2/species-list?key=${perenualKey}&q=${plantName}`);
+      plantName = plantName;
+      const responsePerenual = await fetch(`https://perenual.com/api/v2/species-list?key=${perenualKey}&q=${plantName.toLowerCase()}`);
       if (!responsePerenual.ok) {
         alert('No plant found, please try again');
         setInputResearch("");
