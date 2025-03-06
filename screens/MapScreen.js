@@ -1,6 +1,7 @@
 import {
   ActivityIndicator,
   Modal,
+  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -66,7 +67,6 @@ export default function MapScreen() {
   }, [isFocused]);
 
   // Fonction pour récupérer toutes les annonces depuis le backend
-
   const fetchItems = async () => {
     try {
       const response = await fetch(
@@ -189,7 +189,7 @@ export default function MapScreen() {
         <Modal visible={modalVisible} animationType="fade" transparent>
           <View style={styles.modal}>
             {/* <ScrollView style={styles.cardContainer}>{userItems}</ScrollView> */}
-            <Text>Articles à vendre</Text>
+            <Text>Articles à vendrehhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh</Text>
             <TouchableOpacity
               style={styles.closeButton}
               onPress={() => setModalVisible(false)}
@@ -230,11 +230,11 @@ const styles = StyleSheet.create({
     color: "#2D5334",
   },
   modal: {
-    width: "95%",
-    padding: 5,
-    borderRadius: 5,
-
-    backgroundColor: "pink",
+    position: "absolute",
+    width: "80%",
+    padding: 20,
+    borderRadius: 15,
+    backgroundColor: "white",
   },
   itemCard: {
     backgroundColor: "#FBFBFB",
