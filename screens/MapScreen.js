@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  Alert,
   Modal,
   SafeAreaView,
   ScrollView,
@@ -84,6 +85,7 @@ export default function MapScreen() {
             pinsMap[userId] = {
               lat: userData.address.lat,
               long: userData.address.long,
+              token: userData.token,
             };
           }
         });
@@ -95,35 +97,26 @@ export default function MapScreen() {
   };
 
   // Affichage de la modale lorsque l'utilisateur appuie sur un marqueur
-  const handleMarkerPress = () => {
-    setModalVisible(true);
-  };
+  const handleMarkerPress = async (userToken) => {
+    try {
+  const response = await fetch(
+    `${process.env.EXPO_PUBLIC_API_URL}/items/byUser/${userToken}`);
+  const data = await response.json();
+  if (data.result) {
+  setItemsData(data.items);
+  setModalVisible(true);
+    }} catch (error) {
+      Alert.alert("Erreur", "Impossible de récupérer les annonces de cet utilisateur.");
+      ;}}
 
-  // Récupération des articles à afficher sur la modale
-  // useEffect(() => {
-  //   const fetchItems = () => {
-  //     fetch(`${process.env.EXPO_PUBLIC_API_URL}/items/${user.token}`)
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         if (data && data.data) {
-  //           setItemsData(data.data);
-  //         } else {
-  //           setItemsData([]);
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error fetching items:", error);
-  //         setItemsData([]);
-  //       });
-  //   };
-
-  //   fetchItems();
-  // }, []);
 
   // Articles à afficher dans la modale
-  // const userItems = itemsData.map((data, i) => (
-  //   <ItemCard key={i} {...data} onPress={handleItemScreen} />
-  // ));
+  const userItems = itemsData.map((data, i) => (
+    <ItemCard key={i} 
+    {...data} 
+    //onPress={handleItemScreen} 
+    />
+   ));
 
   // Fonction déclenchée lorsque l'utilisateur appuie sur un article dans la modale
   // const handleItemScreen = () => {
@@ -168,46 +161,50 @@ export default function MapScreen() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
-      <MapView style={{ flex: 1 }} initialRegion={initialRegion}>
-        {currentPosition && (
-          <Marker coordinate={currentPosition} pinColor="red" />
-        )}
-        {uniquePin.map((pin, i) => (
-          <Marker
-            key={i}
-            coordinate={{
-              latitude: pin.lat,
-              longitude: pin.long,
-            }}
-            pinColor="blue"
-            onPress={handleMarkerPress}
-          />
-        ))}
-      </MapView>
-      <View style={styles.modalContainer}>
+  
+      <View style={{ flex: 1 }}>
+        <MapView style={{ flex: 1 }} initialRegion={initialRegion}>
+          {currentPosition && (
+            <Marker coordinate={currentPosition} pinColor="red" />
+          )}
+          {uniquePin.map((pin, i) => (
+            <Marker
+              key={i}
+              token={pin.token}
+              coordinate={{
+                latitude: pin.lat,
+                longitude: pin.long,
+              }}
+              pinColor="blue"
+              onPress={() => handleMarkerPress(pin.token)}
+            />
+          ))}
+        </MapView>
+
         <Modal visible={modalVisible} animationType="fade" transparent>
-          <View style={styles.modal}>
-            {/* <ScrollView style={styles.cardContainer}>{userItems}</ScrollView> */}
-            <Text>Articles à vendrehhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh</Text>
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setModalVisible(false)}
-            >
-              <FontAwesome5
-                style={styles.closeButtonIcon}
-                name="times-circle"
-                size={25}
-                solid={true}
-              />
-            </TouchableOpacity>
+          <View style={styles.modalContainer}>
+            <SafeAreaView style={styles.modal}>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setModalVisible(false)}
+              >
+                <FontAwesome5
+                  style={styles.closeButtonIcon}
+                  name="times-circle"
+                  size={25}
+                  solid={true}
+                />
+              </TouchableOpacity>
+              <ScrollView style={styles.cardContainer}>{userItems}</ScrollView>
+            </SafeAreaView>
           </View>
         </Modal>
+
+        <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
+          <Text style={styles.addButtonText}>+</Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
-        <Text style={styles.addButtonText}>+</Text>
-      </TouchableOpacity>
-    </View>
+   
   );
 }
 
@@ -229,12 +226,19 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans-Regular",
     color: "#2D5334",
   },
+
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   modal: {
-    position: "absolute",
+    position: "relative",
     width: "80%",
     padding: 20,
     borderRadius: 15,
     backgroundColor: "white",
+    marginVertical: 110,
   },
   itemCard: {
     backgroundColor: "#FBFBFB",
@@ -249,14 +253,18 @@ const styles = StyleSheet.create({
   photoContainer: {
     borderRadius: 5,
     width: "35%",
-    backgroundColor: "pink",
   },
   infoContainer: {
     backgroundColor: "lightblue",
   },
   nameContainer: { backgroundColor: "lightgreen" },
   descriptionContainer: {},
-  closeButton: {},
+  closeButton: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    zIndex: 1,
+  },
   closeButtonIcon: {},
   addButton: {
     position: "absolute",
@@ -274,5 +282,8 @@ const styles = StyleSheet.create({
     color: "#FBFBFB",
     fontWeight: "bold",
     fontSize: 30,
+  },
+  cardContainer: {
+    marginTop: 40,
   },
 });

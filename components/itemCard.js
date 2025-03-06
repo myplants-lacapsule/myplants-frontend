@@ -1,7 +1,7 @@
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 
-export default function itemCard({ photo, name, description }) {
+export default function itemCard({ photo, title, description }) {
   const truncatedDescription =
     description.length > 120
       ? description.substring(0, 120) + "..."
@@ -11,11 +11,11 @@ export default function itemCard({ photo, name, description }) {
     <View style={styles.container}>
       <View style={styles.card}>
         <View style={styles.photoContainer}>
-          <Image source={{ uri: photo }} style={styles.photo} />
+          <Image source={{ uri: photo[0] }} style={styles.photo} />
         </View>
         <View style={styles.infoContainer}>
           <View style={styles.nameContainer}>
-            <Text style={styles.name}>{name}</Text>
+            <Text style={styles.name}>{title}</Text>
           </View>
           <View style={styles.descriptionContainer}>
             <Text style={styles.description}>{truncatedDescription}</Text>
@@ -43,7 +43,6 @@ const styles = StyleSheet.create({
   photoContainer: {
     borderRadius: 5,
     width: "35%",
-    backgroundColor: "pink",
   },
   photo: {
     width: "100%",
