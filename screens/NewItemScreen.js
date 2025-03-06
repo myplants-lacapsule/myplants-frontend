@@ -23,6 +23,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import ReturnButton from "../components/ReturnButton.js";
+import MapScreen from "./MapScreen.js";
 
 export default function NewItemScreen() {
   const dispatch = useDispatch();
@@ -118,7 +119,7 @@ export default function NewItemScreen() {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <View style={styles.container}>
-          <ReturnButton />
+          <ReturnButton destination={MapScreen} />
           <View style={styles.pictureContainer}>
             <Text style={styles.picture}>Picture</Text>
           </View>
@@ -126,13 +127,13 @@ export default function NewItemScreen() {
           {imageUri && (
             <Image source={{ uri: imageUri }} style={styles.preview} />
           )}
-					        <View style={styles.registerContainer}></View>
-					<CustomButton
+          <View style={styles.registerContainer}></View>
+          <CustomButton
             onPress={takePhoto}
             text="Add a picture"
             iconName="camera"
           />
-					<View style={styles.toggleContainer}>
+          <View style={styles.toggleContainer}>
             <Text style={styles.plantChoice}>Donation</Text>
             <ToggleButton
               value={isVente}
@@ -140,7 +141,7 @@ export default function NewItemScreen() {
             />
             <Text style={styles.accessoryChoice}>Sale</Text>
           </View>
-          
+
           <RegisterInput
             placeholder="Title"
             autoCapitalize="none"
@@ -200,11 +201,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "pink",
   },
-	pictureContainer: {
-		height: 200,
-		width: 200,
-		backgroundColor: "lightgreen",
-	},
+  pictureContainer: {
+    height: 200,
+    width: 200,
+    backgroundColor: "lightgreen",
+  },
   toggleContainer: {
     flexDirection: "row",
     alignItems: "center",
