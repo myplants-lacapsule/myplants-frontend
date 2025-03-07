@@ -132,8 +132,8 @@ export default function NewItemScreen() {
               <View style={styles.toggleContainer}>
                 <Text style={styles.plantChoice}>Donation</Text>
                 <Switch
-                  trackColor={{ false: "#95AE7D", true: "#95AE7D" }} // Couleur de la piste
-                  thumbColor={isVente ? "#2D5334" : "#2D5334"} // Couleur du bouton
+                  trackColor={{ false: "#2D5334", true: "#2D5334" }} // Couleur de la piste
+                  thumbColor={isVente ? "#95AE7D" : "#95AE7D"} // Couleur du bouton
                   ios_backgroundColor="#3e3e3e" // Fond iOS désactivé
                   value={isVente}
                   onValueChange={(newValue) => setIsVente(newValue)}
@@ -167,18 +167,20 @@ export default function NewItemScreen() {
                 returnKeyType="next"
               />
               <View style={styles.toggleContainer}>
-                <Text style={styles.plantChoice}>Plant</Text>
+                <Text style={styles.plantChoice}>Accessory</Text>
                 <Switch
-                  trackColor={{ false: "#95AE7D", true: "#95AE7D" }} // Couleur de la piste
-                  thumbColor={isVente ? "#2D5334" : "#2D5334"} // Couleur du bouton
+                  trackColor={{ false: "#2D5334", true: "#2D5334" }} // Couleur de la piste
+                  thumbColor={isVente ? "#95AE7D" : "#95AE7D"} // Couleur du bouton
                   ios_backgroundColor="#3e3e3e" // Fond iOS désactivé
                   value={isPlant}
                   onValueChange={(newValue) => setIsPlant(newValue)}
                 />
-                <Text style={styles.accessoryChoice}>Accessory</Text>
+                <Text style={styles.accessoryChoice}>Plant</Text>
               </View>
               <RegisterInput
-                placeholder="Plant condition"
+                placeholder={
+                  isPlant ? "Plant condition" : "Accessory condition"
+                }
                 value={plantCondition}
                 onChangeText={setPlantCondition}
                 returnKeyType="done"
@@ -201,7 +203,6 @@ const styles = StyleSheet.create({
   bigContainer: {
     flex: 1,
     justifyContent: "center",
-
   },
   pictureContainer: {
     height: 200,
@@ -222,11 +223,10 @@ const styles = StyleSheet.create({
   toggleContainer: {
     flexDirection: "row",
     alignItems: "center",
-		paddingLeft: 8,
+    paddingLeft: 8,
   },
   label: {
     marginRight: 10,
     fontSize: 16,
   },
 });
-

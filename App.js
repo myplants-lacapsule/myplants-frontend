@@ -20,6 +20,7 @@ import PlantScreen from "./screens/PlantScreen";
 import NewItemScreen from "./screens/NewItemScreen";
 import AddLocationScreen from "./screens/AddLocationScreen";
 import FullDetailsPlant from "./screens/FullDetailsPlant";
+import UserItemsDetailsScreen from "./screens/UserItemsDetailsScreen";
 import FullDetailsItem from "./screens/FullDetailsItem";
 
 import { Provider } from "react-redux";
@@ -125,7 +126,6 @@ export default function App() {
           <Stack.Screen name="NewItemScreen" component={NewItemScreen} />
           <Stack.Screen name="AddLocationScreen" component={AddLocationScreen}/>
           <Stack.Screen name="FullDetailsPlant" component={FullDetailsPlant}/>
-          <Stack.Screen name="FullDetailsItem" component={FullDetailsItem}/>
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

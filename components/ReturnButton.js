@@ -1,11 +1,9 @@
 import React from "react";
 import { TouchableOpacity, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 export default function ReturnButton({ destination }) {
-
   const navigation = useNavigation();
 
   const handlePress = () => {
@@ -25,7 +23,6 @@ export default function ReturnButton({ destination }) {
       </View>
     </View>
   );
-
 }
 
 const styles = StyleSheet.create({
@@ -40,6 +37,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     padding: 10,
+		paddingLeft: 20,
     alignSelf: "flex-start",
   },
 });
