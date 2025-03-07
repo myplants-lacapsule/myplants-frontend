@@ -166,12 +166,14 @@ export default function SearchScreen() {
             let plantDescription = dataPerenual.description;
 
             let plantWateringFrequency = dataPerenual.watering.toLowerCase();
-            if (plantWateringFrequency === "average") {
-              plantWateringFrequency = "Watering every 3 days";
-            } else if (plantWateringFrequency === "frequent") {
-              plantWateringFrequency = "Frequent watering";
+            if (plantWateringFrequency === "frequent") {
+              plantWateringFrequency = 2;
+            } else if (plantWateringFrequency === "average") {
+              plantWateringFrequency = 4;
+            } else if (plantWateringFrequency === "minimum"){
+              plantWateringFrequency = 6;
             } else {
-              plantWateringFrequency = "Not found";
+              plantWateringFrequency = 7;
             }
 
             const plantToxicityToHuman = dataPerenual.poisonous_to_humans;

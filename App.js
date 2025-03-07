@@ -126,6 +126,9 @@ export default function App() {
           <Stack.Screen name="NewItemScreen" component={NewItemScreen} />
           <Stack.Screen name="AddLocationScreen" component={AddLocationScreen}/>
           <Stack.Screen name="FullDetailsPlant" component={FullDetailsPlant}/>
+          <Stack.screen name="FullDetailsItem" component={FullDetailsItem}/>
+          <Stack.screen name="UserItemsDetailsScreen" component={UserItemsDetailsScreen}/>
+          
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
