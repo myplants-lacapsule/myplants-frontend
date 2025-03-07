@@ -204,9 +204,9 @@ export default function SearchScreen() {
             const isCuisine = dataPerenual.cuisine;
             let plantCuisine = '';
             if (isCuisine) {
-              plantCuisine = "The plant is edible";
+              plantCuisine = "Is edible";
             } else {
-              plantCuisine = "The plant is not edible";
+              plantCuisine = "Is not edible";
             }
 
             console.log(dataPerenual.default_image.regular_url)
