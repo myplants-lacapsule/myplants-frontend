@@ -120,15 +120,17 @@ export default function App() {
           <Stack.Screen name="SignInScreen" component={SignInScreen} />
           <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
-					<Stack.Screen name="NotificationScreen" component={NotificationScreen} />
-					<Stack.Screen name="UserScreen" component={UserScreen} />
-					<Stack.Screen name="PlantScreen" component={PlantScreen} />
+          <Stack.Screen
+            name="NotificationScreen"
+            component={NotificationScreen}
+          />
+          <Stack.Screen name="UserScreen" component={UserScreen} />
+          <Stack.Screen name="PlantScreen" component={PlantScreen} />
           <Stack.Screen name="NewItemScreen" component={NewItemScreen} />
-          <Stack.Screen name="AddLocationScreen" component={AddLocationScreen}/>
-          <Stack.Screen name="FullDetailsPlant" component={FullDetailsPlant}/>
-          <Stack.screen name="FullDetailsItem" component={FullDetailsItem}/>
-          <Stack.screen name="UserItemsDetailsScreen" component={UserItemsDetailsScreen}/>
-          
+          <Stack.Screen name="AddLocationScreen" component={AddLocationScreen} />
+          <Stack.Screen name="FullDetailsPlant" component={FullDetailsPlant} />
+          <Stack.Screen name="UserItemsDetailsScreen" component={UserItemsDetailsScreen}/>
+          <Stack.Screen name="FullDetailsItem" component={FullDetailsItem} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
