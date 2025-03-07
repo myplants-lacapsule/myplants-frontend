@@ -1,14 +1,13 @@
 import React from "react";
 import {
-  Image,
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
   SafeAreaView,
 } from "react-native";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import RegisterButton from "../components/RegisterButton.js";
 import ReturnButton from "../components/ReturnButton.js";
 
@@ -21,9 +20,11 @@ export default function UserScreen() {
       <ReturnButton destination={"Home"} />
       <View style={styles.componentsContainer}>
         <View style={styles.avatarContainer}>
-          <Image
-            source={require("../assets/defaultavatar.jpg")}
-            style={styles.avatar}
+          <FontAwesome5
+            name="user-ninja"
+            size={150}
+						color={"#2D5334"}
+            solid={true}
           />
         </View>
         <View style={styles.usernameContainer}>
@@ -59,18 +60,12 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     paddingTop: 60,
   },
-  avatarContainer: {
-    height: "30%",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  avatar: {
-    width: 200,
-    height: 200,
-    borderWidth: 1,
-    borderRadius: 100,
-    borderColor: "#65924B",
-  },
+	avatarContainer: {
+		height: '30%',
+		width: '100%',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
   usernameContainer: {
     height: "10%",
     alignItems: "center",

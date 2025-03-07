@@ -16,7 +16,6 @@ import SearchScreen from "./screens/SearchScreen";
 import MapScreen from "./screens/MapScreen";
 import NotificationScreen from "./screens/NotificationScreen";
 import UserScreen from "./screens/UserScreen";
-import PlantScreen from "./screens/PlantScreen";
 import NewItemScreen from "./screens/NewItemScreen";
 import AddLocationScreen from "./screens/AddLocationScreen";
 import FullDetailsPlant from "./screens/FullDetailsPlant";
@@ -125,7 +124,6 @@ export default function App() {
             component={NotificationScreen}
           />
           <Stack.Screen name="UserScreen" component={UserScreen} />
-          <Stack.Screen name="PlantScreen" component={PlantScreen} />
           <Stack.Screen name="NewItemScreen" component={NewItemScreen} />
           <Stack.Screen name="AddLocationScreen" component={AddLocationScreen} />
           <Stack.Screen name="FullDetailsPlant" component={FullDetailsPlant} />
