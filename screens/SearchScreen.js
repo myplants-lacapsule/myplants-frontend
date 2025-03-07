@@ -323,6 +323,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
+		marginTop: 40,
   },
   takePhoto: {
     backgroundColor: "#2D5334",
