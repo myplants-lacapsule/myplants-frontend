@@ -13,7 +13,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import ItemCard from "../components/itemCard";
+import ItemCard from "../components/ItemCard";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 
@@ -63,7 +63,9 @@ export default function MapScreen() {
 
   // Appeler fetchItems une fois que le composant MapScreen est chargé
   useEffect(() => {
-    if (!isFocused) {setUniquePin([])}
+    if (!isFocused) {
+      setUniquePin([]);
+    }
     fetchItems();
   }, [isFocused]);
 
@@ -99,29 +101,26 @@ export default function MapScreen() {
   // Affichage de la modale lorsque l'utilisateur appuie sur un marqueur
   const handleMarkerPress = async (userToken) => {
     try {
-  const response = await fetch(
-    `${process.env.EXPO_PUBLIC_API_URL}/items/byUser/${userToken}`);
-  const data = await response.json();
-  if (data.result) {
-  setItemsData(data.items);
-  setModalVisible(true);
-    }} catch (error) {
-      Alert.alert("Erreur", "Impossible de récupérer les annonces de cet utilisateur.");
-      ;}}
-
+      const response = await fetch(
+        `${process.env.EXPO_PUBLIC_API_URL}/items/byUser/${userToken}`
+      );
+      const data = await response.json();
+      if (data.result) {
+        setItemsData(data.items);
+        setModalVisible(true);
+      }
+    } catch (error) {
+      Alert.alert(
+        "Erreur",
+        "Impossible de récupérer les annonces de cet utilisateur."
+      );
+    }
+  };
 
   // Articles à afficher dans la modale
   const userItems = itemsData.map((data, i) => (
-    <ItemCard key={i} 
-    {...data} 
-    //onPress={handleItemScreen} 
-    />
-   ));
-
-  // Fonction déclenchée lorsque l'utilisateur appuie sur un article dans la modale
-  // const handleItemScreen = () => {
-  //   navigation.navigate("ItemScreen");
-  // };
+    <ItemCard key={i} {...data} />
+  ));
 
   // Fonction déclenchée lorsque l'utilisateur appuie sur le bouton "+"
   const handleAddPress = async () => {
@@ -161,50 +160,48 @@ export default function MapScreen() {
   }
 
   return (
-  
-      <View style={{ flex: 1 }}>
-        <MapView style={{ flex: 1 }} initialRegion={initialRegion}>
-          {currentPosition && (
-            <Marker coordinate={currentPosition} pinColor="red" />
-          )}
-          {uniquePin.map((pin, i) => (
-            <Marker
-              key={i}
-              token={pin.token}
-              coordinate={{
-                latitude: pin.lat,
-                longitude: pin.long,
-              }}
-              pinColor="blue"
-              onPress={() => handleMarkerPress(pin.token)}
-            />
-          ))}
-        </MapView>
+    <View style={{ flex: 1 }}>
+      <MapView style={{ flex: 1 }} initialRegion={initialRegion}>
+        {currentPosition && (
+          <Marker coordinate={currentPosition} pinColor="red" />
+        )}
+        {uniquePin.map((pin, i) => (
+          <Marker
+            key={i}
+            token={pin.token}
+            coordinate={{
+              latitude: pin.lat,
+              longitude: pin.long,
+            }}
+            pinColor="blue"
+            onPress={() => handleMarkerPress(pin.token)}
+          />
+        ))}
+      </MapView>
 
-        <Modal visible={modalVisible} animationType="fade" transparent>
-          <View style={styles.modalContainer}>
-            <SafeAreaView style={styles.modal}>
-              <TouchableOpacity
-                style={styles.closeButton}
-                onPress={() => setModalVisible(false)}
-              >
-                <FontAwesome5
-                  style={styles.closeButtonIcon}
-                  name="times-circle"
-                  size={25}
-                  solid={true}
-                />
-              </TouchableOpacity>
-              <ScrollView style={styles.cardContainer}>{userItems}</ScrollView>
-            </SafeAreaView>
-          </View>
-        </Modal>
+      <Modal visible={modalVisible} animationType="fade" transparent>
+        <View style={styles.modalContainer}>
+          <SafeAreaView style={styles.modal}>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalVisible(false)}
+            >
+              <FontAwesome5
+                style={styles.closeButtonIcon}
+                name="times-circle"
+                size={25}
+                solid={true}
+              />
+            </TouchableOpacity>
+            <ScrollView style={styles.cardContainer}>{userItems}</ScrollView>
+          </SafeAreaView>
+        </View>
+      </Modal>
 
-        <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
-          <Text style={styles.addButtonText}>+</Text>
-        </TouchableOpacity>
-      </View>
-   
+      <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
+        <Text style={styles.addButtonText}>+</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
@@ -239,16 +236,6 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     backgroundColor: "white",
     marginVertical: 110,
-  },
-  itemCard: {
-    backgroundColor: "#FBFBFB",
-    height: 150,
-    padding: 7,
-    margin: 5,
-    borderRadius: 10,
-    flexDirection: "row",
-    borderWidth: 1,
-    borderColor: "#D0DDD0",
   },
   photoContainer: {
     borderRadius: 5,

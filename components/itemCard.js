@@ -1,28 +1,37 @@
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
-export default function itemCard({ photo, title, description }) {
+export default function ItemCard({photo, title, description, price, height, isVente, isPlant, plantCondition, createdAt} ) {
+  const navigation = useNavigation();
   const truncatedDescription =
     description.length > 120
       ? description.substring(0, 120) + "..."
       : description;
 
   return (
-    <View style={styles.container}>
-      <View style={styles.card}>
-        <View style={styles.photoContainer}>
-          <Image source={{ uri: photo[0] }} style={styles.photo} />
-        </View>
-        <View style={styles.infoContainer}>
-          <View style={styles.nameContainer}>
-            <Text style={styles.name}>{title}</Text>
+    <TouchableOpacity
+      style={styles.card}
+      onPress={() =>
+        navigation.navigate("FullDetailsItem", { itemDetails: { photo, title, description, price, height, isVente, isPlant, plantCondition, createdAt   } })
+      }
+    >
+      <View style={styles.container}>
+        <View style={styles.cardContent}>
+          <View style={styles.photoContainer}>
+            <Image source={{ uri: photo[0] }} style={styles.photo} />
           </View>
-          <View style={styles.descriptionContainer}>
-            <Text style={styles.description}>{truncatedDescription}</Text>
+          <View style={styles.infoContainer}>
+            <View style={styles.nameContainer}>
+              <Text style={styles.name}>{title}</Text>
+            </View>
+            <View style={styles.descriptionContainer}>
+              <Text style={styles.description}>{truncatedDescription}</Text>
+            </View>
           </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -39,6 +48,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderWidth: 1,
     borderColor: "#D0DDD0",
+  },
+  cardContent: {
+    flexDirection: "row",
+    flex: 1,
+    padding: 7,
+    alignItems: "center",
   },
   photoContainer: {
     borderRadius: 5,
