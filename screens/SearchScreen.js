@@ -147,7 +147,6 @@ export default function SearchScreen() {
       }
 
       const dataPerenual = await responsePerenual.json();
-      console.log(dataPerenual)
 
       // check si la plante est trouvée
       if (dataPerenual.data.length > 0) {
@@ -209,7 +208,6 @@ export default function SearchScreen() {
               plantCuisine = "The plant is not edible";
             }
 
-            console.log(dataPerenual.default_image.regular_url)
             let plantPhotoApi = '';
             if (cloudinaryUrl === undefined) {
               plantPhotoApi = dataPerenual.default_image.regular_url;
@@ -248,7 +246,6 @@ export default function SearchScreen() {
   }
 
   const addPlantToBackend = async (plantsData) => {
-    console.log("plantsdata dans addplanttoback", plantsData)
     try {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/newPlant/${userInStore.token}`,
         {
@@ -270,7 +267,6 @@ export default function SearchScreen() {
         throw new Error("Network response was not ok");
       }
       const newPlant = await response.json();
-      console.log("newPlant ", newPlant);
 
       if (newPlant.result) {
         setShowSuggestions(false);
@@ -302,10 +298,7 @@ export default function SearchScreen() {
 
       {showSuggestions && !showCamera && (
         <View>
-          <SuggestionPlantCard plantsData={plantsData} />
-          <TouchableOpacity style={styles.btn} onPress={() => addPlantToBackend(plantsData)}>
-            <AddPlantButton />
-          </TouchableOpacity>
+          <SuggestionPlantCard plantsData={plantsData} addPlantToBackend={() => addPlantToBackend(plantsData)}/>
         </View>
       )}
     </SafeAreaView >

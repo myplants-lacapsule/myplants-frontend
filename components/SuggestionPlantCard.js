@@ -4,7 +4,9 @@ import { View, StyleSheet, Image, Text } from 'react-native'
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-export default function SuggestionPlantCard({ plantsData }) {
+import RegisterButton from "./RegisterButton"
+
+export default function SuggestionPlantCard({ plantsData, addPlantToBackend }) {
     return (
         <View style={styles.cardContainer}>
             <View style={styles.card}>
@@ -22,7 +24,7 @@ export default function SuggestionPlantCard({ plantsData }) {
                 <View style={styles.badgeWatering}>
                     <FontAwesome name="tint" size={25} color="white" />
                     <Text style={styles.textBadges}>
-                        {plantsData.wateringFrequency}
+                        Every {plantsData.wateringFrequency} days
                     </Text>
                 </View>
                 <View style={styles.badgeToxicity}>
@@ -30,6 +32,8 @@ export default function SuggestionPlantCard({ plantsData }) {
                     <Text style={styles.textBadges}>{plantsData.toxicity}</Text>
                 </View>
             </View>
+            <RegisterButton title={"Add to my inventory"} onPress={addPlantToBackend}/>
+            
         </View>
     )
 }
