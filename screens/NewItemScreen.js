@@ -13,13 +13,10 @@ import {
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-import { login } from "../reducers/user.js";
 import RegisterButton from "../components/RegisterButton.js";
 import RegisterInput from "../components/RegisterInput.js";
-import ToggleButton from "../components/ToggleButton.js";
 import CustomButton from "../components/CustomButton.js";
 import * as ImagePicker from "expo-image-picker";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import ReturnButton from "../components/ReturnButton.js";
@@ -32,7 +29,7 @@ export default function NewItemScreen() {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [height, setHeight] = useState("");
-  const [isVente, setIsVente] = useState(true);
+  const [isGiven, setIsGiven] = useState(true);
   const [isPlant, setIsPlant] = useState(true);
   const [plantCondition, setPlantCondition] = useState("");
   const [imageUri, setImageUri] = useState(null);
@@ -65,7 +62,7 @@ export default function NewItemScreen() {
     if (
       !title ||
       !description ||
-      (isVente && !price) ||
+      (!isGiven && !price) ||
       !height ||
       !imageUri ||
       !plantCondition
@@ -80,7 +77,7 @@ export default function NewItemScreen() {
     formData.append("description", description);
     formData.append("price", price);
     formData.append("height", height);
-    formData.append("isVente", isVente);
+    formData.append("isGiven", isGiven);
     formData.append("isPlant", isPlant);
     formData.append("plantCondition", plantCondition);
 
@@ -130,15 +127,15 @@ export default function NewItemScreen() {
                 iconName="camera"
               />
               <View style={styles.toggleContainer}>
-                <Text style={styles.plantChoice}>Donation</Text>
+                <Text style={styles.plantChoice}>Sale</Text>
                 <Switch
                   trackColor={{ false: "#2D5334", true: "#2D5334" }} // Couleur de la piste
-                  thumbColor={isVente ? "#95AE7D" : "#95AE7D"} // Couleur du bouton
+                  thumbColor={isGiven ? "#95AE7D" : "#95AE7D"} // Couleur du bouton
                   ios_backgroundColor="#3e3e3e" // Fond iOS désactivé
-                  value={isVente}
-                  onValueChange={(newValue) => setIsVente(newValue)}
+                  value={isGiven}
+                  onValueChange={(newValue) => setIsGiven(newValue)}
                 />
-                <Text style={styles.accessoryChoice}>Sale</Text>
+                <Text style={styles.accessoryChoice}>Donation</Text>
               </View>
               <RegisterInput
                 placeholder="Title"
@@ -152,7 +149,7 @@ export default function NewItemScreen() {
                 onChangeText={setDescription}
                 returnKeyType="next"
               />
-              {isVente && (
+              {!isGiven && (
                 <RegisterInput
                   placeholder="Price (in euros)"
                   value={price}
@@ -170,7 +167,7 @@ export default function NewItemScreen() {
                 <Text style={styles.plantChoice}>Accessory</Text>
                 <Switch
                   trackColor={{ false: "#2D5334", true: "#2D5334" }} // Couleur de la piste
-                  thumbColor={isVente ? "#95AE7D" : "#95AE7D"} // Couleur du bouton
+                  thumbColor={"#95AE7D"} // Couleur du bouton
                   ios_backgroundColor="#3e3e3e" // Fond iOS désactivé
                   value={isPlant}
                   onValueChange={(newValue) => setIsPlant(newValue)}

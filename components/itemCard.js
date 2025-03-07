@@ -2,7 +2,7 @@ import React from "react";
 import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-export default function ItemCard({photo, title, description, price, height, isVente, isPlant, plantCondition, createdAt} ) {
+export default function ItemCard({photo, title, description, price, height, isGiven, isPlant, plantCondition, createdAt, closeModal} ) {
   const navigation = useNavigation();
   const truncatedDescription =
     description.length > 120
@@ -12,9 +12,22 @@ export default function ItemCard({photo, title, description, price, height, isVe
   return (
     <TouchableOpacity
       style={styles.card}
-      onPress={() =>
-        navigation.navigate("FullDetailsItem", { itemDetails: { photo, title, description, price, height, isVente, isPlant, plantCondition, createdAt   } })
-      }
+      onPress={() => {
+        closeModal();
+        navigation.navigate("FullDetailsItem", {
+          itemDetails: {
+            photo,
+            title,
+            description,
+            price,
+            height,
+            isGiven,
+            isPlant,
+            plantCondition,
+            createdAt,
+          },
+        });
+      }}
     >
       <View style={styles.container}>
         <View style={styles.cardContent}>
@@ -27,6 +40,11 @@ export default function ItemCard({photo, title, description, price, height, isVe
             </View>
             <View style={styles.descriptionContainer}>
               <Text style={styles.description}>{truncatedDescription}</Text>
+            </View>
+            <View style={styles.descriptionContainer}>
+              <Text style={styles.isGiven}>
+                {isGiven ? "Donation" : "Sale"}
+              </Text>
             </View>
           </View>
         </View>
