@@ -204,7 +204,8 @@ export default function SearchScreen() {
                 ? "Needs exposure to the sun"
                 : "Needs exposure to light";
 
-            const plantCuisine = cuisine ? "The plant is edible" : "The plant is not edible";
+            const plantCuisine = cuisine ? "Is edible" : "Is not edible";
+
 
             const plantPhotoApi = cloudinaryUrl ?? data.default_image.regular_url;
 
@@ -300,6 +301,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
+    marginTop: 40,
   },
   takePhoto: {
     backgroundColor: "#2D5334",

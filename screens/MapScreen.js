@@ -119,7 +119,7 @@ export default function MapScreen() {
 
   // Articles à afficher dans la modale
   const userItems = itemsData.map((data, i) => (
-    <ItemCard key={i} {...data} />
+    <ItemCard key={i} {...data} closeModal={() => setModalVisible(false)}/>
   ));
 
   // Fonction déclenchée lorsque l'utilisateur appuie sur le bouton "+"
