@@ -1,6 +1,12 @@
-import React from 'react'
-
-import { Text, SafeAreaView, ScrollView, StyleSheet, Image, TouchableOpacity, Alert, View } from 'react-native'
+import React from "react";
+import {
+  Text,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Image,
+  View,
+} from "react-native";
 
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
@@ -10,7 +16,6 @@ export default function FullDetailsItemComponent({ itemDetails }) {
     if (!condition) return "";
     return condition.charAt(0).toLowerCase() + condition.slice(1);
   };
-
 
   return (
     <SafeAreaView style={styles.container}>
@@ -22,26 +27,24 @@ export default function FullDetailsItemComponent({ itemDetails }) {
             <Text style={styles.badgeText}>
               {itemDetails.isGiven ? "Donation" : "Sale"}
             </Text>
-            
-              {itemDetails.isGiven ? (
-                <FontAwesome5 name="hands-helping" size={16} color="#F1F0E9" />
-              ) : (
-                <FontAwesome5 name="shopping-cart" size={16} color="#F1F0E9" />
-              )}
-           
+
+            {itemDetails.isGiven ? (
+              <FontAwesome5 name="hands-helping" size={16} color="#2D5334" />
+            ) : (
+              <FontAwesome5 name="shopping-cart" size={16} color="#2D5334" />
+            )}
           </View>
 
           <View style={styles.badge}>
             <Text style={styles.badgeText}>
-              {itemDetails.isPlant ? "Plant" : "Accessories"}
+              {itemDetails.isPlant ? "Plant" : "Accessory"}
             </Text>
-            
-              {itemDetails.isPlant ? (
-                <FontAwesome5 name="leaf" size={16} color="#F1F0E9" />
-              ) : (
-                <FontAwesome5 name="hammer" size={16} color="#F1F0E9" />
-              )}
-            
+
+            {itemDetails.isPlant ? (
+              <FontAwesome5 name="leaf" size={16} color="#2D5334" />
+            ) : (
+              <FontAwesome5 name="hammer" size={16} color="#2D5334" />
+            )}
           </View>
         </View>
 
@@ -54,7 +57,9 @@ export default function FullDetailsItemComponent({ itemDetails }) {
             Height : {itemDetails.height}
             {""}cm
           </Text>
-          <Text style={styles.field}>Condition : {formatCondition(itemDetails.condition)}</Text>
+          <Text style={styles.field}>
+            Condition : {formatCondition(itemDetails.condition)}
+          </Text>
           <Text style={styles.dateField}>
             Announcement posted on {""}
             {new Date(itemDetails.createdAt).toLocaleDateString("en-US", {

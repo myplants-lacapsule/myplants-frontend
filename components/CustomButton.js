@@ -22,8 +22,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 25,
     marginVertical: 5,
-		width: '50%',
-		alignSelf: 'center',
+    width: "50%",
+    alignSelf: "center",
   },
   iconContainer: {
     marginRight: 10,

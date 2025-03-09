@@ -10,19 +10,18 @@ import {
   ScrollView,
   Switch,
 } from "react-native";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
+
 import RegisterButton from "../components/RegisterButton.js";
 import RegisterInput from "../components/RegisterInput.js";
-import CustomButton from "../components/CustomButton.js";
-import * as ImagePicker from "expo-image-picker";
-import { useSelector } from "react-redux";
-import { useEffect } from "react";
 import ReturnButton from "../components/ReturnButton.js";
+import CustomButton from "../components/CustomButton.js";
+
+import * as ImagePicker from "expo-image-picker";
 
 export default function NewItemScreen() {
-  const dispatch = useDispatch();
   const navigation = useNavigation();
 
   const [title, setTitle] = useState("");
@@ -129,9 +128,9 @@ export default function NewItemScreen() {
               <View style={styles.toggleContainer}>
                 <Text style={styles.plantChoice}>Sale</Text>
                 <Switch
-                  trackColor={{ false: "#2D5334", true: "#2D5334" }} // Couleur de la piste
-                  thumbColor={isGiven ? "#95AE7D" : "#95AE7D"} // Couleur du bouton
-                  ios_backgroundColor="#3e3e3e" // Fond iOS désactivé
+                  trackColor={{ false: "#2D5334", true: "#2D5334" }}
+                  thumbColor={isGiven ? "#95AE7D" : "#95AE7D"}
+                  ios_backgroundColor="#3e3e3e"
                   value={isGiven}
                   onValueChange={(newValue) => setIsGiven(newValue)}
                 />
@@ -166,9 +165,9 @@ export default function NewItemScreen() {
               <View style={styles.toggleContainer}>
                 <Text style={styles.plantChoice}>Accessory</Text>
                 <Switch
-                  trackColor={{ false: "#2D5334", true: "#2D5334" }} // Couleur de la piste
-                  thumbColor={"#95AE7D"} // Couleur du bouton
-                  ios_backgroundColor="#3e3e3e" // Fond iOS désactivé
+                  trackColor={{ false: "#2D5334", true: "#2D5334" }}
+                  thumbColor={"#95AE7D"}
+                  ios_backgroundColor="#3e3e3e"
                   value={isPlant}
                   onValueChange={(newValue) => setIsPlant(newValue)}
                 />

@@ -3,13 +3,19 @@ import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
-export default function ItemCard({photo, title, description, price, height, isGiven, isPlant, condition, createdAt, closeModal} ) {
+export default function ItemCard({
+  photo,
+  title,
+  description,
+  price,
+  height,
+  isGiven,
+  isPlant,
+  condition,
+  createdAt,
+  closeModal,
+}) {
   const navigation = useNavigation();
-  const truncatedDescription =
-    description.length > 120
-      ? description.substring(0, 120) + "..."
-      : description;
-      
 
   return (
     <TouchableOpacity
@@ -37,9 +43,7 @@ export default function ItemCard({photo, title, description, price, height, isGi
             <Image source={{ uri: photo[0] }} style={styles.photo} />
           </View>
           <View style={styles.infoContainer}>
-            <View style={styles.nameContainer}>
-              <Text style={styles.name}>{title}</Text>
-            </View>
+            <Text style={styles.name}>{title}</Text>
             <View style={styles.badge}>
               {isPlant ? (
                 <FontAwesome5
@@ -56,7 +60,6 @@ export default function ItemCard({photo, title, description, price, height, isGi
                   style={{ marginRight: 5 }}
                 />
               )}
-
               <Text style={styles.badgeText}>
                 {isPlant ? "Plant" : "Accessory"}
               </Text>
@@ -77,7 +80,6 @@ export default function ItemCard({photo, title, description, price, height, isGi
                   style={{ marginRight: 5 }}
                 />
               )}
-
               <Text style={styles.badgeText}>
                 {isGiven ? "Donation" : "Sale"}
               </Text>
@@ -105,9 +107,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   card: {
-    backgroundColor: "#FBFBFB",
-    height: 150,
-    padding: 7,
+    backgroundColor: "#F1F0E9",
+    height: 160,
     margin: 5,
     borderRadius: 10,
     flexDirection: "row",
@@ -139,7 +140,6 @@ const styles = StyleSheet.create({
     fontFamily: "Merriweather-Bold",
     marginBottom: 10,
   },
-  descriptionContainer: {},
   description: {
     fontFamily: "OpenSans-Regular",
     fontSize: 14,

@@ -14,9 +14,6 @@ const ToggleButton = ({ value, onValueChange, trueLabel, falseLabel }) => {
   );
 };
 
-
-
-
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row", // Affiche l'étiquette et le switch sur la même ligne

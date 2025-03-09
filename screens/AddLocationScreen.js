@@ -92,10 +92,10 @@ const styles = StyleSheet.create({
   registerContainer: {
     width: "80%",
   },
-	title: {
-		color: '#2D5334',
-		fontSize: 18,
-		fontFamily: 'OpenSans-Regular',
-		paddingBottom: 10,
-	},
+  title: {
+    color: "#2D5334",
+    fontSize: 18,
+    fontFamily: "OpenSans-Regular",
+    paddingBottom: 10,
+  },
 });

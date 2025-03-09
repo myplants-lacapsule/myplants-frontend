@@ -16,11 +16,11 @@ import SearchScreen from "./screens/SearchScreen";
 import MapScreen from "./screens/MapScreen";
 import NotificationScreen from "./screens/NotificationScreen";
 import UserScreen from "./screens/UserScreen";
-import NewItemScreen from "./screens/NewItemScreen";
-import AddLocationScreen from "./screens/AddLocationScreen";
-import FullDetailsPlant from "./screens/FullDetailsPlant";
 import UserItemsDetailsScreen from "./screens/UserItemsDetailsScreen";
+import FullDetailsPlant from "./screens/FullDetailsPlant";
 import FullDetailsItem from "./screens/FullDetailsItem";
+import AddLocationScreen from "./screens/AddLocationScreen";
+import NewItemScreen from "./screens/NewItemScreen";
 
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
@@ -124,11 +124,17 @@ export default function App() {
             component={NotificationScreen}
           />
           <Stack.Screen name="UserScreen" component={UserScreen} />
-          <Stack.Screen name="NewItemScreen" component={NewItemScreen} />
-          <Stack.Screen name="AddLocationScreen" component={AddLocationScreen} />
+          <Stack.Screen
+            name="UserItemsDetailsScreen"
+            component={UserItemsDetailsScreen}
+          />
           <Stack.Screen name="FullDetailsPlant" component={FullDetailsPlant} />
-          <Stack.Screen name="UserItemsDetailsScreen" component={UserItemsDetailsScreen}/>
           <Stack.Screen name="FullDetailsItem" component={FullDetailsItem} />
+          <Stack.Screen
+            name="AddLocationScreen"
+            component={AddLocationScreen}
+          />
+          <Stack.Screen name="NewItemScreen" component={NewItemScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

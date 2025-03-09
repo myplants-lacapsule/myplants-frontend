@@ -34,6 +34,7 @@ export default function MapScreen() {
     longitudeDelta: 15,
   });
   const [uniquePin, setUniquePin] = useState([]);
+  const [username, setUsername] = useState("");
 
   // Récupération de la position actuelle de l'utilisateur
   useEffect(() => {
@@ -119,7 +120,7 @@ export default function MapScreen() {
 
   // Articles à afficher dans la modale
   const userItems = itemsData.map((data, i) => (
-    <ItemCard key={i} {...data} closeModal={() => setModalVisible(false)}/>
+    <ItemCard key={i} {...data} closeModal={() => setModalVisible(false)} />
   ));
 
   // Fonction déclenchée lorsque l'utilisateur appuie sur le bouton "+"
@@ -182,17 +183,15 @@ export default function MapScreen() {
       <Modal visible={modalVisible} animationType="fade" transparent>
         <View style={styles.modalContainer}>
           <SafeAreaView style={styles.modal}>
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setModalVisible(false)}
-            >
+            <View style={styles.topContainer}>
               <FontAwesome5
-                style={styles.closeButtonIcon}
                 name="times-circle"
                 size={25}
                 solid={true}
+                style={styles.closeButton}
+                onPress={() => setModalVisible(false)}
               />
-            </TouchableOpacity>
+            </View>
             <ScrollView style={styles.cardContainer}>{userItems}</ScrollView>
           </SafeAreaView>
         </View>
@@ -223,36 +222,33 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans-Regular",
     color: "#2D5334",
   },
-
   modalContainer: {
     flex: 1,
+    height: 150,
     justifyContent: "center",
     alignItems: "center",
   },
   modal: {
     position: "relative",
-    width: "80%",
-    padding: 20,
+		maxHeight: "45%",
+		minHeight: 100,
+    width: "90%",
+    padding: 5,
     borderRadius: 15,
     backgroundColor: "white",
     marginVertical: 110,
   },
-  photoContainer: {
-    borderRadius: 5,
-    width: "35%",
+  topContainer: {
+    display: "flex",
+    justifyContent: "flex-end",
   },
-  infoContainer: {
-    backgroundColor: "lightblue",
-  },
-  nameContainer: { backgroundColor: "lightgreen" },
-  descriptionContainer: {},
   closeButton: {
-    position: "absolute",
-    top: 10,
-    right: 10,
-    zIndex: 1,
+    color: "#2D5334",
+    marginLeft: "auto",
   },
-  closeButtonIcon: {},
+  cardContainer: {
+    marginTop: 10,
+  },
   addButton: {
     position: "absolute",
     bottom: 30,
@@ -269,8 +265,5 @@ const styles = StyleSheet.create({
     color: "#FBFBFB",
     fontWeight: "bold",
     fontSize: 30,
-  },
-  cardContainer: {
-    marginTop: 40,
   },
 });

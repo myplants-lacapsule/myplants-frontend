@@ -1,12 +1,9 @@
 import React from "react";
 import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
-
 import { useNavigation } from "@react-navigation/native";
-
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 export default function PlantCard(props) {
-
   const navigation = useNavigation();
 
   const truncatedDescription =
@@ -16,18 +13,30 @@ export default function PlantCard(props) {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('FullDetailsPlant', { plantDetails: props })}>
+      <TouchableOpacity
+        style={styles.card}
+        onPress={() =>
+          navigation.navigate("FullDetailsPlant", { plantDetails: props })
+        }
+      >
         <View style={styles.photoContainer}>
           <Image source={{ uri: props.photo }} style={styles.photo} />
         </View>
         <View style={styles.infoContainer}>
-          <View style={styles.plantInfoContainer}>
-            <Text style={styles.name}>{props.name}</Text>
-            <Text style={styles.description}>{truncatedDescription}</Text>
-          </View>
+          <Text style={styles.name}>{props.name}</Text>
+          <Text style={styles.description}>{truncatedDescription}</Text>
           <View style={styles.lastWatered}>
-            <View style={[styles.badge, !props.isWatered ? styles.notWatered : styles.watered]}>
-              {!props.isWatered ? <FontAwesome5 name="tint" size={16} color="#F1F0E9" /> : <FontAwesome5 name="tint-slash" size={16} color="#F1F0E9" />}
+            <View
+              style={[
+                styles.badge,
+                !props.isWatered ? styles.notWatered : styles.watered,
+              ]}
+            >
+              {!props.isWatered ? (
+                <FontAwesome5 name="tint" size={16} color="#F1F0E9" />
+              ) : (
+                <FontAwesome5 name="tint-slash" size={16} color="#F1F0E9" />
+              )}
               <Text style={styles.textBadge}>
                 {""}
                 {new Date(props.lastWatering).toLocaleDateString("en-US", {
@@ -49,8 +58,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   card: {
-    backgroundColor: "#FBFBFB",
-    height: 150,
+    backgroundColor: "#F8F3D9",
+    height: 160,
     padding: 7,
     margin: 5,
     borderRadius: 10,
@@ -61,7 +70,6 @@ const styles = StyleSheet.create({
   photoContainer: {
     borderRadius: 5,
     width: "35%",
-    backgroundColor: "pink",
   },
   photo: {
     width: "100%",
@@ -93,6 +101,7 @@ const styles = StyleSheet.create({
     gap: 8,
     borderRadius: 24,
     height: 25,
+    marginVertical: 5,
   },
   watered: {
     backgroundColor: "#95AE7D",
@@ -102,6 +111,6 @@ const styles = StyleSheet.create({
   },
   textBadge: {
     fontSize: 11,
-    color: "white"
-  }
+    color: "white",
+  },
 });
