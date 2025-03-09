@@ -153,6 +153,7 @@ export default function SearchScreen() {
       }
 
       const dataPerenual = await responsePerenual.json();
+      // console.log("dataPerenual", dataPerenual)
 
       // check si la plante est trouvée
       if (dataPerenual.total === 0 || !Array.isArray(dataPerenual.data) || dataPerenual.data.length === 0) {
@@ -169,6 +170,7 @@ export default function SearchScreen() {
         if (!fetchPerenualDetails.ok) {
           throw new Error('Invalid data received from Perenual API');
         }
+        // console.log(fetchPerenualDetails)
 
         const data = await fetchPerenualDetails.json();
         const { description, watering, poisonous_to_humans, poisonous_to_pets, harvest_season, sunlight, cuisine } = data;
