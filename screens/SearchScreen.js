@@ -60,7 +60,7 @@ export default function SearchScreen() {
   const takePicture = async () => {
     try {
       const photo = await cameraRef.current.takePictureAsync({ quality: 0.3 });
-      console.log(photo)
+      // console.log(photo)
       if (photo && photo.uri) {
         sendPictureToBack(photo.uri);
       } else {
@@ -86,14 +86,14 @@ export default function SearchScreen() {
         body: formData,
       });
 
-      console.log("response from plants/upload", response)
+      // console.log("response from plants/upload", response)
       if (!response.ok) {
         // throw new Error("Network response was not ok");
         Alert.alert("Error sending the photo", "Please retry")
       }
 
       const responseFromCloudinary = await response.json();
-      console.log("responseFromCloudinary", responseFromCloudinary)
+      // console.log("responseFromCloudinary", responseFromCloudinary)
 
       if (responseFromCloudinary.url) {
         identificationPlantId(responseFromCloudinary.url);
@@ -125,14 +125,14 @@ export default function SearchScreen() {
 
     try {
       const response = await fetch("https://plant.id/api/v3/identification", requestOptions);
-      console.log("reponse from identificaiton", response)
+      // console.log("reponse from identificaiton", response)
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
 
       const data = await response.json();
-      console.log("data from reponse identification", data)
+      // console.log("data from reponse identification", data)
       const plantProbability = data.result.is_plant.probability;
       const plantName = data.result.classification.suggestions[0].name;
 
@@ -150,7 +150,7 @@ export default function SearchScreen() {
     try {
       //appel 2ème API pour récupérer l'id de la plante
       const responsePerenual = await fetch(`https://perenual.com/api/v2/species-list?key=${perenualKey}&q=${plantName.toLowerCase()}`);
-      console.log("responsePerenual ", responsePerenual)
+      // console.log("responsePerenual ", responsePerenual)
 
       if (!responsePerenual.ok) {
         setInputResearch("");

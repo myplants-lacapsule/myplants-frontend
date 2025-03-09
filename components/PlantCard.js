@@ -3,6 +3,8 @@ import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+
 export default function PlantCard(props) {
 
   const navigation = useNavigation();
@@ -19,14 +21,22 @@ export default function PlantCard(props) {
           <Image source={{ uri: props.photo }} style={styles.photo} />
         </View>
         <View style={styles.infoContainer}>
-          <View style={styles.nameContainer}>
+          <View style={styles.plantInfoContainer}>
             <Text style={styles.name}>{props.name}</Text>
-          </View>
-          <View style={styles.descriptionContainer}>
             <Text style={styles.description}>{truncatedDescription}</Text>
           </View>
-          <View>
-            {!props.isWatered ? <Text>besoin d'un arrosage</Text> : <Text>pas besoin d'arrosage</Text>}
+          <View style={styles.lastWatered}>
+            <View style={[styles.badge, !props.isWatered ? styles.notWatered : styles.watered]}>
+              {!props.isWatered ? <FontAwesome5 name="tint" size={16} color="#F1F0E9" /> : <FontAwesome5 name="tint-slash" size={16} color="#F1F0E9" />}
+              <Text style={styles.textBadge}>
+                {""}
+                {new Date(props.lastWatering).toLocaleDateString("en-US", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                })}
+              </Text>
+            </View>
           </View>
         </View>
       </TouchableOpacity>
@@ -61,16 +71,37 @@ const styles = StyleSheet.create({
   infoContainer: {
     width: "65%",
     paddingLeft: 10,
+    justifyContent: "space-evenly",
   },
   name: {
     color: "#2D5334",
     fontSize: 16,
     fontFamily: "Merriweather-Bold",
   },
-  descriptionContainer: {},
   description: {
     fontFamily: "OpenSans-Regular",
     fontSize: 14,
     flexWrap: "wrap",
   },
+  lastWatered: {
+    width: "60%",
+  },
+  badge: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    borderRadius: 24,
+    height: 25,
+  },
+  watered: {
+    backgroundColor: "#95AE7D",
+  },
+  notWatered: {
+    backgroundColor: "#BC4749",
+  },
+  textBadge: {
+    fontSize: 11,
+    color: "white"
+  }
 });
