@@ -3,7 +3,7 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
-  Alert
+  Alert,
 } from "react-native";
 import { Camera } from "expo-camera";
 import { useEffect, useState, useRef } from "react";
@@ -11,9 +11,9 @@ import { useSelector } from "react-redux";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-import CameraSearch from '../components/CameraSearch'
+import CameraSearch from "../components/CameraSearch";
 import SearchBar from "../components/SearchBar";
-import SuggestionPlantCard from '../components/SuggestionPlantCard'
+import SuggestionPlantCard from "../components/SuggestionPlantCard";
 
 export default function SearchScreen() {
   const perenualKey = "sk-yd0d67c8592057aad8972";
@@ -44,9 +44,9 @@ export default function SearchScreen() {
     if (!isFocused) {
       setShowCamera(false);
       setInputResearch("");
-      setShowSuggestions(false)
+      setShowSuggestions(false);
       if (!showSuggestions) {
-        setPlantsData(null)
+        setPlantsData(null);
       }
     }
   }, [isFocused, showSuggestions]);
@@ -59,7 +59,7 @@ export default function SearchScreen() {
       if (photo && photo.uri) {
         sendPictureToBack(photo.uri);
       } else {
-        Alert.alert("Photo not found", "Please retry")
+        Alert.alert("Photo not found", "Please retry");
       }
     } catch (error) {
       console.error("Error taking picture:", error);
@@ -76,15 +76,18 @@ export default function SearchScreen() {
         type: "image/jpeg",
       });
 
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/upload`, {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        `${process.env.EXPO_PUBLIC_API_URL}/plants/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       // console.log("response from plants/upload", response)
       if (!response.ok) {
         // throw new Error("Network response was not ok");
-        Alert.alert("Error sending the photo", "Please retry")
+        Alert.alert("Error sending the photo", "Please retry");
       }
 
       const responseFromCloudinary = await response.json();
@@ -93,7 +96,7 @@ export default function SearchScreen() {
       if (responseFromCloudinary.url) {
         identificationPlantId(responseFromCloudinary.url);
       } else {
-        Alert.alert("Error", "Please retry")
+        Alert.alert("Error", "Please retry");
       }
     } catch (error) {
       console.error("Error sending picture:", error);
@@ -101,7 +104,6 @@ export default function SearchScreen() {
   };
 
   const identificationPlantId = async (cloudinaryUrl) => {
-
     var myHeaders = new Headers();
     myHeaders.append("Api-Key", plantidKey);
     myHeaders.append("Content-Type", "application/json");
@@ -119,7 +121,10 @@ export default function SearchScreen() {
     };
 
     try {
-      const response = await fetch("https://plant.id/api/v3/identification", requestOptions);
+      const response = await fetch(
+        "https://plant.id/api/v3/identification",
+        requestOptions
+      );
       // console.log("reponse from identificaiton", response)
 
       if (!response.ok) {
@@ -134,7 +139,7 @@ export default function SearchScreen() {
       if (plantProbability < 0.75 || !plantProbability) {
         Alert.alert("Plant not found", "Please try again");
       } else {
-        await idenficationDetailsPlant(plantName, cloudinaryUrl)
+        await idenficationDetailsPlant(plantName, cloudinaryUrl);
       }
     } catch (error) {
       console.error("Error when taking the picture", error);
@@ -144,19 +149,25 @@ export default function SearchScreen() {
   const idenficationDetailsPlant = async (plantName, cloudinaryUrl) => {
     try {
       //appel 2ème API pour récupérer l'id de la plante
-      const responsePerenual = await fetch(`https://perenual.com/api/v2/species-list?key=${perenualKey}&q=${plantName.toLowerCase()}`);
+      const responsePerenual = await fetch(
+        `https://perenual.com/api/v2/species-list?key=${perenualKey}&q=${plantName.toLowerCase()}`
+      );
       // console.log("responsePerenual ", responsePerenual)
 
       if (!responsePerenual.ok) {
         setInputResearch("");
-        throw new Error('No plant found, please try again');
+        throw new Error("No plant found, please try again");
       }
 
       const dataPerenual = await responsePerenual.json();
       // console.log("dataPerenual", dataPerenual)
 
       // check si la plante est trouvée
-      if (dataPerenual.total === 0 || !Array.isArray(dataPerenual.data) || dataPerenual.data.length === 0) {
+      if (
+        dataPerenual.total === 0 ||
+        !Array.isArray(dataPerenual.data) ||
+        dataPerenual.data.length === 0
+      ) {
         setInputResearch("");
         Alert.alert("Plant not found", "Please try again");
         return;
@@ -166,14 +177,24 @@ export default function SearchScreen() {
 
       // si l'id est trouvé, on récupère les détails de la plante
       if (idPerenual) {
-        const fetchPerenualDetails = await fetch(`https://perenual.com/api/v2/species/details/${idPerenual}?key=${perenualKey}`);
+        const fetchPerenualDetails = await fetch(
+          `https://perenual.com/api/v2/species/details/${idPerenual}?key=${perenualKey}`
+        );
         if (!fetchPerenualDetails.ok) {
-          throw new Error('Invalid data received from Perenual API');
+          throw new Error("Invalid data received from Perenual API");
         }
         // console.log(fetchPerenualDetails)
 
         const data = await fetchPerenualDetails.json();
-        const { description, watering, poisonous_to_humans, poisonous_to_pets, harvest_season, sunlight, cuisine } = data;
+        const {
+          description,
+          watering,
+          poisonous_to_humans,
+          poisonous_to_pets,
+          harvest_season,
+          sunlight,
+          cuisine,
+        } = data;
 
         let plantWateringFrequency = watering.toLowerCase();
         if (plantWateringFrequency === "frequent") {
@@ -186,23 +207,23 @@ export default function SearchScreen() {
           plantWateringFrequency = 7;
         }
 
-        const plantToxicity = poisonous_to_humans && poisonous_to_pets
-          ? "Toxic to humans and pets"
-          : poisonous_to_pets
+        const plantToxicity =
+          poisonous_to_humans && poisonous_to_pets
+            ? "Toxic to humans and pets"
+            : poisonous_to_pets
             ? "Toxic to animals"
             : poisonous_to_humans
-              ? "Toxic to humans"
-              : "Non-toxic";
+            ? "Toxic to humans"
+            : "Non-toxic";
 
-
-        const plantSunExposure = sunlight[0].toLowerCase() === "part shade"
-          ? "Needs shade"
-          : sunlight[0] === "full-sun"
+        const plantSunExposure =
+          sunlight[0].toLowerCase() === "part shade"
+            ? "Needs shade"
+            : sunlight[0] === "full-sun"
             ? "Needs exposure to the sun"
             : "Needs exposure to light";
 
         const plantCuisine = cuisine ? "Is edible" : "Is not edible";
-
 
         const plantPhotoApi = cloudinaryUrl ?? data.default_image.regular_url;
 
@@ -222,16 +243,16 @@ export default function SearchScreen() {
         setInputResearch("");
         Alert.alert("Plant not found", "Please try again");
       }
-
     } catch (error) {
       console.error("Plant not found", error);
       Alert.alert("Error", "An error occurred while fetching plant details.");
     }
-  }
+  };
 
   const addPlantToBackend = async (plantsData) => {
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/newPlant/${userInStore.token}`,
+      const response = await fetch(
+        `${process.env.EXPO_PUBLIC_API_URL}/plants/newPlant/${userInStore.token}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -249,7 +270,7 @@ export default function SearchScreen() {
         setPlantsData({});
         navigation.navigate("Home");
       } else {
-        Alert.alert("Error", "Please retry")
+        Alert.alert("Error", "Please retry");
       }
     } catch (error) {
       console.error("Error adding plant to backend", error);
@@ -260,7 +281,11 @@ export default function SearchScreen() {
     <SafeAreaView style={styles.container}>
       {!showCamera && !showSuggestions && (
         <View style={styles.containsearch}>
-          <SearchBar inputResearch={inputResearch} setInputResearch={setInputResearch} onSearch={() => idenficationDetailsPlant(inputResearch)} />
+          <SearchBar
+            inputResearch={inputResearch}
+            setInputResearch={setInputResearch}
+            onSearch={() => idenficationDetailsPlant(inputResearch)}
+          />
           <TouchableOpacity style={styles.takePhoto} onPress={getPermission}>
             <FontAwesome name="camera" size={30} color="white" />
           </TouchableOpacity>
@@ -268,15 +293,23 @@ export default function SearchScreen() {
       )}
 
       {(hasPermission === true || isFocused) && showCamera && (
-        <CameraSearch takePicture={takePicture} cameraRef={cameraRef} setShowCamera={setShowCamera} showCamera={showCamera}/>
+        <CameraSearch
+          takePicture={takePicture}
+          cameraRef={cameraRef}
+          setShowCamera={setShowCamera}
+          showCamera={showCamera}
+        />
       )}
 
       {showSuggestions && !showCamera && (
         <View>
-          <SuggestionPlantCard plantsData={plantsData} addPlantToBackend={() => addPlantToBackend(plantsData)} />
+          <SuggestionPlantCard
+            plantsData={plantsData}
+            addPlantToBackend={() => addPlantToBackend(plantsData)}
+          />
         </View>
       )}
-    </SafeAreaView >
+    </SafeAreaView>
   );
 }
 

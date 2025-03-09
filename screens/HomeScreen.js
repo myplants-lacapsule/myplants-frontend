@@ -18,34 +18,40 @@ export default function HomeScreen() {
   useEffect(() => {
     fetchPlants();
     setNoPlantData(false);
-  }, [isFocused])
+  }, [isFocused]);
 
   const fetchPlants = async () => {
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/${userInStore.token}`)
+      const response = await fetch(
+        `${process.env.EXPO_PUBLIC_API_URL}/plants/${userInStore.token}`
+      );
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (data.error === "No plant found") {
-        setPlantsData([])
-        setNoPlantData(true)
+        setPlantsData([]);
+        setNoPlantData(true);
       }
 
       if (data && data.data) {
         setPlantsData(data.data);
-        setNoPlantData(false)
+        setNoPlantData(false);
       }
-
     } catch (error) {
       console.error("Error fetching plants:", error);
-    };
-  }
+    }
+  };
 
   const hasPlants = plantsData.length > 0 && !noPlantData;
 
-  const userPlants = hasPlants ? plantsData.map((data, i) => <PlantCard key={i} {...data} />
+  const userPlants = hasPlants ? (
+    plantsData.map((data, i) => <PlantCard key={i} {...data} />)
   ) : (
-    <Text style={styles.noCardMessage}> You don't have any plants yet. Add one! </Text>)
+    <Text style={styles.noCardMessage}>
+      {" "}
+      You don't have any plants yet. Add one!{" "}
+    </Text>
+  );
 
   return (
     <View style={styles.container}>
