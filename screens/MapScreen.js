@@ -230,8 +230,10 @@ const styles = StyleSheet.create({
   },
   modal: {
     position: "relative",
-    width: "80%",
-    padding: 20,
+		maxHeight: "45%",
+		minHeight: 100,
+    width: "90%",
+    padding: 5,
     borderRadius: 15,
     backgroundColor: "white",
     marginVertical: 110,

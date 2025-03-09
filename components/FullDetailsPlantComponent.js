@@ -144,15 +144,17 @@ export default function FullDetailsPlantComponent() {
               style={{ marginRight: 5 }}
             />
           </View>
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>{plantDetails.seasonality}</Text>
-            <FontAwesome5
-              name={currentSeason.icon}
-              size={20}
-              color={currentSeason.color}
-              style={{ marginRight: 5 }}
-            />
-          </View>
+          {plantDetails.seasonality !== null && (
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>{plantDetails.seasonality}</Text>
+              <FontAwesome5
+                name={currentSeason.icon}
+                size={20}
+                color={currentSeason.color}
+                style={{ marginRight: 5 }}
+              />
+            </View>
+          )}
         </ScrollView>
         <Text style={styles.description}>{plantDetails.description}</Text>
         <RegisterButton

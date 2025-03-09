@@ -16,10 +16,6 @@ export default function ItemCard({
   closeModal,
 }) {
   const navigation = useNavigation();
-  const truncatedDescription =
-    description.length > 120
-      ? description.substring(0, 120) + "..."
-      : description;
 
   return (
     <TouchableOpacity
@@ -47,9 +43,7 @@ export default function ItemCard({
             <Image source={{ uri: photo[0] }} style={styles.photo} />
           </View>
           <View style={styles.infoContainer}>
-            <View style={styles.nameContainer}>
-              <Text style={styles.name}>{title}</Text>
-            </View>
+            <Text style={styles.name}>{title}</Text>
             <View style={styles.badge}>
               {isPlant ? (
                 <FontAwesome5
@@ -113,9 +107,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   card: {
-    backgroundColor: "#FBFBFB",
-    height: 150,
-    padding: 7,
+    backgroundColor: "#F1F0E9",
+    height: 160,
     margin: 5,
     borderRadius: 10,
     flexDirection: "row",

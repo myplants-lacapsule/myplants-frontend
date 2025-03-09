@@ -23,10 +23,8 @@ export default function PlantCard(props) {
           <Image source={{ uri: props.photo }} style={styles.photo} />
         </View>
         <View style={styles.infoContainer}>
-          <View style={styles.plantInfoContainer}>
-            <Text style={styles.name}>{props.name}</Text>
-            <Text style={styles.description}>{truncatedDescription}</Text>
-          </View>
+          <Text style={styles.name}>{props.name}</Text>
+          <Text style={styles.description}>{truncatedDescription}</Text>
           <View style={styles.lastWatered}>
             <View
               style={[
@@ -60,8 +58,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   card: {
-    backgroundColor: "#FBFBFB",
-    height: 150,
+    backgroundColor: "#F8F3D9",
+    height: 160,
     padding: 7,
     margin: 5,
     borderRadius: 10,
@@ -72,7 +70,6 @@ const styles = StyleSheet.create({
   photoContainer: {
     borderRadius: 5,
     width: "35%",
-    backgroundColor: "pink",
   },
   photo: {
     width: "100%",
@@ -104,6 +101,7 @@ const styles = StyleSheet.create({
     gap: 8,
     borderRadius: 24,
     height: 25,
+    marginVertical: 5,
   },
   watered: {
     backgroundColor: "#95AE7D",

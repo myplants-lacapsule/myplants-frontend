@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+
 import CustomButton from "../components/CustomButton";
 import PlantCard from "../components/PlantCard";
 
@@ -27,11 +28,6 @@ export default function HomeScreen() {
       );
 
       const data = await response.json();
-
-      if (data.error === "No plant found") {
-        setPlantsData([]);
-        setNoPlantData(true);
-      }
 
       if (data && data.data) {
         setPlantsData(data.data);

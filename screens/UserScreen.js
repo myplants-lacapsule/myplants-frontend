@@ -27,7 +27,7 @@ export default function UserScreen() {
           <Text style={styles.username}>{userInStore.username}</Text>
         </View>
         <RegisterButton
-          title="My plants for sale"
+          title="My items for sale"
           onPress={() => navigation.navigate("UserItemsDetailsScreen")}
           style={styles.button}
         />
