@@ -58,7 +58,7 @@ export default function ItemCard({photo, title, description, price, height, isGi
               )}
 
               <Text style={styles.badgeText}>
-                {isPlant ? "Plant" : "Accessories"}
+                {isPlant ? "Plant" : "Accessory"}
               </Text>
             </View>
             <View style={styles.badge}>
