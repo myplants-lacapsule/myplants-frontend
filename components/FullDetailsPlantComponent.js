@@ -10,9 +10,10 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import RegisterButton from "./RegisterButton";
 
-export default function FullDetailsPlantComponent() {
+export default function FullDetailsPlantComponent({ isEdible }) {
   console.log("plantDetails", plantDetails);
 
   const navigation = useNavigation();
@@ -59,6 +60,34 @@ export default function FullDetailsPlantComponent() {
     );
   };
 
+  // Icônes pour les saisons
+  const seasonIcons = {
+    Spring: { label: "Spring", icon: "seedling", color: "#4CAF50" }, // Vert 🌱
+    Summer: { label: "Summer", icon: "sun", color: "#FFD700" }, // Jaune ☀️
+    Fall: { label: "Autumn", icon: "leaf", color: "#D2691E" }, // Marron 🍂
+    Winter: { label: "Winter", icon: "snowflake", color: "#00BFFF" }, // Bleu ❄️
+  };
+
+  const season = seasonIcons[plantDetails.seasonality] || seasonIcons.Fall;
+
+  // Icônes pour l'exposition au soleil
+  const sunIcons = {
+    "part shade": { label: "Needs shade", icon: "cloud", color: "#808080" },
+    "full sun": {
+      label: "Needs exposure to the sun",
+      icon: "sun",
+      color: "#FFD700",
+    },
+    default: {
+      label: "Needs exposure to light",
+      icon: "cloud-sun",
+      color: "#FFA500",
+    },
+  };
+
+  const sunExposure =
+    sunIcons[plantDetails.sunExposure.toLowerCase()] || sunIcons.default;
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -66,27 +95,64 @@ export default function FullDetailsPlantComponent() {
         <Text style={styles.name}>{plantDetails.name}</Text>
         <ScrollView horizontal={true} style={styles.badgeContainer}>
           <View style={styles.badge}>
-            <Text style={styles.badgeText}>{plantDetails.cuisine}</Text>
-            <FontAwesome name="check" size={25} color="#F1F0E9" />
+            <Text style={styles.badgeText}>
+              Water every {plantDetails.wateringFrequency} days
+            </Text>
+            <FontAwesome name="tint" size={25} color="#00BFFF" />
           </View>
           <View style={styles.badge}>
-            <Text style={styles.badgeText}>{plantDetails.toxicity}</Text>
-            <FontAwesome name="check" size={25} color="#F1F0E9" />
+            <Text style={styles.badgeText}>{sunExposure.label}</Text>
+            <FontAwesome5
+              name={sunExposure.icon}
+              size={20}
+              color={sunExposure.color}
+              style={{ marginRight: 5 }}
+            />
           </View>
           <View style={styles.badge}>
-            <Text style={styles.badgeText}>{plantDetails.seasonality}</Text>
-            <FontAwesome name="snowflake-o" size={25} color="#F1F0E9" />
+            <Text style={styles.badgeText}>
+              {plantDetails.cuisine === "the plant is edible"
+                ? "is edible"
+                : "is not edible"}
+            </Text>
+            <FontAwesome5
+              name={
+                plantDetails.cuisine === "the plant is edible"
+                  ? "check"
+                  : "times"
+              }
+              size={20}
+              color={
+                plantDetails.cuisine === "the plant is edible"
+                  ? "#2D5334"
+                  : "#BC4749"
+              }
+              style={{ marginRight: 5 }}
+            />
           </View>
           <View style={styles.badge}>
-            <Text style={styles.badgeText}>{plantDetails.sunExposure}</Text>
-            <FontAwesome name="tint" size={25} color="#F1F0E9" />
+            <Text style={styles.badgeText}>
+              {plantDetails.toxicity === "Non-toxic" ? "non-toxic" : "is toxic"}
+            </Text>
+            <FontAwesome5
+              name={plantDetails.toxicity === "Non-toxic" ? "check" : "times"}
+              size={20}
+              color={
+                plantDetails.toxicity === "Non-toxic" ? "#2D5334" : "#BC4749"
+              }
+              style={{ marginRight: 5 }}
+            />
           </View>
           <View style={styles.badge}>
-            <Text style={styles.badgeText}>Water every {plantDetails.wateringFrequency} days</Text>
-            <FontAwesome name="tint" size={25} color="#F1F0E9" />
+            <Text style={styles.badgeText}>{season.label}</Text>
+            <FontAwesome5
+              name={season.icon}
+              size={20}
+              color={season.color}
+              style={{ marginRight: 5 }}
+            />
           </View>
         </ScrollView>
-
         <Text style={styles.description}>{plantDetails.description}</Text>
         <RegisterButton
           title={"Delete from my inventory"}
@@ -121,9 +187,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   badge: {
-    width: 100,
+    width: 190,
     marginRight: 10,
-    paddingVertical: 8,
+    paddingVertical: 3,
     paddingHorizontal: 15,
     borderRadius: 35,
     borderWidth: 1,
@@ -137,7 +203,7 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans-Regular",
     marginBottom: 5,
   },
-	description: {
+  description: {
     width: "85%",
     alignSelf: "center",
     padding: 10,
@@ -148,8 +214,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "#F8F3D9",
   },
-	button: {
-		fontFamily: 'OpenSans-Regular',
-		backgroundColor: "#BC4749",
-	},
+  button: {
+    fontFamily: "OpenSans-Regular",
+    backgroundColor: "#BC4749",
+  },
 });

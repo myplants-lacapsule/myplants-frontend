@@ -5,15 +5,10 @@ import {
   TouchableOpacity,
   Alert
 } from "react-native";
-
 import { Camera } from "expo-camera";
-
 import { useEffect, useState, useRef } from "react";
-
 import { useSelector } from "react-redux";
-
 import { useIsFocused, useNavigation } from "@react-navigation/native";
-
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 import CameraSearch from '../components/CameraSearch'
@@ -200,8 +195,8 @@ export default function SearchScreen() {
 
         const plantSunExposure = sunlight[0].toLowerCase() === "part shade"
           ? "Needs shade"
-          : sunlight[0] === "full sun"
-            ? "Needs exposure to the sun"
+          : sunlight[0] === "Needs exposure to the sun"
+            ? "full-sun"
             : "Needs exposure to light";
 
         const plantCuisine = cuisine ? "Is edible" : "Is not edible";
