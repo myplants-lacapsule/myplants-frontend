@@ -16,7 +16,7 @@ import SearchBar from "../components/SearchBar";
 import SuggestionPlantCard from '../components/SuggestionPlantCard'
 
 export default function SearchScreen() {
-  const perenualKey = "sk-yd0d67c8592057aad8972";
+  const perenualKey = "sk-9oF467cde70f4a03e9041";
   const plantidKey = "MPTt3cQB5Z8PlOmOhGC3XBagUam7WtPUfCJ66Q9e4p0YdSvOAS";
 
   const userInStore = useSelector((state) => state.user.value);
@@ -156,7 +156,7 @@ export default function SearchScreen() {
       // console.log("dataPerenual", dataPerenual)
 
       // check si la plante est trouvée
-      if (dataPerenual.total === 0 || !Array.isArray(dataPerenual.data) || dataPerenual.data.length === 0) {
+      if (dataPerenual.total === 0) {
         setInputResearch("");
         Alert.alert("Plant not found", "Please try again");
         return;
@@ -164,13 +164,20 @@ export default function SearchScreen() {
 
       const idPerenual = dataPerenual.data[0].id;
 
+      if (idPerenual >= 3000){
+        Alert.alert("ID de plante trop élevé", "On paie pas le premium alors cherche une autre plante")
+        return
+      }
+      // console.log(idPerenual)
+
       // si l'id est trouvé, on récupère les détails de la plante
       if (idPerenual) {
         const fetchPerenualDetails = await fetch(`https://perenual.com/api/v2/species/details/${idPerenual}?key=${perenualKey}`);
         if (!fetchPerenualDetails.ok) {
           throw new Error('Invalid data received from Perenual API');
         }
-        // console.log(fetchPerenualDetails)
+        const rateLimitRemaining = fetchPerenualDetails.headers.get('x-ratelimit-remaining');
+        console.log("IDperenual remaining :", rateLimitRemaining)
 
         const data = await fetchPerenualDetails.json();
         const { description, watering, poisonous_to_humans, poisonous_to_pets, harvest_season, sunlight, cuisine } = data;
