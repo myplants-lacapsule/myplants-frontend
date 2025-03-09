@@ -12,7 +12,7 @@ import {
 
 import { Camera } from "expo-camera";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import { useSelector } from "react-redux";
 
@@ -20,14 +20,13 @@ import { useIsFocused, useNavigation } from "@react-navigation/native";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-import AddPlantButton from "../components/AddPlantButton";
 import CameraSearch from '../components/CameraSearch'
 import SearchBar from "../components/SearchBar";
 import SuggestionPlantCard from '../components/SuggestionPlantCard'
 
 export default function SearchScreen() {
   const perenualKey = "sk-yd0d67c8592057aad8972";
-  const plantidKey = "pvThvN3lWpXcKxgeg4LL98pKkQMOQ6vTyGFj2ReUkYDrpHLVoN";
+  const plantidKey = "MPTt3cQB5Z8PlOmOhGC3XBagUam7WtPUfCJ66Q9e4p0YdSvOAS";
 
   const userInStore = useSelector((state) => state.user.value);
 
@@ -40,6 +39,8 @@ export default function SearchScreen() {
 
   const isFocused = useIsFocused();
   const [hasPermission, setHasPermission] = useState(false); // état de la permission
+
+  const cameraRef = useRef(null);
 
   // obtenir la permission de la caméra au clic sur le bouton photo
   const getPermission = async () => {
@@ -57,14 +58,17 @@ export default function SearchScreen() {
         setPlantsData(null)
       }
     }
-  }, [isFocused, inputResearch, showSuggestions, plantsData]);
+  }, [isFocused, showSuggestions]);
 
   // fonction pour la prise de photo
-  const takePicture = async (cameraRef) => {
+  const takePicture = async () => {
     try {
-      const photo = await cameraRef.current?.takePictureAsync({ quality: 0.3 });
-      if (photo) {
+      const photo = await cameraRef.current.takePictureAsync({ quality: 0.3 });
+      console.log(photo)
+      if (photo && photo.uri) {
         sendPictureToBack(photo.uri);
+      } else {
+        Alert.alert("Photo not found")
       }
     } catch (error) {
       console.error("Error taking picture:", error);
@@ -73,27 +77,35 @@ export default function SearchScreen() {
 
   // fonction pour envoyer la photo vers le back
   const sendPictureToBack = async (photoUri) => {
-    const formData = new FormData();
-    formData.append("photoFromFront", {
-      uri: photoUri,
-      name: "photo.jpg",
-      type: "image/jpeg",
-    });
-
     try {
+      const formData = new FormData();
+      formData.append("photoFromFront", {
+        uri: photoUri,
+        name: "photo.jpg",
+        type: "image/jpeg",
+      });
+
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/upload`, {
         method: "POST",
         body: formData,
       });
 
+      console.log("response from plants/upload", response)
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        // throw new Error("Network response was not ok");
+        Alert.alert("Error sending the photo, please retry")
       }
 
       const responseFromCloudinary = await response.json();
-      identificationPlantId(responseFromCloudinary.url);
+      console.log("responseFromCloudinary", responseFromCloudinary)
+
+      if (responseFromCloudinary.url) {
+        identificationPlantId(responseFromCloudinary.url);
+      } else {
+        Alert.alert("URL not found in response from Cloudinary")
+      }
     } catch (error) {
-      console.error("Error taking picture:", error);
+      console.error("Error sending picture:", error);
     }
   };
 
@@ -117,17 +129,19 @@ export default function SearchScreen() {
 
     try {
       const response = await fetch("https://plant.id/api/v3/identification", requestOptions);
+      console.log("reponse from identificaiton", response)
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
 
       const data = await response.json();
+      console.log("data from reponse identification", data)
       const plantProbability = data.result.is_plant.probability;
       const plantName = data.result.classification.suggestions[0].name;
 
       if (plantProbability < 0.75 || !plantProbability) {
-        alert("Plant not found, please try again");
+        Alert.alert("Plant not found, please try again");
       } else {
         await idenficationDetailsPlant(plantName, cloudinaryUrl)
       }
@@ -139,11 +153,11 @@ export default function SearchScreen() {
   const idenficationDetailsPlant = async (plantName, cloudinaryUrl) => {
     try {
       //appel 2ème API pour récupérer l'id de la plante
-      plantName = plantName;
       const responsePerenual = await fetch(`https://perenual.com/api/v2/species-list?key=${perenualKey}&q=${plantName.toLowerCase()}`);
       if (!responsePerenual.ok) {
-        alert('No plant found, please try again');
+        Alert.alert('No plant found, please try again');
         setInputResearch("");
+        return
       }
 
       const dataPerenual = await responsePerenual.json();
@@ -159,89 +173,68 @@ export default function SearchScreen() {
             throw new Error('Invalid data received from Perenual API');
           }
 
-          const dataPerenual = await fetchPerenualDetails.json();
+          const data = await fetchPerenualDetails.json();
+          const { description, watering, poisonous_to_humans, poisonous_to_pets, harvest_season, sunlight, cuisine } = data;
 
           if (dataPerenual) {
-            let plantDescription = dataPerenual.description;
 
-            let plantWateringFrequency = dataPerenual.watering.toLowerCase();
+            let plantWateringFrequency = watering.toLowerCase();
             if (plantWateringFrequency === "frequent") {
               plantWateringFrequency = 2;
             } else if (plantWateringFrequency === "average") {
               plantWateringFrequency = 4;
-            } else if (plantWateringFrequency === "minimum"){
+            } else if (plantWateringFrequency === "minimum") {
               plantWateringFrequency = 6;
             } else {
               plantWateringFrequency = 7;
             }
 
-            const plantToxicityToHuman = dataPerenual.poisonous_to_humans;
-            const plantToToxicityToPets = dataPerenual.poisonous_to_pets;
-            let plantToxicity = '';
-            if (plantToxicityToHuman && plantToToxicityToPets) {
-              plantToxicity = "Toxic to humans and pets"
-            } else if (plantToToxicityToPets && !plantToxicityToHuman) {
-              plantToxicity = "Toxic to animals";
-            } else if (!plantToToxicityToPets && plantToxicityToHuman) {
-              plantToxicity = "Toxic to humans";
-            } else {
-              plantToxicity = "Non-toxic";
-            }
+            const plantToxicity = poisonous_to_humans && poisonous_to_pets
+              ? "Toxic to humans and pets"
+              : poisonous_to_pets
+                ? "Toxic to animals"
+                : poisonous_to_humans
+                  ? "Toxic to humans"
+                  : "Non-toxic";
 
-            let plantSeasonality = dataPerenual.harvest_season;
 
-            let plantSunExposure = dataPerenual.sunlight[0];
-            let plantSun = ''
-            if (plantSunExposure === "part shade") {
-              plantSun = "Needs shade";
-            } else if (plantSunExposure === "full sun") {
-              plantSun = "Needs exposure to the sun";
-            } else (
-              plantSun = "Needs exposure to light"
-            )
+            const plantSunExposure = sunlight[0].toLowerCase() === "part shade"
+              ? "Needs shade"
+              : sunlight[0] === "full sun"
+                ? "Needs exposure to the sun"
+                : "Needs exposure to light";
 
-            const isCuisine = dataPerenual.cuisine;
-            let plantCuisine = '';
-            if (isCuisine) {
-              plantCuisine = "The plant is edible";
-            } else {
-              plantCuisine = "The plant is not edible";
-            }
+            const plantCuisine = cuisine ? "The plant is edible" : "The plant is not edible";
 
-            let plantPhotoApi = '';
-            if (cloudinaryUrl === undefined) {
-              plantPhotoApi = dataPerenual.default_image.regular_url;
-            } else {
-              plantPhotoApi = cloudinaryUrl;
-            }
+            const plantPhotoApi = cloudinaryUrl ?? data.default_image.regular_url;
 
             setPlantsData({
               name: plantName,
-              description: plantDescription,
+              description: description,
               wateringFrequency: plantWateringFrequency,
               cuisine: plantCuisine,
               toxicity: plantToxicity,
-              seasonality: plantSeasonality,
-              sunExposure: plantSun,
+              seasonality: harvest_season,
+              sunExposure: plantSunExposure,
               photo: plantPhotoApi,
             });
-            setShowCamera(false)
-            setShowSuggestions(true)
+            setShowCamera(false);
+            setShowSuggestions(true);
           } else {
-          setInputResearch("");
-          alert("Données invalides reçues de l'API Perenual");
+            setInputResearch("");
+            Alert.alert("Plant not found, please try again");
           }
 
         } else {
-        alert("Plant not found, please try again");
+          Alert.alert("Plant not found, please try again");
           setInputResearch("");
         }
       } else {
-        alert("Plant not found, please try again");
+        Alert.alert("Plant not found, please try again");
         setInputResearch("");
       }
     } catch (error) {
-      console.error("Error lors de la prise de la photo", error);
+      console.error("Error taking photo, please try again", error);
     }
   }
 
@@ -251,16 +244,7 @@ export default function SearchScreen() {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: plantsData.name,
-            description: plantsData.description,
-            wateringFrequency: plantsData.wateringFrequency,
-            cuisine: plantsData.cuisine,
-            toxicity: plantsData.toxicity,
-            seasonality: plantsData.seasonality,
-            sunExposure: plantsData.sunExposure,
-            photo: plantsData.photo,
-          }),
+          body: JSON.stringify(plantsData),
         }
       );
       if (!response.ok) {
@@ -274,10 +258,10 @@ export default function SearchScreen() {
         setPlantsData({});
         navigation.navigate("Home");
       } else {
-        console.log(false);
+        Alert.alert("Error, please retry")
       }
     } catch (error) {
-      console.error("Problème de fetch", error);
+      console.error("Error adding plant to backend", error);
     }
   };
 
@@ -293,12 +277,12 @@ export default function SearchScreen() {
       )}
 
       {(hasPermission === true || isFocused) && showCamera && (
-        <CameraSearch takePicture={takePicture} />
+        <CameraSearch takePicture={takePicture} cameraRef={cameraRef} />
       )}
 
       {showSuggestions && !showCamera && (
         <View>
-          <SuggestionPlantCard plantsData={plantsData} addPlantToBackend={() => addPlantToBackend(plantsData)}/>
+          <SuggestionPlantCard plantsData={plantsData} addPlantToBackend={() => addPlantToBackend(plantsData)} />
         </View>
       )}
     </SafeAreaView >

@@ -4,17 +4,17 @@ import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 export default function PlantCard(props) {
-  
+
+  const navigation = useNavigation();
+
   const truncatedDescription =
     props.description.length > 120
       ? props.description.substring(0, 120) + "..."
       : props.description;
 
-  const navigation = useNavigation();
-
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('FullDetailsPlant', { plantDetails: {...props} })}>
+      <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('FullDetailsPlant', { plantDetails: props })}>
         <View style={styles.photoContainer}>
           <Image source={{ uri: props.photo }} style={styles.photo} />
         </View>
@@ -24,6 +24,9 @@ export default function PlantCard(props) {
           </View>
           <View style={styles.descriptionContainer}>
             <Text style={styles.description}>{truncatedDescription}</Text>
+          </View>
+          <View>
+            {!props.isWatered ? <Text>besoin d'un arrosage</Text> : <Text>pas besoin d'arrosage</Text>}
           </View>
         </View>
       </TouchableOpacity>
