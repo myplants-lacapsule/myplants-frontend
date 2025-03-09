@@ -8,10 +8,13 @@ import { CameraView } from "expo-camera";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-function CameraSearch({ takePicture, cameraRef }) {
+function CameraSearch({ takePicture, cameraRef, showCamera, setShowCamera }) {
 
     return (
         <CameraView style={styles.camera} ref={cameraRef}>
+            <TouchableOpacity style={styles.containerReturnButton} onPress={() => setShowCamera(false)} >
+                <FontAwesome name="close" size={24} color="white" />
+            </TouchableOpacity>
             <TouchableOpacity style={styles.snapButton} onPress={takePicture}>
                 <View style={styles.cameraContainer}>
                     <FontAwesome name="camera" size={30} color="black" />
@@ -23,10 +26,15 @@ function CameraSearch({ takePicture, cameraRef }) {
 
 const styles = StyleSheet.create({
     camera: {
-        width: "100%",
+        flex: 1,
         height: "100%",
-        justifyContent: "flex-end",
-        alignItems: "center",
+        justifyContent: "space-between",
+    },
+    containerReturnButton: {
+        height: '10%',
+        justifyContent: 'center',
+        padding: 10,
+        paddingLeft: 20,
     },
     snapButton: {
         alignItems: "center",

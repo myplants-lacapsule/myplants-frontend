@@ -1,13 +1,9 @@
 import {
   StyleSheet,
-  Text,
   View,
   SafeAreaView,
-  Button,
   TouchableOpacity,
-  Image,
-  ScrollView,
-  TextInput,
+  Alert
 } from "react-native";
 
 import { Camera } from "expo-camera";
@@ -68,7 +64,7 @@ export default function SearchScreen() {
       if (photo && photo.uri) {
         sendPictureToBack(photo.uri);
       } else {
-        Alert.alert("Photo not found")
+        Alert.alert("Photo not found", "Please retry")
       }
     } catch (error) {
       console.error("Error taking picture:", error);
@@ -93,7 +89,7 @@ export default function SearchScreen() {
       console.log("response from plants/upload", response)
       if (!response.ok) {
         // throw new Error("Network response was not ok");
-        Alert.alert("Error sending the photo, please retry")
+        Alert.alert("Error sending the photo", "Please retry")
       }
 
       const responseFromCloudinary = await response.json();
@@ -102,7 +98,7 @@ export default function SearchScreen() {
       if (responseFromCloudinary.url) {
         identificationPlantId(responseFromCloudinary.url);
       } else {
-        Alert.alert("URL not found in response from Cloudinary")
+        Alert.alert("Error", "Please retry")
       }
     } catch (error) {
       console.error("Error sending picture:", error);
@@ -141,7 +137,7 @@ export default function SearchScreen() {
       const plantName = data.result.classification.suggestions[0].name;
 
       if (plantProbability < 0.75 || !plantProbability) {
-        Alert.alert("Plant not found, please try again");
+        Alert.alert("Plant not found", "Please try again");
       } else {
         await idenficationDetailsPlant(plantName, cloudinaryUrl)
       }
@@ -154,88 +150,85 @@ export default function SearchScreen() {
     try {
       //appel 2ème API pour récupérer l'id de la plante
       const responsePerenual = await fetch(`https://perenual.com/api/v2/species-list?key=${perenualKey}&q=${plantName.toLowerCase()}`);
+      console.log("responsePerenual ", responsePerenual)
+
       if (!responsePerenual.ok) {
-        Alert.alert('No plant found, please try again');
         setInputResearch("");
-        return
+        throw new Error('No plant found, please try again');
       }
 
       const dataPerenual = await responsePerenual.json();
 
       // check si la plante est trouvée
-      if (dataPerenual.data.length > 0) {
-        const idPerenual = dataPerenual.data[0].id;
-
-        // si l'id est trouvé, on récupère les détails de la plante
-        if (idPerenual) {
-          const fetchPerenualDetails = await fetch(`https://perenual.com/api/v2/species/details/${idPerenual}?key=${perenualKey}`);
-          if (!fetchPerenualDetails.ok) {
-            throw new Error('Invalid data received from Perenual API');
-          }
-
-          const data = await fetchPerenualDetails.json();
-          const { description, watering, poisonous_to_humans, poisonous_to_pets, harvest_season, sunlight, cuisine } = data;
-
-          if (dataPerenual) {
-
-            let plantWateringFrequency = watering.toLowerCase();
-            if (plantWateringFrequency === "frequent") {
-              plantWateringFrequency = 2;
-            } else if (plantWateringFrequency === "average") {
-              plantWateringFrequency = 4;
-            } else if (plantWateringFrequency === "minimum") {
-              plantWateringFrequency = 6;
-            } else {
-              plantWateringFrequency = 7;
-            }
-
-            const plantToxicity = poisonous_to_humans && poisonous_to_pets
-              ? "Toxic to humans and pets"
-              : poisonous_to_pets
-                ? "Toxic to animals"
-                : poisonous_to_humans
-                  ? "Toxic to humans"
-                  : "Non-toxic";
-
-
-            const plantSunExposure = sunlight[0].toLowerCase() === "part shade"
-              ? "Needs shade"
-              : sunlight[0] === "full sun"
-                ? "Needs exposure to the sun"
-                : "Needs exposure to light";
-
-            const plantCuisine = cuisine ? "Is edible" : "Is not edible";
-
-
-            const plantPhotoApi = cloudinaryUrl ?? data.default_image.regular_url;
-
-            setPlantsData({
-              name: plantName,
-              description: description,
-              wateringFrequency: plantWateringFrequency,
-              cuisine: plantCuisine,
-              toxicity: plantToxicity,
-              seasonality: harvest_season,
-              sunExposure: plantSunExposure,
-              photo: plantPhotoApi,
-            });
-            setShowCamera(false);
-            setShowSuggestions(true);
-          } else {
-            setInputResearch("");
-            Alert.alert("Plant not found, please try again");
-          }
-
-        } else {
-          Alert.alert("Plant not found, please try again");
-          setInputResearch("");
-        }
-      } else {
-        Alert.alert("Plant not found, please try again");
+      if (dataPerenual.total === 0 || !Array.isArray(dataPerenual.data) || dataPerenual.data.length === 0) {
         setInputResearch("");
+        Alert.alert("Plant not found", "Please try again");
+        return;
       }
+
+      const idPerenual = dataPerenual.data[0].id;
+
+      // si l'id est trouvé, on récupère les détails de la plante
+      if (idPerenual) {
+        const fetchPerenualDetails = await fetch(`https://perenual.com/api/v2/species/details/${idPerenual}?key=${perenualKey}`);
+        if (!fetchPerenualDetails.ok) {
+          throw new Error('Invalid data received from Perenual API');
+        }
+
+        const data = await fetchPerenualDetails.json();
+        const { description, watering, poisonous_to_humans, poisonous_to_pets, harvest_season, sunlight, cuisine } = data;
+
+        let plantWateringFrequency = watering.toLowerCase();
+        if (plantWateringFrequency === "frequent") {
+          plantWateringFrequency = 2;
+        } else if (plantWateringFrequency === "average") {
+          plantWateringFrequency = 4;
+        } else if (plantWateringFrequency === "minimum") {
+          plantWateringFrequency = 6;
+        } else {
+          plantWateringFrequency = 7;
+        }
+
+        const plantToxicity = poisonous_to_humans && poisonous_to_pets
+          ? "Toxic to humans and pets"
+          : poisonous_to_pets
+            ? "Toxic to animals"
+            : poisonous_to_humans
+              ? "Toxic to humans"
+              : "Non-toxic";
+
+
+        const plantSunExposure = sunlight[0].toLowerCase() === "part shade"
+          ? "Needs shade"
+          : sunlight[0] === "full sun"
+            ? "Needs exposure to the sun"
+            : "Needs exposure to light";
+
+        const plantCuisine = cuisine ? "Is edible" : "Is not edible";
+
+
+        const plantPhotoApi = cloudinaryUrl ?? data.default_image.regular_url;
+
+        setPlantsData({
+          name: plantName,
+          description: description,
+          wateringFrequency: plantWateringFrequency,
+          cuisine: plantCuisine,
+          toxicity: plantToxicity,
+          seasonality: harvest_season,
+          sunExposure: plantSunExposure,
+          photo: plantPhotoApi,
+        });
+        setShowCamera(false);
+        setShowSuggestions(true);
+      } else {
+        setInputResearch("");
+        Alert.alert("Plant not found", "Please try again");
+      }
+
     } catch (error) {
-      console.error("Error taking photo, please try again", error);
+      console.error("Plant not found", error);
+      Alert.alert("Error", "An error occurred while fetching plant details.");
     }
   }
 
@@ -259,7 +252,7 @@ export default function SearchScreen() {
         setPlantsData({});
         navigation.navigate("Home");
       } else {
-        Alert.alert("Error, please retry")
+        Alert.alert("Error", "Please retry")
       }
     } catch (error) {
       console.error("Error adding plant to backend", error);
@@ -278,7 +271,7 @@ export default function SearchScreen() {
       )}
 
       {(hasPermission === true || isFocused) && showCamera && (
-        <CameraSearch takePicture={takePicture} cameraRef={cameraRef} />
+        <CameraSearch takePicture={takePicture} cameraRef={cameraRef} setShowCamera={setShowCamera} showCamera={showCamera}/>
       )}
 
       {showSuggestions && !showCamera && (

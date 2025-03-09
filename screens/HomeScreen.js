@@ -13,7 +13,6 @@ export default function HomeScreen() {
   const userInStore = useSelector((state) => state.user.value);
 
   const [plantsData, setPlantsData] = useState([]);
-  console.log(plantsData)
   const [noPlantData, setNoPlantData] = useState(false);
 
   useEffect(() => {
