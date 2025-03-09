@@ -13,15 +13,12 @@ export default function HomeScreen() {
   const userInStore = useSelector((state) => state.user.value);
 
   const [plantsData, setPlantsData] = useState([]);
-  const [dataLoaded, setDataLoaded] = useState(false);
+  console.log(plantsData)
   const [noPlantData, setNoPlantData] = useState(false);
-
-  // useEffect(() => {
-  //   fetchPlants();
-  // }, []);
 
   useEffect(() => {
     fetchPlants();
+    setNoPlantData(false);
   }, [isFocused])
 
   const fetchPlants = async () => {
@@ -31,12 +28,13 @@ export default function HomeScreen() {
       const data = await response.json()
 
       if (data.error === "No plant found") {
+        setPlantsData([])
         setNoPlantData(true)
       }
 
       if (data && data.data) {
         setPlantsData(data.data);
-        setDataLoaded(true);
+        setNoPlantData(false)
       }
 
     } catch (error) {
@@ -44,7 +42,7 @@ export default function HomeScreen() {
     };
   }
 
-  const hasPlants = plantsData.length > 0 && !noPlantData && dataLoaded;
+  const hasPlants = plantsData.length > 0 && !noPlantData;
 
   const userPlants = hasPlants ? plantsData.map((data, i) => <PlantCard key={i} {...data} />
   ) : (

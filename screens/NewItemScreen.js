@@ -31,7 +31,7 @@ export default function NewItemScreen() {
   const [height, setHeight] = useState("");
   const [isGiven, setIsGiven] = useState(true);
   const [isPlant, setIsPlant] = useState(true);
-  const [plantCondition, setPlantCondition] = useState("");
+  const [condition, setCondition] = useState("");
   const [imageUri, setImageUri] = useState(null);
 
   const user = useSelector((state) => state.user.value);
@@ -65,7 +65,7 @@ export default function NewItemScreen() {
       (!isGiven && !price) ||
       !height ||
       !imageUri ||
-      !plantCondition
+      !condition
     ) {
       Alert.alert("Error", "Please fill in all fields and take a picture.");
       return;
@@ -79,7 +79,7 @@ export default function NewItemScreen() {
     formData.append("height", height);
     formData.append("isGiven", isGiven);
     formData.append("isPlant", isPlant);
-    formData.append("plantCondition", plantCondition);
+    formData.append("condition", condition);
 
     //Ajout de la photo au FormData
     formData.append("photoFromFront", {
@@ -178,8 +178,8 @@ export default function NewItemScreen() {
                 placeholder={
                   isPlant ? "Plant condition" : "Accessory condition"
                 }
-                value={plantCondition}
-                onChangeText={setPlantCondition}
+                value={condition}
+                onChangeText={setCondition}
                 returnKeyType="done"
               />
               <RegisterButton title="Add my item" onPress={handleSubmit} />

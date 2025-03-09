@@ -4,19 +4,29 @@ import { useEffect, useState } from 'react';
 
 import { Text, SafeAreaView, StyleSheet } from 'react-native'
 
+import { useIsFocused } from '@react-navigation/native'; 
+
 import { useSelector } from 'react-redux'
 
 import ItemCard from '../components/ItemCard';
 
+import ReturnButton from '../components/ReturnButton'
+
 function UserItemsDetailsScreen() {
+
+    const isFocused = useIsFocused();
 
     const userInStore = useSelector((state) => state.user.value);
     const [itemsForSale, setItemsForSale] = useState([]);
-    console.log("itemsforSale", itemsForSale)
+    const [isItemsForSale, setIsItemsForSale] = useState(false)
 
     useEffect(() => {
         getItemsByUser();
     }, [])
+
+    useEffect(() => {
+        setIsItemsForSale(false)
+    }, [isFocused])
 
     const getItemsByUser = async () => {
 
@@ -24,14 +34,13 @@ function UserItemsDetailsScreen() {
             const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/items/byUser/${userInStore.token}`)
 
             const data = await response.json();
-            console.log("data", data.items.length)
 
             if (data.result) {
                 setItemsForSale(data.items.map((item, i) => (
-                    <ItemCard key={i} title={item.title} photo={item.photo[0]} description={item.description} />
+                    <ItemCard key={i} title={item.title} photo={item.photo} description={item.description} />
                 )));
             } else {
-                console.log(data.result);
+                setIsItemsForSale(true)
             }
         } catch (error) {
             console.error("Error fetching items:", error);
@@ -40,8 +49,9 @@ function UserItemsDetailsScreen() {
 
     return (
         <SafeAreaView style={styles.container}>
+            <ReturnButton />
             <Text>UserItemsDetailsScreen</Text>
-            {itemsForSale}
+            {isItemsForSale ? (<Text>No items to sell</Text>) : (itemsForSale)}
         </SafeAreaView>
     )
 }

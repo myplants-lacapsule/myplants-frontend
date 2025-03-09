@@ -4,34 +4,38 @@ import { View, StyleSheet, Image, Text } from "react-native";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-export default function SuggestionPlantCard({ plantsData }) {
-  return (
-    <View style={styles.cardContainer}>
-      <View style={styles.card}>
-        <Image source={{ uri: plantsData.photo }} style={styles.image} />
-        <View style={styles.containText}>
-          <View style={styles.firstrow}>
-            <Text style={styles.title}>{plantsData.name}</Text>
-          </View>
-          <Text style={styles.description}>
-            {plantsData.description.length > 150
-              ? plantsData.description.slice(0, 150) + "..."
-              : plantsData.description}
-          </Text>
+import RegisterButton from "./RegisterButton"
+
+export default function SuggestionPlantCard({ plantsData, addPlantToBackend }) {
+    return (
+        <View style={styles.cardContainer}>
+            <View style={styles.card}>
+                <Image source={{ uri: plantsData.photo }} style={styles.image} />
+                <View style={styles.containText}>
+                    <View style={styles.firstrow}>
+                        <Text style={styles.title}>{plantsData.name}</Text>
+                    </View>
+                    <Text style={styles.description}>
+                        {plantsData.description.length > 150 ? plantsData.description.slice(0, 150) + "..." : plantsData.description}
+                    </Text>
+                </View>
+            </View>
+            <View style={styles.badges}>
+                <View style={styles.badgeWatering}>
+                    <FontAwesome name="tint" size={25} color="white" />
+                    <Text style={styles.textBadges}>
+                        Every {plantsData.wateringFrequency} days
+                    </Text>
+                </View>
+                <View style={styles.badgeToxicity}>
+                    <FontAwesome name="fire" size={25} color="white" />
+                    <Text style={styles.textBadges}>{plantsData.toxicity}</Text>
+                </View>
+            </View>
+            <RegisterButton title={"Add to my inventory"} onPress={addPlantToBackend}/>
+            
         </View>
-      </View>
-      <View style={styles.badges}>
-        <View style={styles.badgeWatering}>
-          <FontAwesome name="tint" size={25} color="white" />
-          <Text style={styles.textBadges}>{plantsData.wateringFrequency}</Text>
-        </View>
-        <View style={styles.badgeToxicity}>
-          <FontAwesome name="fire" size={25} color="white" />
-          <Text style={styles.textBadges}>{plantsData.toxicity}</Text>
-        </View>
-      </View>
-    </View>
-  );
+    )
 }
 
 const styles = StyleSheet.create({
