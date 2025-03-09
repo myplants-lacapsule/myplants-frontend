@@ -13,7 +13,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import RegisterButton from "./RegisterButton";
 
-export default function FullDetailsPlantComponent({ isEdible }) {
+export default function FullDetailsPlantComponent() {
   console.log("plantDetails", plantDetails);
 
   const navigation = useNavigation();
@@ -62,16 +62,16 @@ export default function FullDetailsPlantComponent({ isEdible }) {
 
   // Icônes pour les saisons
   const seasonIcons = {
-    Spring: { label: "Spring", icon: "seedling", color: "#4CAF50" }, // Vert 🌱
-    Summer: { label: "Summer", icon: "sun", color: "#FFD700" }, // Jaune ☀️
-    Fall: { label: "Autumn", icon: "leaf", color: "#D2691E" }, // Marron 🍂
-    Winter: { label: "Winter", icon: "snowflake", color: "#00BFFF" }, // Bleu ❄️
+    Spring: { label: "Spring", icon: "seedling", color: "#4CAF50" },
+    Summer: { label: "Summer", icon: "sun", color: "#FFD700" },
+    Fall: { label: "Autumn", icon: "leaf", color: "#D2691E" },
+    Winter: { label: "Winter", icon: "snowflake", color: "#00BFFF" },
   };
 
-  const season = seasonIcons[plantDetails.seasonality] || seasonIcons.Fall;
+  const currentSeason = seasonIcons[plantDetails.seasonality];
 
   // Icônes pour l'exposition au soleil
-  const sunIcons = {
+  const sunExposureIcons = {
     "part shade": { label: "Needs shade", icon: "cloud", color: "#808080" },
     "full sun": {
       label: "Needs exposure to the sun",
@@ -85,8 +85,9 @@ export default function FullDetailsPlantComponent({ isEdible }) {
     },
   };
 
-  const sunExposure =
-    sunIcons[plantDetails.sunExposure.toLowerCase()] || sunIcons.default;
+  const currentSunExposure =
+    sunExposureIcons[plantDetails.sunExposure.toLowerCase()] ||
+    sunExposureIcons["default"];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -101,11 +102,11 @@ export default function FullDetailsPlantComponent({ isEdible }) {
             <FontAwesome name="tint" size={25} color="#00BFFF" />
           </View>
           <View style={styles.badge}>
-            <Text style={styles.badgeText}>{sunExposure.label}</Text>
+            <Text style={styles.badgeText}>{plantDetails.sunExposure}</Text>
             <FontAwesome5
-              name={sunExposure.icon}
+              name={currentSunExposure.icon}
               size={20}
-              color={sunExposure.color}
+              color={currentSunExposure.color}
               style={{ marginRight: 5 }}
             />
           </View>
@@ -144,11 +145,11 @@ export default function FullDetailsPlantComponent({ isEdible }) {
             />
           </View>
           <View style={styles.badge}>
-            <Text style={styles.badgeText}>{season.label}</Text>
+            <Text style={styles.badgeText}>{plantDetails.seasonality}</Text>
             <FontAwesome5
-              name={season.icon}
+              name={currentSeason.icon}
               size={20}
-              color={season.color}
+              color={currentSeason.color}
               style={{ marginRight: 5 }}
             />
           </View>
