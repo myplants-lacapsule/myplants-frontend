@@ -195,8 +195,8 @@ export default function SearchScreen() {
 
         const plantSunExposure = sunlight[0].toLowerCase() === "part shade"
           ? "Needs shade"
-          : sunlight[0] === "full sun"
-            ? "Needs exposure to the sun"
+          : sunlight[0] === "Needs exposure to the sun"
+            ? "full-sun"
             : "Needs exposure to light";
 
         const plantCuisine = cuisine ? "Is edible" : "Is not edible";
