@@ -10,9 +10,10 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import RegisterButton from "./RegisterButton";
 
-export default function FullDetailsPlantComponent() {
+export default function FullDetailsPlantComponent({ isEdible }) {
   console.log("plantDetails", plantDetails);
 
   const navigation = useNavigation();
@@ -67,7 +68,21 @@ export default function FullDetailsPlantComponent() {
         <ScrollView horizontal={true} style={styles.badgeContainer}>
           <View style={styles.badge}>
             <Text style={styles.badgeText}>{plantDetails.cuisine}</Text>
-            <FontAwesome name="check" size={25} color="#F1F0E9" />
+            {isEdible ? (
+              <FontAwesome5
+                name="check"
+                size={16}
+                color="#2D5334"
+                style={{ marginRight: 5 }}
+              />
+            ) : (
+              <FontAwesome5
+                name="xmark"
+                size={16}
+                color="#2D5334"
+                style={{ marginRight: 5 }}
+              />
+            )}
           </View>
           <View style={styles.badge}>
             <Text style={styles.badgeText}>{plantDetails.toxicity}</Text>
@@ -82,7 +97,9 @@ export default function FullDetailsPlantComponent() {
             <FontAwesome name="tint" size={25} color="#F1F0E9" />
           </View>
           <View style={styles.badge}>
-            <Text style={styles.badgeText}>Water every {plantDetails.wateringFrequency} days</Text>
+            <Text style={styles.badgeText}>
+              Water every {plantDetails.wateringFrequency} days
+            </Text>
             <FontAwesome name="tint" size={25} color="#F1F0E9" />
           </View>
         </ScrollView>
@@ -137,7 +154,7 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans-Regular",
     marginBottom: 5,
   },
-	description: {
+  description: {
     width: "85%",
     alignSelf: "center",
     padding: 10,
@@ -148,8 +165,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "#F8F3D9",
   },
-	button: {
-		fontFamily: 'OpenSans-Regular',
-		backgroundColor: "#BC4749",
-	},
+  button: {
+    fontFamily: "OpenSans-Regular",
+    backgroundColor: "#BC4749",
+  },
 });

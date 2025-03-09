@@ -5,15 +5,10 @@ import {
   TouchableOpacity,
   Alert
 } from "react-native";
-
 import { Camera } from "expo-camera";
-
 import { useEffect, useState, useRef } from "react";
-
 import { useSelector } from "react-redux";
-
 import { useIsFocused, useNavigation } from "@react-navigation/native";
-
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 import CameraSearch from '../components/CameraSearch'
