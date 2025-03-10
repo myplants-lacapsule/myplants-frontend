@@ -50,22 +50,9 @@ const TabNavigator = () => {
             iconName = "map";
           }
 
-          return (
-            <IconComponent
-              name={iconName}
-              size={size}
-              color={color}
-              style={{ opacity: focused ? 1 : 0.5 }}
-            />
-          );
+          return <IconComponent name={iconName} size={size} color={color} style={{ opacity: focused ? 1 : 0.5 }} />;
         },
-        tabBarLabel: ({ focused, color }) => (
-          <Text
-            style={[styles.tabBarLabel, { color, opacity: focused ? 1 : 0.5 }]}
-          >
-            {route.name}
-          </Text>
-        ),
+        tabBarLabel: ({ focused, color }) => <Text style={[styles.tabBarLabel, { color, opacity: focused ? 1 : 0.5 }]}>{route.name}</Text>,
         tabBarActiveTintColor: "#F1F0E9",
         tabBarInactiveTintColor: "#F1F0E9",
         tabBarStyle: {
@@ -119,21 +106,12 @@ export default function App() {
           <Stack.Screen name="SignInScreen" component={SignInScreen} />
           <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
-          <Stack.Screen
-            name="NotificationScreen"
-            component={NotificationScreen}
-          />
+          <Stack.Screen name="NotificationScreen" component={NotificationScreen} />
           <Stack.Screen name="UserScreen" component={UserScreen} />
-          <Stack.Screen
-            name="UserItemsDetailsScreen"
-            component={UserItemsDetailsScreen}
-          />
+          <Stack.Screen name="UserItemsDetailsScreen" component={UserItemsDetailsScreen} />
           <Stack.Screen name="FullDetailsPlant" component={FullDetailsPlant} />
           <Stack.Screen name="FullDetailsItem" component={FullDetailsItem} />
-          <Stack.Screen
-            name="AddLocationScreen"
-            component={AddLocationScreen}
-          />
+          <Stack.Screen name="AddLocationScreen" component={AddLocationScreen} />
           <Stack.Screen name="NewItemScreen" component={NewItemScreen} />
         </Stack.Navigator>
       </NavigationContainer>

@@ -27,17 +27,17 @@ export default function ReturnButton({ destination }) {
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    height: '10%',
-    alignItems: 'center',
-    flexDirection: 'row',
-		paddingTop: 20,
+    width: "100%",
+    height: "10%",
+    alignItems: "center",
+    flexDirection: "row",
+    paddingTop: 20,
   },
   button: {
     width: 50,
     height: 50,
     padding: 10,
-		paddingLeft: 20,
+    paddingLeft: 20,
     alignSelf: "flex-start",
   },
 });

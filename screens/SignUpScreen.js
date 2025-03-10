@@ -1,10 +1,4 @@
-import {
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  View,
-  Text,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet, View, Text } from "react-native";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
@@ -12,6 +6,7 @@ import { login } from "../reducers/user";
 
 import RegisterInput from "../components/RegisterInput.js";
 import RegisterButton from "../components/RegisterButton.js";
+import ReturnButton from "../components/ReturnButton.js";
 
 export default function SignUpScreen() {
   const dispatch = useDispatch();
@@ -70,33 +65,12 @@ export default function SignUpScreen() {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
+    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"}>
+      <ReturnButton />
       <View style={styles.registerContainer}>
-        <RegisterInput
-          placeholder="Username"
-          value={signUpUsername}
-          onChangeText={setSignUpUsername}
-        />
-        <RegisterInput
-          placeholder="Email address"
-          autoCapitalize="none"
-          keyboardType="email-address"
-          textContentType="emailAddress"
-          autoComplete="email"
-          value={signUpEmail}
-          onChangeText={(text) => setSignUpEmail(text.toLowerCase())}
-        />
-        <RegisterInput
-          placeholder="Password"
-          textContentType="password"
-          autoComplete="password"
-          value={signUpPassword}
-          onChangeText={setSignUpPassword}
-          secureTextEntry={true}
-        />
+        <RegisterInput placeholder="Username" value={signUpUsername} onChangeText={setSignUpUsername} />
+        <RegisterInput placeholder="Email address" autoCapitalize="none" keyboardType="email-address" textContentType="emailAddress" autoComplete="email" value={signUpEmail} onChangeText={(text) => setSignUpEmail(text.toLowerCase())} />
+        <RegisterInput placeholder="Password" textContentType="password" autoComplete="password" value={signUpPassword} onChangeText={setSignUpPassword} secureTextEntry={true} />
         <RegisterButton title="Sign up" onPress={handleRegister} />
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
       </View>
@@ -108,11 +82,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F1F0E9",
-    alignItems: "center",
-    justifyContent: "center",
   },
   registerContainer: {
     width: "80%",
+    alignSelf: "center",
+    marginTop: 220,
   },
   errorText: {
     width: "80%",

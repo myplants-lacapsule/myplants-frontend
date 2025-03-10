@@ -12,29 +12,20 @@ export default function SuggestionPlantCard({ plantsData, addPlantToBackend }) {
           <View style={styles.firstrow}>
             <Text style={styles.title}>{plantsData.name}</Text>
           </View>
-          <Text style={styles.description}>
-            {plantsData.description.length > 150
-              ? plantsData.description.slice(0, 150) + "..."
-              : plantsData.description}
-          </Text>
+          <Text style={styles.description}>{plantsData.description.length > 150 ? plantsData.description.slice(0, 150) + "..." : plantsData.description}</Text>
         </View>
       </View>
       <View style={styles.badges}>
         <View style={styles.badgeWatering}>
           <FontAwesome name="tint" size={25} color="white" />
-          <Text style={styles.textBadges}>
-            Every {plantsData.wateringFrequency} days
-          </Text>
+          <Text style={styles.textBadges}>Every {plantsData.wateringFrequency} days</Text>
         </View>
         <View style={styles.badgeToxicity}>
           <FontAwesome name="fire" size={25} color="white" />
           <Text style={styles.textBadges}>{plantsData.toxicity}</Text>
         </View>
       </View>
-      <RegisterButton
-        title={"Add to my inventory"}
-        onPress={addPlantToBackend}
-      />
+      <RegisterButton title={"Add to my inventory"} onPress={addPlantToBackend} />
     </View>
   );
 }

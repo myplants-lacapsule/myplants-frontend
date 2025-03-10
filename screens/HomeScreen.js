@@ -15,6 +15,8 @@ export default function HomeScreen() {
 
   const [plantsData, setPlantsData] = useState([]);
   const [noPlantData, setNoPlantData] = useState(false);
+  const [numberPlantNeedsWater, setNumberPlantNeedsWater] = useState("");
+  console.log(numberPlantNeedsWater)
 
   useEffect(() => {
     fetchPlants();
@@ -23,15 +25,14 @@ export default function HomeScreen() {
 
   const fetchPlants = async () => {
     try {
-      const response = await fetch(
-        `${process.env.EXPO_PUBLIC_API_URL}/plants/${userInStore.token}`
-      );
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/${userInStore.token}`);
 
       const data = await response.json();
 
       if (data && data.data) {
         setPlantsData(data.data);
         setNoPlantData(false);
+        setNumberPlantNeedsWater(data.numberPlantNeedsWater)
       }
     } catch (error) {
       console.error("Error fetching plants:", error);
@@ -40,14 +41,7 @@ export default function HomeScreen() {
 
   const hasPlants = plantsData.length > 0 && !noPlantData;
 
-  const userPlants = hasPlants ? (
-    plantsData.map((data, i) => <PlantCard key={i} {...data} />)
-  ) : (
-    <Text style={styles.noCardMessage}>
-      {" "}
-      You don't have any plants yet. Add one!{" "}
-    </Text>
-  );
+  const userPlants = hasPlants ? plantsData.map((data, i) => <PlantCard key={i} {...data} />) : <Text style={styles.noCardMessage}> You don't have any plants yet. Add one! </Text>;
 
   return (
     <View style={styles.container}>
@@ -57,14 +51,17 @@ export default function HomeScreen() {
           <FontAwesome5
             style={styles.icon}
             name="bell"
-            size={25}
+            size={35}
             solid={true}
             onPress={() => navigation.navigate("NotificationScreen")}
           />
+          {numberPlantNeedsWater > 0 && <View style={styles.containerNumber}>
+            <Text style={styles.number}>{numberPlantNeedsWater}</Text>
+          </View>}
           <FontAwesome5
             style={styles.icon}
             name="user-circle"
-            size={40}
+            size={35}
             solid={true}
             onPress={() => navigation.navigate("UserScreen")}
           />
@@ -72,12 +69,7 @@ export default function HomeScreen() {
       </View>
       <Text style={styles.myplants}>My plants</Text>
       <View style={styles.buttonContainer}>
-        <CustomButton
-          iconName="plus-circle"
-          text="Add a plant"
-          onPress={() => navigation.navigate("Add a plant")}
-          style={styles.buttonText}
-        />
+        <CustomButton iconName="plus-circle" text="Add a plant" onPress={() => navigation.navigate("Add a plant")} style={styles.buttonText} />
       </View>
       <ScrollView style={styles.cardContainer}>{userPlants}</ScrollView>
     </View>
@@ -113,6 +105,22 @@ const styles = StyleSheet.create({
   },
   icon: {
     color: "#2D5334",
+
+  },
+  containerNumber: {
+    width: 20,
+    height: 20,
+    backgroundColor: "#BC4749",
+    position: "absolute",
+    borderRadius: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    left: 15,
+    bottom : 25,
+    zIndex: 1,
+  },
+  number: {
+    color: "white",
   },
   myplants: {
     color: "#2D5334",
