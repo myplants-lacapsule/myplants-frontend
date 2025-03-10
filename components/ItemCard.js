@@ -3,7 +3,7 @@ import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
-export default function ItemCard({ photo, title, description, price, height, isGiven, isPlant, condition, createdAt, closeModal }) {
+export default function ItemCard({ photo, title, description, price, height, isGiven, isPlant, condition, createdAt, createdBy, closeModal }) {
   const navigation = useNavigation();
 
   return (
@@ -22,6 +22,7 @@ export default function ItemCard({ photo, title, description, price, height, isG
             isPlant,
             condition,
             createdAt,
+            createdBy
           },
         });
       }}

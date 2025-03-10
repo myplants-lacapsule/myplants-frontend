@@ -1,14 +1,33 @@
 import React from "react";
-import { Text, SafeAreaView, ScrollView, StyleSheet, Image, View } from "react-native";
+import { Text, SafeAreaView, ScrollView, StyleSheet, Image, View, Linking } from "react-native";
+import { useState } from "react";
+import RegisterButton from "./RegisterButton";
 
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 export default function FullDetailsItemComponent({ itemDetails }) {
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   // Fonction pour mettre la 1ère lettre en minuscule
   const formatCondition = (condition) => {
     if (!condition) return "";
     return condition.charAt(0).toLowerCase() + condition.slice(1);
   };
+
+  const handleContactSeller = async() => {
+    setIsSubmitting(true); 
+    const subject = `Interest in your listing ${itemDetails.title}`;
+    const body = `Hello ${itemDetails.createdBy.username} , I'm interested in your listing ${itemDetails.title}. Is it still available and if yes how could we proceed? Thanks!`;
+    const mailtoURL = `mailto:${itemDetails.createdBy.email}?subject=${encodeURIComponent(
+    subject
+  )}&body=${encodeURIComponent(body)}`;
+  try{
+  await Linking.openURL(mailtoURL);}
+  catch(err) {
+    console.error("An error occurred", err)}
+  finally {setIsSubmitting(false)};
+};
 
   return (
     <SafeAreaView style={styles.container}>
@@ -17,27 +36,54 @@ export default function FullDetailsItemComponent({ itemDetails }) {
         <Text style={styles.title}>{itemDetails.title}</Text>
         <View style={styles.badgeRow}>
           <View style={styles.badge}>
-            <Text style={styles.badgeText}>{itemDetails.isGiven ? "Donation" : "Sale"}</Text>
+            <Text style={styles.badgeText}>
+              {itemDetails.isGiven ? "Donation" : "Sale"}
+            </Text>
 
-            {itemDetails.isGiven ? <FontAwesome5 name="hands-helping" size={16} color="#2D5334" /> : <FontAwesome5 name="shopping-cart" size={16} color="#2D5334" />}
+            {itemDetails.isGiven ? (
+              <FontAwesome5 name="hands-helping" size={16} color="#2D5334" />
+            ) : (
+              <View style={styles.priceContainer}>
+                <FontAwesome5
+                  name="euro-sign"
+                  size={16}
+                  color="#2D5334"
+                  style={{ marginRight: 5 }}
+                />
+                <Text style={styles.priceText}>{itemDetails.price}</Text>
+              </View>
+            )}
           </View>
 
           <View style={styles.badge}>
-            <Text style={styles.badgeText}>{itemDetails.isPlant ? "Plant" : "Accessory"}</Text>
+            <Text style={styles.badgeText}>
+              {itemDetails.isPlant ? "Plant" : "Accessory"}
+            </Text>
 
-            {itemDetails.isPlant ? <FontAwesome5 name="leaf" size={16} color="#2D5334" /> : <FontAwesome5 name="hammer" size={16} color="#2D5334" />}
+            {itemDetails.isPlant ? (
+              <FontAwesome5 name="leaf" size={16} color="#2D5334" />
+            ) : (
+              <FontAwesome5 name="hammer" size={16} color="#2D5334" />
+            )}
           </View>
         </View>
 
         <Text style={styles.description}>{itemDetails.description}</Text>
         <View style={styles.fieldsContainer}>
-          {!itemDetails.isGiven && <Text style={styles.field}>Price : {itemDetails.price}€</Text>}
+          <Text style={styles.field}>Height : {itemDetails.height} cm</Text>
           <Text style={styles.field}>
-            Height : {itemDetails.height} cm
+            Condition : {formatCondition(itemDetails.condition)}
           </Text>
-          <Text style={styles.field}>Condition : {formatCondition(itemDetails.condition)}</Text>
+
+          <RegisterButton
+            title="Contact seller"
+            onPress={() => handleContactSeller()}
+            style={{ marginTop: 40 }}
+            loading={isSubmitting}
+            disabled={isSubmitting}
+          />
           <Text style={styles.dateField}>
-            Announcement posted on {""}
+            Listing posted on {""}
             {new Date(itemDetails.createdAt).toLocaleDateString("en-US", {
               day: "numeric",
               month: "long",
@@ -90,9 +136,10 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   badgeText: {
-    color: "#F1F0E9",
+    color: "#2D5334",
     fontFamily: "OpenSans-Regular",
     marginBottom: 10,
+    fontWeight: "bold",
   },
   description: {
     width: "85%",
@@ -130,5 +177,15 @@ const styles = StyleSheet.create({
     color: "#2D5334",
     marginVertical: 5,
     marginTop: 50,
+  },
+
+  priceContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  priceText: {
+    color: "#2D5334",
+    fontSize: 16,
+    fontFamily: "OpenSans-Bold",
   },
 });
