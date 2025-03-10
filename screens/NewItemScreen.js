@@ -108,18 +108,18 @@ export default function NewItemScreen() {
             <View style={styles.registerContainer}>
               <CustomButton onPress={takePhoto} text="Add a picture" iconName="camera" />
               <View style={styles.toggleContainer}>
-                <Text style={styles.plantChoice}>Sale</Text>
+                <Text style={styles.label}>Sale</Text>
                 <Switch trackColor={{ false: "#2D5334", true: "#2D5334" }} thumbColor={isGiven ? "#95AE7D" : "#95AE7D"} ios_backgroundColor="#3e3e3e" value={isGiven} onValueChange={(newValue) => setIsGiven(newValue)} />
-                <Text style={styles.accessoryChoice}>Donation</Text>
+                <Text style={styles.label}>Donation</Text>
               </View>
               <RegisterInput title="Title" placeholder="Title" value={title} onChangeText={setTitle} returnKeyType="next" />
               <RegisterInput title="Description" placeholder="Description" value={description} onChangeText={setDescription} returnKeyType="next" />
               {!isGiven && <RegisterInput title="Price" placeholder="Price (in euros)" value={price} onChangeText={setPrice} returnKeyType="next" />}
               <RegisterInput title="Height" placeholder="Height (in cm)" value={height} onChangeText={setHeight} returnKeyType="next" />
               <View style={styles.toggleContainer}>
-                <Text style={styles.plantChoice}>Accessory</Text>
+                <Text style={styles.label}>Accessory</Text>
                 <Switch trackColor={{ false: "#2D5334", true: "#2D5334" }} thumbColor={"#95AE7D"} ios_backgroundColor="#3e3e3e" value={isPlant} onValueChange={(newValue) => setIsPlant(newValue)} />
-                <Text style={styles.accessoryChoice}>Plant</Text>
+                <Text style={styles.label}>Plant</Text>
               </View>
               <RegisterInput title={isPlant ? "Plant condition" : "Accessory condition"} placeholder={isPlant ? "Plant condition" : "Accessory condition"} value={condition} onChangeText={setCondition} returnKeyType="done" />
               <RegisterButton title="Add my item" onPress={handleSubmit} />
@@ -160,10 +160,11 @@ const styles = StyleSheet.create({
   toggleContainer: {
     flexDirection: "row",
     alignItems: "center",
-    paddingLeft: 8,
+    paddingLeft: 30,
   },
   label: {
-    marginRight: 10,
-    fontSize: 16,
+		color: '#2D5334',
+    paddingHorizontal: 10,
+		fontFamily: 'OpenSans-Regular',
   },
 });
