@@ -219,6 +219,20 @@ export default function SearchScreen() {
             ? "Toxic to humans"
             : "Non-toxic";
 
+
+        const plantSeasonality = harvest_season === null
+        ? "Fall"
+        : plantSeasonality.toLowerCase() === "winter"
+        ? "Winter"
+        : plantSeasonality.toLowerCase() === "spring"
+        ? "Spring"
+        : plantSeasonality.toLowerCase() === "summer"
+        ? "Summer"
+        : "Fall"
+
+
+        console.log(plantSeasonality)
+
         const plantSunExposure =
           sunlight[0].toLowerCase() === "part shade"
             ? "Needs shade"
@@ -236,7 +250,7 @@ export default function SearchScreen() {
           wateringFrequency: plantWateringFrequency,
           cuisine: plantCuisine,
           toxicity: plantToxicity,
-          seasonality: harvest_season,
+          seasonality: plantSeasonality,
           sunExposure: plantSunExposure,
           photo: plantPhotoApi,
         });
