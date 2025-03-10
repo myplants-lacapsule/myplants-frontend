@@ -137,7 +137,8 @@ export default function SearchScreen() {
   const idenficationDetailsPlant = async (plantName, cloudinaryUrl) => {
     try {
       //appel 2ème API pour récupérer l'id de la plante
-      const responsePerenual = await fetch(`https://perenual.com/api/v2/species-list?key=${perenualKey}&q=${plantName.toLowerCase()}`);
+      // plantName = plantName.toLowerCase();
+      const responsePerenual = await fetch(`https://perenual.com/api/v2/species-list?key=${perenualKey}&q=${plantName}`);
       // console.log("responsePerenual ", responsePerenual)
 
       if (!responsePerenual.ok) {
@@ -173,7 +174,7 @@ export default function SearchScreen() {
         console.log("IDperenual remaining :", rateLimitRemaining);
 
         const data = await fetchPerenualDetails.json();
-        const { description, watering, poisonous_to_humans, poisonous_to_pets, harvest_season, sunlight, cuisine } = data;
+        const { description, watering, poisonous_to_humans, poisonous_to_pets, flowering_season, sunlight, cuisine } = data;
 
         let plantWateringFrequency = watering.toLowerCase();
         if (plantWateringFrequency === "frequent") {
@@ -188,9 +189,7 @@ export default function SearchScreen() {
 
         const plantToxicity = poisonous_to_humans && poisonous_to_pets ? "Toxic to humans and pets" : poisonous_to_pets ? "Toxic to animals" : poisonous_to_humans ? "Toxic to humans" : "Non-toxic";
 
-        const plantSeasonality = harvest_season === null ? "Fall" : plantSeasonality.toLowerCase() === "winter" ? "Winter" : plantSeasonality.toLowerCase() === "spring" ? "Spring" : plantSeasonality.toLowerCase() === "summer" ? "Summer" : "Fall";
-
-        console.log(plantSeasonality);
+        const plantSeasonality = flowering_season === null ? "Fall" : plantSeasonality.toLowerCase() === "winter" ? "Winter" : plantSeasonality.toLowerCase() === "spring" ? "Spring" : plantSeasonality.toLowerCase() === "summer" ? "Summer" : "Fall";
 
         const plantSunExposure = sunlight[0].toLowerCase() === "part shade" ? "Needs shade" : sunlight[0] === "full-sun" ? "Needs exposure to the sun" : "Needs exposure to light";
 
