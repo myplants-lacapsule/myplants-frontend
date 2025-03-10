@@ -43,7 +43,7 @@ export default function FullDetailsPlantComponent() {
   const deletePlant = async () => {
     Alert.alert(
       "Confirmation",
-      "Are you sure you want to remove your plant from your inventory? ",
+      "Are you sure you want to remove this plant from your inventory? ",
       [
         {
           text: "Cancel",
@@ -157,7 +157,7 @@ export default function FullDetailsPlantComponent() {
           </View>
           <Text style={styles.description}>{plantDetails.description}</Text>
         </View>
-        <RegisterButton title={"Delete from my inventory"} style={styles.button} onPress={deletePlant} />
+        <RegisterButton title={"Remove from my inventory"} style={styles.button} onPress={deletePlant} />
       </ScrollView>
     </SafeAreaView>
   );
