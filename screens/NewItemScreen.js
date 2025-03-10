@@ -116,9 +116,9 @@ export default function NewItemScreen() {
             {!isGiven && <RegisterInput title="Price" placeholder="Price (in euros)" value={price} onChangeText={setPrice} returnKeyType="next" style={{ width: "90%", alignSelf: "center" }} />}
             <RegisterInput title="Height" placeholder="Height (in cm)" value={height} onChangeText={setHeight} returnKeyType="next" style={{ width: "90%", alignSelf: "center" }} />
             <View style={styles.toggleContainer}>
-              <Text style={styles.label}>Plant</Text>
-              <Switch trackColor={{ false: "#2D5334", true: "#2D5334" }} thumbColor={"#95AE7D"} ios_backgroundColor="#2D5334" value={isPlant} onValueChange={(newValue) => setIsPlant(newValue)} />
               <Text style={styles.label}>Accessory</Text>
+              <Switch trackColor={{ false: "#2D5334", true: "#2D5334" }} thumbColor={"#95AE7D"} ios_backgroundColor="#2D5334" value={isPlant} onValueChange={(newValue) => setIsPlant(newValue)} />
+              <Text style={styles.label}>Plant</Text>
             </View>
             <RegisterInput title={isPlant ? "Accessory condition" : "Plant condition"} placeholder={isPlant ? "Accessory condition" : "Plant condition"} value={condition} onChangeText={setCondition} returnKeyType="done" onSubmitEditing={handleSubmit} style={{ width: "90%", alignSelf: "center" }} />
             <RegisterButton title="Add my item" onPress={handleSubmit} disabled={isSubmitting} loading={isSubmitting} style={styles.addButton} />
@@ -132,7 +132,7 @@ export default function NewItemScreen() {
 const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
-		paddingTop: 40,
+    paddingTop: 40,
     paddingHorizontal: 10,
     backgroundColor: "#F1F0E9",
   },
