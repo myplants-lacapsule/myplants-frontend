@@ -51,11 +51,10 @@ export default function FullDetailsItemComponent({ itemDetails }) {
         <Text style={styles.description}>{itemDetails.description}</Text>
         <View style={styles.fieldsContainer}>
           {!itemDetails.isGiven && (
-            <Text style={styles.field}>Price : {itemDetails.price}€</Text>
+            <Text style={styles.field}>Price : {itemDetails.price} €</Text>
           )}
           <Text style={styles.field}>
-            Height : {itemDetails.height}
-            {""}cm
+            Height : {itemDetails.height} cm
           </Text>
           <Text style={styles.field}>
             Condition : {formatCondition(itemDetails.condition)}

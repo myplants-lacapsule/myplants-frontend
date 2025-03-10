@@ -32,6 +32,7 @@ export default function NewItemScreen() {
   const [isPlant, setIsPlant] = useState(true);
   const [condition, setCondition] = useState("");
   const [imageUri, setImageUri] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const user = useSelector((state) => state.user.value);
   const userToken = user.token;
@@ -57,6 +58,8 @@ export default function NewItemScreen() {
 
   // Fonction pour envoyer les données du formulaire
   const handleSubmit = async () => {
+    if (isSubmitting) return; // Empêche un double clic sur le bouton
+
     // Vérification des champs obligatoires
     if (
       !title ||
@@ -69,6 +72,8 @@ export default function NewItemScreen() {
       Alert.alert("Error", "Please fill in all fields and take a picture.");
       return;
     }
+
+    setIsSubmitting(true);
 
     // Création de l'objet FormData
     const formData = new FormData();
@@ -87,6 +92,7 @@ export default function NewItemScreen() {
       type: "image/jpeg",
     });
 
+  try {
     const response = await fetch(
       `${process.env.EXPO_PUBLIC_API_URL}/items/newItem/` + userToken,
       {
@@ -103,7 +109,9 @@ export default function NewItemScreen() {
     } else {
       Alert.alert("Erreur", result.error);
     }
-  };
+  } finally {
+    setIsSubmitting(false);
+  }};
 
   return (
     <SafeAreaView style={styles.safeContainer}>
@@ -181,7 +189,11 @@ export default function NewItemScreen() {
                 onChangeText={setCondition}
                 returnKeyType="done"
               />
-              <RegisterButton title="Add my item" onPress={handleSubmit} />
+              <RegisterButton
+                title="Add my item"
+                onPress={handleSubmit}
+                disabled={isSubmitting}
+              />
             </View>
           </View>
         </ScrollView>
