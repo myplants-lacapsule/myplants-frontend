@@ -149,9 +149,8 @@ export default function SearchScreen() {
   const idenficationDetailsPlant = async (plantName, cloudinaryUrl) => {
     try {
       //appel 2ème API pour récupérer l'id de la plante
-      const responsePerenual = await fetch(
-        `https://perenual.com/api/v2/species-list?key=${perenualKey}&q=${plantName.toLowerCase()}`
-      );
+      // plantName = plantName.toLowerCase();
+      const responsePerenual = await fetch(`https://perenual.com/api/v2/species-list?key=${perenualKey}&q=${plantName}`);
       // console.log("responsePerenual ", responsePerenual)
 
       if (!responsePerenual.ok) {
@@ -171,7 +170,7 @@ export default function SearchScreen() {
 
       const idPerenual = dataPerenual.data[0].id;
 
-      if (idPerenual >= 3000){
+      if (idPerenual >= 3000) {
         Alert.alert("ID de plante trop élevé", "On paie pas le premium alors cherche une autre plante")
         return
       }
@@ -194,7 +193,7 @@ export default function SearchScreen() {
           watering,
           poisonous_to_humans,
           poisonous_to_pets,
-          harvest_season,
+          flowering_season,
           sunlight,
           cuisine,
         } = data;
@@ -214,31 +213,27 @@ export default function SearchScreen() {
           poisonous_to_humans && poisonous_to_pets
             ? "Toxic to humans and pets"
             : poisonous_to_pets
-            ? "Toxic to animals"
-            : poisonous_to_humans
-            ? "Toxic to humans"
-            : "Non-toxic";
+              ? "Toxic to animals"
+              : poisonous_to_humans
+                ? "Toxic to humans"
+                : "Non-toxic";
 
-
-        const plantSeasonality = harvest_season === null
-        ? "Fall"
-        : plantSeasonality.toLowerCase() === "winter"
-        ? "Winter"
-        : plantSeasonality.toLowerCase() === "spring"
-        ? "Spring"
-        : plantSeasonality.toLowerCase() === "summer"
-        ? "Summer"
-        : "Fall"
-
-
-        console.log(plantSeasonality)
+        const plantSeasonality = flowering_season === null
+          ? "Fall"
+          : plantSeasonality.toLowerCase() === "winter"
+            ? "Winter"
+            : plantSeasonality.toLowerCase() === "spring"
+              ? "Spring"
+              : plantSeasonality.toLowerCase() === "summer"
+                ? "Summer"
+                : "Fall"
 
         const plantSunExposure =
           sunlight[0].toLowerCase() === "part shade"
             ? "Needs shade"
             : sunlight[0] === "full-sun"
-            ? "Needs exposure to the sun"
-            : "Needs exposure to light";
+              ? "Needs exposure to the sun"
+              : "Needs exposure to light";
 
         const plantCuisine = cuisine ? "Is edible" : "Is not edible";
 
