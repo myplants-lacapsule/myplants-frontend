@@ -10,7 +10,7 @@ export default function ItemCard({ photo, title, description, price, height, isG
     <TouchableOpacity
       style={styles.card}
       onPress={() => {
-        closeModal();
+        if (closeModal) closeModal();
         navigation.navigate("FullDetailsItem", {
           itemDetails: {
             photo,
@@ -61,11 +61,16 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "white",
     height: 160,
-    margin: 5,
+    margin: 10,
     borderRadius: 10,
     flexDirection: "row",
     borderWidth: 1,
     borderColor: "#D0DDD0",
+		shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
   },
   cardContent: {
     flexDirection: "row",
