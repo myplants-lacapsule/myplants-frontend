@@ -6,7 +6,7 @@ import { login } from "../reducers/user";
 
 import RegisterInput from "../components/RegisterInput.js";
 import RegisterButton from "../components/RegisterButton.js";
-import ReturnButton from "../components/ReturnButton";
+import ReturnButton from "../components/ReturnButton.js";
 
 export default function SignInScreen() {
   const dispatch = useDispatch();
@@ -62,11 +62,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F1F0E9",
-    alignItems: "center",
-    justifyContent: "center",
   },
   registerContainer: {
     width: "80%",
+		alignSelf: 'center',
+		marginTop: 220,
   },
   errorText: {
     width: "80%",
