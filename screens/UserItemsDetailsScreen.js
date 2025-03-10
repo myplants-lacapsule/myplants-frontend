@@ -43,8 +43,7 @@ export default function UserItemsDetailsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ReturnButton />
-      <Text style={styles.myitems}>My items for sale</Text>
+      <ReturnButton title="My items for sale"/>
       <ScrollView style={styles.cardContainer}>{userItems}</ScrollView>
     </SafeAreaView>
   );
@@ -53,14 +52,8 @@ export default function UserItemsDetailsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+		paddingTop: 40,
     backgroundColor: "#F1F0E9",
-  },
-  myitems: {
-    color: "#2D5334",
-    fontSize: 30,
-    marginTop: 5,
-    paddingLeft: 15,
-    fontFamily: "Merriweather-Bold",
   },
   noCardMessage: {
     color: "#2D5334",
