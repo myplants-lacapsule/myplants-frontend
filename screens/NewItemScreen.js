@@ -138,7 +138,7 @@ export default function NewItemScreen() {
                 iconName="camera"
               />
               <View style={styles.toggleContainer}>
-                <Text>Sale</Text>
+                <Text style={styles.label}>Sale</Text>
 
                 <Switch
                   trackColor={{ false: "#2D5334", true: "#2D5334" }}
@@ -148,7 +148,7 @@ export default function NewItemScreen() {
                   onValueChange={(newValue) => setIsGiven(newValue)}
                   style={styles.customSwitch}
                 />
-                <Text>Donation</Text>
+                <Text style={styles.label}>Donation</Text>
               </View>
               <RegisterInput
                 placeholder="Title"
@@ -181,7 +181,7 @@ export default function NewItemScreen() {
                 style={{ width: "85%", alignSelf: "center" }}
               />
               <View style={styles.toggleContainer}>
-                <Text style={styles.plantChoice}>Accessory</Text>
+                <Text style={styles.label}>Accessory</Text>
                 <Switch
                   trackColor={{ false: "#2D5334", true: "#2D5334" }}
                   thumbColor={"#95AE7D"}
@@ -189,7 +189,7 @@ export default function NewItemScreen() {
                   value={isPlant}
                   onValueChange={(newValue) => setIsPlant(newValue)}
                 />
-                <Text style={styles.accessoryChoice}>Plant</Text>
+                <Text style={styles.label}>Plant</Text>
               </View>
               <RegisterInput
                 placeholder={
@@ -207,7 +207,6 @@ export default function NewItemScreen() {
                 disabled={isSubmitting}
                 loading={isSubmitting}
                 style={{ marginTop: 40, width: "85%", alignSelf: "center" }}
-          
               />
             </View>
           </View>
@@ -247,13 +246,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 10,
-    marginTop: 15,
+    marginTop: 20,
     paddingLeft: 8,
   },
   label: {
-    marginRight: 10,
-    fontSize: 16,
+    color: "#2D5334",
+    paddingHorizontal: 10,
+    fontFamily: "OpenSans-Regular",
   },
-
 });

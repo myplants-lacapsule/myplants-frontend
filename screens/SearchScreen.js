@@ -10,7 +10,7 @@ import SearchBar from "../components/SearchBar";
 import SuggestionPlantCard from "../components/SuggestionPlantCard";
 
 export default function SearchScreen() {
-  const perenualKey = "sk-9oF467cde70f4a03e9041";
+  const perenualKey = "sk-RB2z67cecb13330dc9059";
   const plantidKey = "MPTt3cQB5Z8PlOmOhGC3XBagUam7WtPUfCJ66Q9e4p0YdSvOAS";
 
   const userInStore = useSelector((state) => state.user.value);

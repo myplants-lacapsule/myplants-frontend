@@ -68,9 +68,9 @@ export default function SignUpScreen() {
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"}>
       <ReturnButton />
       <View style={styles.registerContainer}>
-        <RegisterInput placeholder="Username" value={signUpUsername} onChangeText={setSignUpUsername} />
-        <RegisterInput placeholder="Email address" autoCapitalize="none" keyboardType="email-address" textContentType="emailAddress" autoComplete="email" value={signUpEmail} onChangeText={(text) => setSignUpEmail(text.toLowerCase())} />
-        <RegisterInput placeholder="Password" textContentType="password" autoComplete="password" value={signUpPassword} onChangeText={setSignUpPassword} secureTextEntry={true} />
+        <RegisterInput title="Username" placeholder="Username" value={signUpUsername} onChangeText={setSignUpUsername} />
+        <RegisterInput title="Email address" placeholder="Email address" autoCapitalize="none" keyboardType="email-address" textContentType="emailAddress" autoComplete="email" value={signUpEmail} onChangeText={(text) => setSignUpEmail(text.toLowerCase())} />
+        <RegisterInput title="Password" placeholder="Password" textContentType="password" autoComplete="password" value={signUpPassword} onChangeText={setSignUpPassword} secureTextEntry={true} />
         <RegisterButton title="Sign up" onPress={handleRegister} />
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
       </View>
