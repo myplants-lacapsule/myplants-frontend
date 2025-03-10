@@ -1,7 +1,7 @@
 import { ActivityIndicator, Alert, Modal, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useIsFocused, useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import ItemCard from "../components/ItemCard";
 import MapView, { Marker } from "react-native-maps";
@@ -10,6 +10,7 @@ import * as Location from "expo-location";
 export default function MapScreen() {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
+  const route = useRoute();
   const user = useSelector((state) => state.user.value);
   const userToken = user.token;
 
@@ -24,7 +25,6 @@ export default function MapScreen() {
     longitudeDelta: 15,
   });
   const [uniquePin, setUniquePin] = useState([]);
-  const [username, setUsername] = useState("");
 
   // Récupération de la position actuelle de l'utilisateur
   useEffect(() => {
@@ -59,6 +59,13 @@ export default function MapScreen() {
     }
     fetchItems();
   }, [isFocused]);
+
+  // Rafraîchir la carte si on revient depuis NewItemScreen avec refresh: true
+  useEffect(() => {
+    if (route.params?.refresh) {
+      fetchItems();
+    }
+  }, [route.params?.refresh]);
 
   // Fonction pour récupérer toutes les annonces depuis le backend
   const fetchItems = async () => {
@@ -133,7 +140,9 @@ export default function MapScreen() {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#2D5334" />
+        <ActivityIndicator
+          size="large"
+          color="#2D5334"/>
         <Text style={styles.loadingText}>Loading ...</Text>
       </View>
     );
@@ -222,6 +231,10 @@ const styles = StyleSheet.create({
     borderRadius: 35,
     alignItems: "center",
     justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
     elevation: 10,
   },
   addButtonText: {

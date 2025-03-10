@@ -2,7 +2,7 @@ import React from "react";
 import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 
-const CustomButton = ({ onPress, text, iconName }) => {
+export default function CustomButton({ onPress, text, iconName }) {
   return (
     <TouchableOpacity style={styles.button} onPress={onPress}>
       <View style={styles.iconContainer}>
@@ -11,7 +11,7 @@ const CustomButton = ({ onPress, text, iconName }) => {
       <Text style={styles.buttonText}>{text}</Text>
     </TouchableOpacity>
   );
-};
+}
 
 const styles = StyleSheet.create({
   button: {
@@ -24,6 +24,11 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     width: "50%",
     alignSelf: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 10,
   },
   iconContainer: {
     marginRight: 10,
@@ -33,5 +38,3 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
-
-export default CustomButton;

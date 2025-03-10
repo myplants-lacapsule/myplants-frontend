@@ -1,4 +1,4 @@
-import { StyleSheet, View, SafeAreaView, TouchableOpacity, Alert } from "react-native";
+import { ActivityIndicator, Alert, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Camera } from "expo-camera";
 import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
@@ -7,6 +7,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 import CameraSearch from "../components/CameraSearch";
 import SearchBar from "../components/SearchBar";
+import ReturnButton from "../components/ReturnButton.js";
 import SuggestionPlantCard from "../components/SuggestionPlantCard";
 
 export default function SearchScreen() {
@@ -21,6 +22,7 @@ export default function SearchScreen() {
   const [showCamera, setShowCamera] = useState(false);
   const [plantsData, setPlantsData] = useState(null);
   const [inputResearch, setInputResearch] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const isFocused = useIsFocused();
   const [hasPermission, setHasPermission] = useState(false); // état de la permission
@@ -244,14 +246,27 @@ export default function SearchScreen() {
     }
   };
 
+  // Affichage d'un écran de chargement si les données ne sont pas encore chargées
+  // if (loading) {
+  //   return (
+  //     <View style={styles.loadingContainer}>
+  //       <ActivityIndicator size="large" color="#2D5334" />
+  //       <Text style={styles.loadingText}>Loading ...</Text>
+  //     </View>
+  //   );
+  // }
+
   return (
     <SafeAreaView style={styles.container}>
       {!showCamera && !showSuggestions && (
-        <View style={styles.containsearch}>
-          <SearchBar inputResearch={inputResearch} setInputResearch={setInputResearch} onSearch={() => idenficationDetailsPlant(inputResearch)} />
-          <TouchableOpacity style={styles.takePhoto} onPress={getPermission}>
-            <FontAwesome name="camera" size={30} color="white" />
-          </TouchableOpacity>
+        <View>
+          <ReturnButton title="Search for a plant" />
+          <View style={styles.containsearch}>
+            <SearchBar inputResearch={inputResearch} setInputResearch={setInputResearch} onSearch={() => idenficationDetailsPlant(inputResearch)} />
+            <TouchableOpacity style={styles.takePhoto} onPress={getPermission}>
+              <FontAwesome name="camera" size={30} color="white" />
+            </TouchableOpacity>
+          </View>
         </View>
       )}
 
@@ -269,7 +284,7 @@ export default function SearchScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F1F0E9",
+		paddingTop: 40,
   },
   containsearch: {
     height: "15%",
@@ -310,5 +325,17 @@ const styles = StyleSheet.create({
   btn: {
     alignItems: "center",
     justifyContent: "center",
+  },
+  loadingContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#F1F0E9",
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 18,
+    fontFamily: "OpenSans-Regular",
+    color: "#2D5334",
   },
 });
