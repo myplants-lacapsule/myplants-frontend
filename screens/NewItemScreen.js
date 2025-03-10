@@ -1,4 +1,15 @@
-import { KeyboardAvoidingView, Platform, StyleSheet, View, Text, Alert, Image, SafeAreaView, ScrollView, Switch } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  View,
+  Text,
+  Alert,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  Switch,
+} from "react-native";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
@@ -17,8 +28,8 @@ export default function NewItemScreen() {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [height, setHeight] = useState("");
-  const [isGiven, setIsGiven] = useState(true);
-  const [isPlant, setIsPlant] = useState(true);
+  const [isGiven, setIsGiven] = useState(false);
+  const [isPlant, setIsPlant] = useState(false);
   const [condition, setCondition] = useState("");
   const [imageUri, setImageUri] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -50,54 +61,69 @@ export default function NewItemScreen() {
     if (isSubmitting) return; // Empêche un double clic sur le bouton
 
     // Vérification des champs obligatoires
-    if (!title || !description || (!isGiven && !price) || !height || !imageUri || !condition) {
+    if (
+      !title ||
+      !description ||
+      (!isGiven && !price) ||
+      !height ||
+      !imageUri ||
+      !condition
+    ) {
       Alert.alert("Error", "Please fill in all fields and take a picture.");
       return;
     }
 
     setIsSubmitting(true);
 
-    try{
-    // Création de l'objet FormData
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("price", price);
-    formData.append("height", height);
-    formData.append("isGiven", isGiven);
-    formData.append("isPlant", isPlant);
-    formData.append("condition", condition);
+    try {
+      // Création de l'objet FormData
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("price", price);
+      formData.append("height", height);
+      formData.append("isGiven", isGiven);
+      formData.append("isPlant", isPlant);
+      formData.append("condition", condition);
 
-    //Ajout de la photo au FormData
-    formData.append("photoFromFront", {
-      uri: imageUri,
-      name: "photo.jpg",
-      type: "image/jpeg",
-    });
+      //Ajout de la photo au FormData
+      formData.append("photoFromFront", {
+        uri: imageUri,
+        name: "photo.jpg",
+        type: "image/jpeg",
+      });
 
-    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/items/newItem/` + userToken, {
-      method: "POST",
-      body: formData,
-    });
-    const result = await response.json();
+      const response = await fetch(
+        `${process.env.EXPO_PUBLIC_API_URL}/items/newItem/` + userToken,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      const result = await response.json();
 
-    if (result.result) {
-      Alert.alert("Success", "Your item has been added.", [{ onPress: () => navigation.navigate("Sale/donation") }]);
-    } else {
-      Alert.alert("Erreur", result.error);
+      if (result.result) {
+        Alert.alert("Success", "Your item has been added.", [
+          { onPress: () => navigation.navigate("Sale/donation") },
+        ]);
+      } else {
+        Alert.alert("Erreur", result.error);
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+      Alert.alert("Erreur", "An unexpected error occurred.");
+    } finally {
+      setIsSubmitting(false);
     }
-  } catch (error) {
-    console.error("An error occurred:", error);
-    Alert.alert("Erreur", "An unexpected error occurred.");
-  } finally {
-    setIsSubmitting(false);
-  }
-}
+  };
 
   return (
     <SafeAreaView style={styles.safeContainer}>
       <ReturnButton destination={"Sale/donation"} />
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <View style={styles.bigContainer}>
             {imageUri && (
@@ -106,23 +132,82 @@ export default function NewItemScreen() {
               </View>
             )}
             <View style={styles.registerContainer}>
-              <CustomButton onPress={takePhoto} text="Add a picture" iconName="camera" />
+              <CustomButton
+                onPress={takePhoto}
+                text="Add a picture"
+                iconName="camera"
+              />
               <View style={styles.toggleContainer}>
-                <Text style={styles.plantChoice}>Sale</Text>
-                <Switch trackColor={{ false: "#2D5334", true: "#2D5334" }} thumbColor={isGiven ? "#95AE7D" : "#95AE7D"} ios_backgroundColor="#3e3e3e" value={isGiven} onValueChange={(newValue) => setIsGiven(newValue)} />
-                <Text style={styles.accessoryChoice}>Donation</Text>
+                <Text style={styles.label}>Sale</Text>
+
+                <Switch
+                  trackColor={{ false: "#2D5334", true: "#2D5334" }}
+                  thumbColor={"#95AE7D"}
+                  ios_backgroundColor="#2D5334"
+                  value={isGiven}
+                  onValueChange={(newValue) => setIsGiven(newValue)}
+                  style={styles.customSwitch}
+                />
+                <Text style={styles.label}>Donation</Text>
               </View>
-              <RegisterInput placeholder="Title" value={title} onChangeText={setTitle} returnKeyType="next" />
-              <RegisterInput placeholder="Description" value={description} onChangeText={setDescription} returnKeyType="next" />
-              {!isGiven && <RegisterInput placeholder="Price (in euros)" value={price} onChangeText={setPrice} returnKeyType="next" />}
-              <RegisterInput placeholder="Height (in cm)" value={height} onChangeText={setHeight} returnKeyType="next" />
+              <RegisterInput
+                placeholder="Title"
+                value={title}
+                onChangeText={setTitle}
+                returnKeyType="next"
+                style={{ width: "90%", alignSelf: "center" }}
+              />
+              <RegisterInput
+                placeholder="Description"
+                value={description}
+                onChangeText={setDescription}
+                returnKeyType="next"
+                style={{ width: "90%", alignSelf: "center" }}
+              />
+              {!isGiven && (
+                <RegisterInput
+                  placeholder="Price (in euros)"
+                  value={price}
+                  onChangeText={setPrice}
+                  returnKeyType="next"
+                  style={{ width: "90%", alignSelf: "center" }}
+                />
+              )}
+              <RegisterInput
+                placeholder="Height (in cm)"
+                value={height}
+                onChangeText={setHeight}
+                returnKeyType="next"
+                style={{ width: "90%", alignSelf: "center" }}
+              />
               <View style={styles.toggleContainer}>
-                <Text style={styles.plantChoice}>Accessory</Text>
-                <Switch trackColor={{ false: "#2D5334", true: "#2D5334" }} thumbColor={"#95AE7D"} ios_backgroundColor="#3e3e3e" value={isPlant} onValueChange={(newValue) => setIsPlant(newValue)} />
-                <Text style={styles.accessoryChoice}>Plant</Text>
+                <Text style={styles.label}>Plant</Text>
+                <Switch
+                  trackColor={{ false: "#2D5334", true: "#2D5334" }}
+                  thumbColor={"#95AE7D"}
+                  ios_backgroundColor="#2D5334"
+                  value={isPlant}
+                  onValueChange={(newValue) => setIsPlant(newValue)}
+                />
+                <Text style={styles.label}>Accessory</Text>
               </View>
-              <RegisterInput placeholder={isPlant ? "Plant condition" : "Accessory condition"} value={condition} onChangeText={setCondition} returnKeyType="done" />
-              <RegisterButton title="Add my item" onPress={handleSubmit} />
+              <RegisterInput
+                placeholder={
+                  isPlant ? "Accessory condition" : "Plant condition"
+                }
+                value={condition}
+                onChangeText={setCondition}
+                returnKeyType="done"
+                onSubmitEditing={handleSubmit}
+                style={{ width: "90%", alignSelf: "center" }}
+              />
+              <RegisterButton
+                title="Add my item"
+                onPress={handleSubmit}
+                disabled={isSubmitting}
+                loading={isSubmitting}
+                style={{ marginTop: 40, width: "90%", alignSelf: "center" }}
+              />
             </View>
           </View>
         </ScrollView>
@@ -155,15 +240,17 @@ const styles = StyleSheet.create({
   registerContainer: {
     height: "70%",
     width: "100%",
-    paddingTop: 5,
   },
   toggleContainer: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
     paddingLeft: 8,
   },
   label: {
-    marginRight: 10,
-    fontSize: 16,
+    color: "#2D5334",
+    paddingHorizontal: 10,
+    fontFamily: "OpenSans-Regular",
   },
 });
