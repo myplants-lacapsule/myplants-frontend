@@ -31,19 +31,21 @@ export default function HomeScreen() {
       if (!data.result) {
         setPlantsData([])
         setNoPlantData(true);
+      } else {
+        setNoPlantData(false);
+        setPlantsData(data.data);
+        setNumberPlantNeedsWater(data.numberPlantNeedsWater)
       }
-
-      setNoPlantData(false);
-      setPlantsData(data.data);
-      setNumberPlantNeedsWater(data.numberPlantNeedsWater)
 
     } catch (error) {
       console.error("Error fetching plants:", error);
     }
   };
 
-  const hasPlants = plantsData.length > 0 && !noPlantData;
+  const plantsNeedsWater = plantsData.length > 0 && !noPlantData
+  const unwateredPlant = plantsNeedsWater && plantsData.filter(data => !data.isWatered)
 
+  const hasPlants = plantsData.length > 0 && !noPlantData;
   const userPlants = hasPlants ? plantsData.map((data, i) => <PlantCard key={i} {...data} />) : <Text style={styles.noCardMessage}> You don't have any plants yet. Add one! </Text>;
 
   return (
@@ -51,23 +53,11 @@ export default function HomeScreen() {
       <View style={styles.topContainer}>
         <Text style={styles.hello}>Hello, {userInStore.username} !</Text>
         <View style={styles.iconContainer}>
-          <FontAwesome5
-            style={styles.icon}
-            name="bell"
-            size={35}
-            solid={true}
-            onPress={() => navigation.navigate("NotificationScreen")}
-          />
+          <FontAwesome5 style={styles.icon} name="bell" size={35} solid={true} onPress={() => navigation.navigate("NotificationScreen", { unwateredPlant })} />
           {numberPlantNeedsWater > 0 && <View style={styles.containerNumber}>
             <Text style={styles.number}>{numberPlantNeedsWater}</Text>
           </View>}
-          <FontAwesome5
-            style={styles.icon}
-            name="user-circle"
-            size={35}
-            solid={true}
-            onPress={() => navigation.navigate("UserScreen")}
-          />
+          <FontAwesome5 style={styles.icon} name="user-circle" size={35} solid={true} onPress={() => navigation.navigate("UserScreen")} />
         </View>
       </View>
       <Text style={styles.myplants}>My plants</Text>
