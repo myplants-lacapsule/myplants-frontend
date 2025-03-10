@@ -1,14 +1,4 @@
-import {
-  ActivityIndicator,
-  Alert,
-  Modal,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ActivityIndicator, Alert, Modal, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
@@ -73,9 +63,7 @@ export default function MapScreen() {
   // Fonction pour récupérer toutes les annonces depuis le backend
   const fetchItems = async () => {
     try {
-      const response = await fetch(
-        `${process.env.EXPO_PUBLIC_API_URL}/items/allItems`
-      );
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/items/allItems`);
       const data = await response.json();
       if (data.result) {
         // Regrouper les annonces par utilisateur pour n'afficher qu'un seul marker par user
@@ -102,26 +90,19 @@ export default function MapScreen() {
   // Affichage de la modale lorsque l'utilisateur appuie sur un marqueur
   const handleMarkerPress = async (userToken) => {
     try {
-      const response = await fetch(
-        `${process.env.EXPO_PUBLIC_API_URL}/items/byUser/${userToken}`
-      );
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/items/byUser/${userToken}`);
       const data = await response.json();
       if (data.result) {
         setItemsData(data.items);
         setModalVisible(true);
       }
     } catch (error) {
-      Alert.alert(
-        "Erreur",
-        "Impossible de récupérer les annonces de cet utilisateur."
-      );
+      Alert.alert("Erreur", "Impossible de récupérer les annonces de cet utilisateur.");
     }
   };
 
   // Articles à afficher dans la modale
-  const userItems = itemsData.map((data, i) => (
-    <ItemCard key={i} {...data} closeModal={() => setModalVisible(false)} />
-  ));
+  const userItems = itemsData.map((data, i) => <ItemCard key={i} {...data} closeModal={() => setModalVisible(false)} />);
 
   // Fonction déclenchée lorsque l'utilisateur appuie sur le bouton "+"
   const handleAddPress = async () => {
@@ -139,9 +120,7 @@ export default function MapScreen() {
   // Fonction qui vérifie si l'utilisateur a déjà des coordonnées enregistrées
   const checkUserLocation = async () => {
     try {
-      const response = await fetch(
-        `${process.env.EXPO_PUBLIC_API_URL}/users/getUserLocation/${userToken}`
-      );
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/users/getUserLocation/${userToken}`);
       const result = await response.json();
       return result;
     } catch (error) {
@@ -163,9 +142,7 @@ export default function MapScreen() {
   return (
     <View style={{ flex: 1 }}>
       <MapView style={{ flex: 1 }} initialRegion={initialRegion}>
-        {currentPosition && (
-          <Marker coordinate={currentPosition} pinColor="red" />
-        )}
+        {currentPosition && <Marker coordinate={currentPosition} pinColor="red" />}
         {uniquePin.map((pin, i) => (
           <Marker
             key={i}
@@ -184,13 +161,7 @@ export default function MapScreen() {
         <View style={styles.modalContainer}>
           <SafeAreaView style={styles.modal}>
             <View style={styles.topContainer}>
-              <FontAwesome5
-                name="times-circle"
-                size={25}
-                solid={true}
-                style={styles.closeButton}
-                onPress={() => setModalVisible(false)}
-              />
+              <FontAwesome5 name="times-circle" size={25} solid={true} style={styles.closeButton} onPress={() => setModalVisible(false)} />
             </View>
             <ScrollView style={styles.cardContainer}>{userItems}</ScrollView>
           </SafeAreaView>
@@ -230,8 +201,8 @@ const styles = StyleSheet.create({
   },
   modal: {
     position: "relative",
-		maxHeight: "45%",
-		minHeight: 100,
+    maxHeight: "45%",
+    minHeight: 100,
     width: "90%",
     padding: 5,
     borderRadius: 15,

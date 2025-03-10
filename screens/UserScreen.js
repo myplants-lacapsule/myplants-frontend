@@ -16,27 +16,14 @@ export default function UserScreen() {
       <ReturnButton destination={"Home"} />
       <View style={styles.componentsContainer}>
         <View style={styles.avatarContainer}>
-          <FontAwesome5
-            name="user-ninja"
-            size={150}
-            color={"#2D5334"}
-            solid={true}
-          />
+          <FontAwesome5 name="user-ninja" size={150} color={"#2D5334"} solid={true} />
         </View>
         <View style={styles.usernameContainer}>
           <Text style={styles.username}>{userInStore.username}</Text>
         </View>
-        <RegisterButton
-          title="My items for sale"
-          onPress={() => navigation.navigate("UserItemsDetailsScreen")}
-          style={styles.button}
-        />
+        <RegisterButton title="My items for sale" onPress={() => navigation.navigate("UserItemsDetailsScreen")} style={styles.button} />
         <RegisterButton title="Settings" style={styles.button} />
-        <RegisterButton
-          title="Log out"
-          onPress={() => navigation.navigate("WelcomeScreen")}
-          style={styles.button}
-        />
+        <RegisterButton title="Log out" onPress={() => navigation.navigate("WelcomeScreen")} style={styles.button} />
       </View>
     </SafeAreaView>
   );

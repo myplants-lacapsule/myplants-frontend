@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Text,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Image,
-  Alert,
-  View,
-} from "react-native";
+import { Text, SafeAreaView, ScrollView, StyleSheet, Image, Alert, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
@@ -32,13 +24,10 @@ export default function FullDetailsPlantComponent() {
           text: "Yes, remove",
           onPress: async () => {
             try {
-              const response = await fetch(
-                `${process.env.EXPO_PUBLIC_API_URL}/plants/deletePlant/${plantDetails.token}`,
-                {
-                  method: "DELETE",
-                  "Content-Type": "application/json",
-                }
-              );
+              const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/deletePlant/${plantDetails.token}`, {
+                method: "DELETE",
+                "Content-Type": "application/json",
+              });
 
               if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -85,9 +74,7 @@ export default function FullDetailsPlantComponent() {
     },
   };
 
-  const currentSunExposure =
-    sunExposureIcons[plantDetails.sunExposure.toLowerCase()] ||
-    sunExposureIcons["default"];
+  const currentSunExposure = sunExposureIcons[plantDetails.sunExposure.toLowerCase()] || sunExposureIcons["default"];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -96,72 +83,28 @@ export default function FullDetailsPlantComponent() {
         <Text style={styles.name}>{plantDetails.name}</Text>
         <ScrollView horizontal={true} style={styles.badgeContainer}>
           <View style={styles.badge}>
-            <Text style={styles.badgeText}>
-              Water every {plantDetails.wateringFrequency} days
-            </Text>
+            <Text style={styles.badgeText}>Water every {plantDetails.wateringFrequency} days</Text>
             <FontAwesome name="tint" size={25} color="#00BFFF" />
           </View>
           <View style={styles.badge}>
             <Text style={styles.badgeText}>{plantDetails.sunExposure}</Text>
-            <FontAwesome5
-              name={currentSunExposure.icon}
-              size={20}
-              color={currentSunExposure.color}
-              style={{ marginRight: 5 }}
-            />
+            <FontAwesome5 name={currentSunExposure.icon} size={20} color={currentSunExposure.color} style={{ marginRight: 5 }} />
           </View>
           <View style={styles.badge}>
-            <Text style={styles.badgeText}>
-              {plantDetails.cuisine === "the plant is edible"
-                ? "is edible"
-                : "is not edible"}
-            </Text>
-            <FontAwesome5
-              name={
-                plantDetails.cuisine === "the plant is edible"
-                  ? "check"
-                  : "times"
-              }
-              size={20}
-              color={
-                plantDetails.cuisine === "the plant is edible"
-                  ? "#2D5334"
-                  : "#BC4749"
-              }
-              style={{ marginRight: 5 }}
-            />
+            <Text style={styles.badgeText}>{plantDetails.cuisine === "the plant is edible" ? "is edible" : "is not edible"}</Text>
+            <FontAwesome5 name={plantDetails.cuisine === "the plant is edible" ? "check" : "times"} size={20} color={plantDetails.cuisine === "the plant is edible" ? "#2D5334" : "#BC4749"} style={{ marginRight: 5 }} />
           </View>
           <View style={styles.badge}>
-            <Text style={styles.badgeText}>
-              {plantDetails.toxicity === "Non-toxic" ? "non-toxic" : "is toxic"}
-            </Text>
-            <FontAwesome5
-              name={plantDetails.toxicity === "Non-toxic" ? "check" : "times"}
-              size={20}
-              color={
-                plantDetails.toxicity === "Non-toxic" ? "#2D5334" : "#BC4749"
-              }
-              style={{ marginRight: 5 }}
-            />
+            <Text style={styles.badgeText}>{plantDetails.toxicity === "Non-toxic" ? "non-toxic" : "is toxic"}</Text>
+            <FontAwesome5 name={plantDetails.toxicity === "Non-toxic" ? "check" : "times"} size={20} color={plantDetails.toxicity === "Non-toxic" ? "#2D5334" : "#BC4749"} style={{ marginRight: 5 }} />
           </View>
-          {plantDetails.seasonality !== null && (
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>{plantDetails.seasonality}</Text>
-              <FontAwesome5
-                name={currentSeason.icon}
-                size={20}
-                color={currentSeason.color}
-                style={{ marginRight: 5 }}
-              />
-            </View>
-          )}
+          <View style={styles.badge}>
+            <Text style={styles.badgeText}>{plantDetails.seasonality}</Text>
+            <FontAwesome5 name={currentSeason.icon} size={20} color={currentSeason.color} style={{ marginRight: 5 }} />
+          </View>
         </ScrollView>
         <Text style={styles.description}>{plantDetails.description}</Text>
-        <RegisterButton
-          title={"Delete from my inventory"}
-          style={styles.button}
-          onPress={deletePlant}
-        />
+        <RegisterButton title={"Delete from my inventory"} style={styles.button} onPress={deletePlant} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -215,7 +158,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#95AE7D",
     borderRadius: 10,
-    backgroundColor: "#F8F3D9",
+    backgroundColor: "white",
   },
   button: {
     fontFamily: "OpenSans-Regular",

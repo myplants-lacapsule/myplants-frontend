@@ -2,11 +2,7 @@ import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
 export default function RegisterButton({ title, onPress, style }) {
   return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={[styles.button, style]}
-      activeOpacity={0.8}
-    >
+    <TouchableOpacity onPress={onPress} style={[styles.button, style]} activeOpacity={0.8}>
       <Text style={styles.textButton}>{title}</Text>
     </TouchableOpacity>
   );

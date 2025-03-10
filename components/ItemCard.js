@@ -3,18 +3,7 @@ import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
-export default function ItemCard({
-  photo,
-  title,
-  description,
-  price,
-  height,
-  isGiven,
-  isPlant,
-  condition,
-  createdAt,
-  closeModal,
-}) {
+export default function ItemCard({ photo, title, description, price, height, isGiven, isPlant, condition, createdAt, closeModal }) {
   const navigation = useNavigation();
 
   return (
@@ -45,53 +34,16 @@ export default function ItemCard({
           <View style={styles.infoContainer}>
             <Text style={styles.name}>{title}</Text>
             <View style={styles.badge}>
-              {isPlant ? (
-                <FontAwesome5
-                  name="leaf"
-                  size={16}
-                  color="#2D5334"
-                  style={{ marginRight: 5 }}
-                />
-              ) : (
-                <FontAwesome5
-                  name="hammer"
-                  size={16}
-                  color="#2D5334"
-                  style={{ marginRight: 5 }}
-                />
-              )}
-              <Text style={styles.badgeText}>
-                {isPlant ? "Plant" : "Accessory"}
-              </Text>
+              {isPlant ? <FontAwesome5 name="leaf" size={16} color="#2D5334" style={{ marginRight: 5 }} /> : <FontAwesome5 name="hammer" size={16} color="#2D5334" style={{ marginRight: 5 }} />}
+              <Text style={styles.badgeText}>{isPlant ? "Plant" : "Accessory"}</Text>
             </View>
             <View style={styles.badge}>
-              {isGiven ? (
-                <FontAwesome5
-                  name="hands-helping"
-                  size={16}
-                  color="#2D5334"
-                  style={{ marginRight: 5 }}
-                />
-              ) : (
-                <FontAwesome5
-                  name="shopping-cart"
-                  size={16}
-                  color="#2D5334"
-                  style={{ marginRight: 5 }}
-                />
-              )}
-              <Text style={styles.badgeText}>
-                {isGiven ? "Donation" : "Sale"}
-              </Text>
+              {isGiven ? <FontAwesome5 name="hands-helping" size={16} color="#2D5334" style={{ marginRight: 5 }} /> : <FontAwesome5 name="shopping-cart" size={16} color="#2D5334" style={{ marginRight: 5 }} />}
+              <Text style={styles.badgeText}>{isGiven ? "Donation" : "Sale"}</Text>
             </View>
             {!isGiven && (
               <View style={styles.badge}>
-                <FontAwesome5
-                  name="euro-sign"
-                  size={16}
-                  color="#2D5334"
-                  style={{ marginRight: 5 }}
-                />
+                <FontAwesome5 name="euro-sign" size={16} color="#2D5334" style={{ marginRight: 5 }} />
                 <Text style={styles.badgeText}>{price}</Text>
               </View>
             )}
@@ -107,7 +59,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   card: {
-    backgroundColor: "#F1F0E9",
+    backgroundColor: "white",
     height: 160,
     margin: 5,
     borderRadius: 10,

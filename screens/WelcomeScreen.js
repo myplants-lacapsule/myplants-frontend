@@ -1,10 +1,4 @@
-import {
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  View,
-} from "react-native";
+import { Image, KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import RegisterButton from "../components/RegisterButton.js";
 
@@ -12,20 +6,11 @@ export default function WelcomeScreen() {
   const navigation = useNavigation();
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
+    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"}>
       <Image style={styles.image} source={require("../assets/logo.jpg")} />
       <View style={styles.buttonContainer}>
-        <RegisterButton
-          title="Sign in"
-          onPress={() => navigation.navigate("SignInScreen")}
-        />
-        <RegisterButton
-          title="Sign up"
-          onPress={() => navigation.navigate("SignUpScreen")}
-        />
+        <RegisterButton title="Sign in" onPress={() => navigation.navigate("SignInScreen")} />
+        <RegisterButton title="Sign up" onPress={() => navigation.navigate("SignUpScreen")} />
       </View>
     </KeyboardAvoidingView>
   );

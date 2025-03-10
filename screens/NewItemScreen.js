@@ -1,15 +1,4 @@
-import {
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  View,
-  Text,
-  Alert,
-  Image,
-  SafeAreaView,
-  ScrollView,
-  Switch,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet, View, Text, Alert, Image, SafeAreaView, ScrollView, Switch } from "react-native";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
@@ -58,14 +47,7 @@ export default function NewItemScreen() {
   // Fonction pour envoyer les données du formulaire
   const handleSubmit = async () => {
     // Vérification des champs obligatoires
-    if (
-      !title ||
-      !description ||
-      (!isGiven && !price) ||
-      !height ||
-      !imageUri ||
-      !condition
-    ) {
+    if (!title || !description || (!isGiven && !price) || !height || !imageUri || !condition) {
       Alert.alert("Error", "Please fill in all fields and take a picture.");
       return;
     }
@@ -87,19 +69,14 @@ export default function NewItemScreen() {
       type: "image/jpeg",
     });
 
-    const response = await fetch(
-      `${process.env.EXPO_PUBLIC_API_URL}/items/newItem/` + userToken,
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
+    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/items/newItem/` + userToken, {
+      method: "POST",
+      body: formData,
+    });
     const result = await response.json();
 
     if (result.result) {
-      Alert.alert("Success", "Your item has been added.", [
-        { onPress: () => navigation.navigate("Sale/donation") },
-      ]);
+      Alert.alert("Success", "Your item has been added.", [{ onPress: () => navigation.navigate("Sale/donation") }]);
     } else {
       Alert.alert("Erreur", result.error);
     }
@@ -108,10 +85,7 @@ export default function NewItemScreen() {
   return (
     <SafeAreaView style={styles.safeContainer}>
       <ReturnButton destination={"Sale/donation"} />
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ flex: 1 }}
-      >
+      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <View style={styles.bigContainer}>
             {imageUri && (
@@ -120,67 +94,22 @@ export default function NewItemScreen() {
               </View>
             )}
             <View style={styles.registerContainer}>
-              <CustomButton
-                onPress={takePhoto}
-                text="Add a picture"
-                iconName="camera"
-              />
+              <CustomButton onPress={takePhoto} text="Add a picture" iconName="camera" />
               <View style={styles.toggleContainer}>
                 <Text style={styles.plantChoice}>Sale</Text>
-                <Switch
-                  trackColor={{ false: "#2D5334", true: "#2D5334" }}
-                  thumbColor={isGiven ? "#95AE7D" : "#95AE7D"}
-                  ios_backgroundColor="#3e3e3e"
-                  value={isGiven}
-                  onValueChange={(newValue) => setIsGiven(newValue)}
-                />
+                <Switch trackColor={{ false: "#2D5334", true: "#2D5334" }} thumbColor={isGiven ? "#95AE7D" : "#95AE7D"} ios_backgroundColor="#3e3e3e" value={isGiven} onValueChange={(newValue) => setIsGiven(newValue)} />
                 <Text style={styles.accessoryChoice}>Donation</Text>
               </View>
-              <RegisterInput
-                placeholder="Title"
-                value={title}
-                onChangeText={setTitle}
-                returnKeyType="next"
-              />
-              <RegisterInput
-                placeholder="Description"
-                value={description}
-                onChangeText={setDescription}
-                returnKeyType="next"
-              />
-              {!isGiven && (
-                <RegisterInput
-                  placeholder="Price (in euros)"
-                  value={price}
-                  onChangeText={setPrice}
-                  returnKeyType="next"
-                />
-              )}
-              <RegisterInput
-                placeholder="Height (in cm)"
-                value={height}
-                onChangeText={setHeight}
-                returnKeyType="next"
-              />
+              <RegisterInput placeholder="Title" value={title} onChangeText={setTitle} returnKeyType="next" />
+              <RegisterInput placeholder="Description" value={description} onChangeText={setDescription} returnKeyType="next" />
+              {!isGiven && <RegisterInput placeholder="Price (in euros)" value={price} onChangeText={setPrice} returnKeyType="next" />}
+              <RegisterInput placeholder="Height (in cm)" value={height} onChangeText={setHeight} returnKeyType="next" />
               <View style={styles.toggleContainer}>
                 <Text style={styles.plantChoice}>Accessory</Text>
-                <Switch
-                  trackColor={{ false: "#2D5334", true: "#2D5334" }}
-                  thumbColor={"#95AE7D"}
-                  ios_backgroundColor="#3e3e3e"
-                  value={isPlant}
-                  onValueChange={(newValue) => setIsPlant(newValue)}
-                />
+                <Switch trackColor={{ false: "#2D5334", true: "#2D5334" }} thumbColor={"#95AE7D"} ios_backgroundColor="#3e3e3e" value={isPlant} onValueChange={(newValue) => setIsPlant(newValue)} />
                 <Text style={styles.accessoryChoice}>Plant</Text>
               </View>
-              <RegisterInput
-                placeholder={
-                  isPlant ? "Plant condition" : "Accessory condition"
-                }
-                value={condition}
-                onChangeText={setCondition}
-                returnKeyType="done"
-              />
+              <RegisterInput placeholder={isPlant ? "Plant condition" : "Accessory condition"} value={condition} onChangeText={setCondition} returnKeyType="done" />
               <RegisterButton title="Add my item" onPress={handleSubmit} />
             </View>
           </View>
