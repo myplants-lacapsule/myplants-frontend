@@ -15,6 +15,8 @@ export default function HomeScreen() {
 
   const [plantsData, setPlantsData] = useState([]);
   const [noPlantData, setNoPlantData] = useState(false);
+  const [numberPlantNeedsWater, setNumberPlantNeedsWater] = useState("");
+  console.log(numberPlantNeedsWater)
 
   useEffect(() => {
     fetchPlants();
@@ -30,6 +32,7 @@ export default function HomeScreen() {
       if (data && data.data) {
         setPlantsData(data.data);
         setNoPlantData(false);
+        setNumberPlantNeedsWater(data.numberPlantNeedsWater)
       }
     } catch (error) {
       console.error("Error fetching plants:", error);
@@ -45,8 +48,23 @@ export default function HomeScreen() {
       <View style={styles.topContainer}>
         <Text style={styles.hello}>Hello, {userInStore.username} !</Text>
         <View style={styles.iconContainer}>
-          <FontAwesome5 style={styles.icon} name="bell" size={25} solid={true} onPress={() => navigation.navigate("NotificationScreen")} />
-          <FontAwesome5 style={styles.icon} name="user-circle" size={40} solid={true} onPress={() => navigation.navigate("UserScreen")} />
+          <FontAwesome5
+            style={styles.icon}
+            name="bell"
+            size={35}
+            solid={true}
+            onPress={() => navigation.navigate("NotificationScreen")}
+          />
+          {numberPlantNeedsWater > 0 && <View style={styles.containerNumber}>
+            <Text style={styles.number}>{numberPlantNeedsWater}</Text>
+          </View>}
+          <FontAwesome5
+            style={styles.icon}
+            name="user-circle"
+            size={35}
+            solid={true}
+            onPress={() => navigation.navigate("UserScreen")}
+          />
         </View>
       </View>
       <Text style={styles.myplants}>My plants</Text>
@@ -87,6 +105,22 @@ const styles = StyleSheet.create({
   },
   icon: {
     color: "#2D5334",
+
+  },
+  containerNumber: {
+    width: 20,
+    height: 20,
+    backgroundColor: "#BC4749",
+    position: "absolute",
+    borderRadius: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    left: 15,
+    bottom : 25,
+    zIndex: 1,
+  },
+  number: {
+    color: "white",
   },
   myplants: {
     color: "#2D5334",
