@@ -7,7 +7,6 @@ import ReturnButton from "../components/ReturnButton"
 import Notifications from "../components/Notifications"
 
 export default function NotificationScreen({ route }) {
-
   const navigation = useNavigation();
 
   const { unwateredPlant } = route.params;
@@ -27,6 +26,7 @@ export default function NotificationScreen({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+		paddingTop: 40,
     backgroundColor: "#F1F0E9",
   },
   containerNotifications: {
