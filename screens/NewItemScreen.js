@@ -112,16 +112,16 @@ export default function NewItemScreen() {
                 <Switch trackColor={{ false: "#2D5334", true: "#2D5334" }} thumbColor={isGiven ? "#95AE7D" : "#95AE7D"} ios_backgroundColor="#3e3e3e" value={isGiven} onValueChange={(newValue) => setIsGiven(newValue)} />
                 <Text style={styles.accessoryChoice}>Donation</Text>
               </View>
-              <RegisterInput placeholder="Title" value={title} onChangeText={setTitle} returnKeyType="next" />
-              <RegisterInput placeholder="Description" value={description} onChangeText={setDescription} returnKeyType="next" />
-              {!isGiven && <RegisterInput placeholder="Price (in euros)" value={price} onChangeText={setPrice} returnKeyType="next" />}
-              <RegisterInput placeholder="Height (in cm)" value={height} onChangeText={setHeight} returnKeyType="next" />
+              <RegisterInput title="Title" placeholder="Title" value={title} onChangeText={setTitle} returnKeyType="next" />
+              <RegisterInput title="Description" placeholder="Description" value={description} onChangeText={setDescription} returnKeyType="next" />
+              {!isGiven && <RegisterInput title="Price" placeholder="Price (in euros)" value={price} onChangeText={setPrice} returnKeyType="next" />}
+              <RegisterInput title="Height" placeholder="Height (in cm)" value={height} onChangeText={setHeight} returnKeyType="next" />
               <View style={styles.toggleContainer}>
                 <Text style={styles.plantChoice}>Accessory</Text>
                 <Switch trackColor={{ false: "#2D5334", true: "#2D5334" }} thumbColor={"#95AE7D"} ios_backgroundColor="#3e3e3e" value={isPlant} onValueChange={(newValue) => setIsPlant(newValue)} />
                 <Text style={styles.accessoryChoice}>Plant</Text>
               </View>
-              <RegisterInput placeholder={isPlant ? "Plant condition" : "Accessory condition"} value={condition} onChangeText={setCondition} returnKeyType="done" />
+              <RegisterInput title={isPlant ? "Plant condition" : "Accessory condition"} placeholder={isPlant ? "Plant condition" : "Accessory condition"} value={condition} onChangeText={setCondition} returnKeyType="done" />
               <RegisterButton title="Add my item" onPress={handleSubmit} />
             </View>
           </View>

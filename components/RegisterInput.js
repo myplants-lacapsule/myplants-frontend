@@ -1,14 +1,20 @@
-import { StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 
-export default function RegisterInput({ placeholder, onChangeText, value, style, secureTextEntry, ...otherProps }) {
+export default function RegisterInput({ title, placeholder, onChangeText, value, style, secureTextEntry, ...otherProps }) {
   return (
     <View>
-      <TextInput placeholder={placeholder} value={value} onChangeText={onChangeText} style={[styles.input, style]} secureTextEntry={secureTextEntry} {...otherProps} />
+			<Text style={styles.title}>{title}</Text>
+      <TextInput style={[styles.input, style]} placeholder={placeholder} value={value} onChangeText={onChangeText} secureTextEntry={secureTextEntry} {...otherProps} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+	title: {
+		color: "#2D5334",
+		fontFamily: 'OpenSans-Regular',
+		paddingLeft: 7,
+	},
   input: {
     height: 45,
     width: "96%",
