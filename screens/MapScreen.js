@@ -156,18 +156,14 @@ export default function MapScreen() {
           />
         ))}
       </MapView>
-
       <Modal visible={modalVisible} animationType="fade" transparent>
         <View style={styles.modalContainer}>
           <SafeAreaView style={styles.modal}>
-            <View style={styles.topContainer}>
-              <FontAwesome5 name="times-circle" size={25} solid={true} style={styles.closeButton} onPress={() => setModalVisible(false)} />
-            </View>
+            <FontAwesome5 name="times-circle" size={25} solid={true} style={styles.closeButton} onPress={() => setModalVisible(false)} />
             <ScrollView style={styles.cardContainer}>{userItems}</ScrollView>
           </SafeAreaView>
         </View>
       </Modal>
-
       <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
         <Text style={styles.addButtonText}>+</Text>
       </TouchableOpacity>
@@ -204,14 +200,10 @@ const styles = StyleSheet.create({
     maxHeight: "45%",
     minHeight: 100,
     width: "90%",
-    
+    padding: 5,
     borderRadius: 15,
     backgroundColor: "white",
     marginVertical: 110,
-  },
-  topContainer: {
-    display: "flex",
-    justifyContent: "flex-end",
   },
   closeButton: {
     color: "#2D5334",
