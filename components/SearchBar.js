@@ -8,7 +8,7 @@ function SearchBar({ inputResearch, setInputResearch, onSearch }) {
       <TouchableOpacity onPress={() => onSearch(inputResearch)} style={styles.searchicon}>
         <FontAwesome name="search" size={30} color="#2D5334" />
       </TouchableOpacity>
-      <TextInput style={styles.textInputResearch} placeholder="Search for a plant" onChangeText={(value) => setInputResearch(value)} value={inputResearch} />
+      <TextInput style={styles.textInputResearch} placeholder="Enter plant name" onChangeText={(value) => setInputResearch(value)} value={inputResearch} />
     </View>
   );
 }
@@ -25,8 +25,8 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   textInputResearch: {
-    backgroundColor: "#FBFBFB",
-    width: "280",
+    backgroundColor: "white",
+    width: "250",
     height: "60",
     alignItems: "center",
     justifyContent: "center",
