@@ -25,6 +25,8 @@ export default function MapScreen() {
     longitudeDelta: 15,
   });
   const [uniquePin, setUniquePin] = useState([]);
+  const [selectedPin, setSelectedPin] = useState(null);
+  
 
   // Récupération de la position actuelle de l'utilisateur
   useEffect(() => {
@@ -109,7 +111,7 @@ export default function MapScreen() {
   };
 
   // Articles à afficher dans la modale
-  const userItems = itemsData.map((data, i) => <ItemCard key={i} {...data} closeModal={() => setModalVisible(false)} />);
+  const userItems = itemsData.map((data, i) => <ItemCard key={i} {...data} closeModal={closeModal} />)
 
   // Fonction déclenchée lorsque l'utilisateur appuie sur le bouton "+"
   const handleAddPress = async () => {
@@ -148,27 +150,45 @@ export default function MapScreen() {
     );
   }
 
+  const closeModal = () => {
+  setModalVisible(false);
+  setSelectedPin(null);
+};
+
   return (
     <View style={{ flex: 1 }}>
       <MapView style={{ flex: 1 }} initialRegion={initialRegion}>
-        {currentPosition && <Marker coordinate={currentPosition} pinColor="red" />}
+        {currentPosition && (
+          <Marker coordinate={currentPosition} pinColor="red" />
+        )}
         {uniquePin.map((pin, i) => (
           <Marker
-            key={i}
+            key={`${pin.token}-${
+              selectedPin === pin.token ? "selected" : "default"
+            }`}
             token={pin.token}
             coordinate={{
               latitude: pin.lat,
               longitude: pin.long,
             }}
             pinColor="blue"
-            onPress={() => handleMarkerPress(pin.token)}
+            onPress={() => {setSelectedPin(pin.token); // Mise à jour de l'état du marker sélectionné
+            handleMarkerPress(pin.token);}}
+            calloutEnabled={false}
+            tracksViewChanges={false}
           />
         ))}
       </MapView>
       <Modal visible={modalVisible} animationType="fade" transparent>
         <View style={styles.modalContainer}>
           <SafeAreaView style={styles.modal}>
-            <FontAwesome5 name="times-circle" size={25} solid={true} style={styles.closeButton} onPress={() => setModalVisible(false)} />
+            <FontAwesome5
+              name="times-circle"
+              size={25}
+              solid={true}
+              style={styles.closeButton}
+              onPress={closeModal}
+            />
             <ScrollView style={styles.cardContainer}>{userItems}</ScrollView>
           </SafeAreaView>
         </View>
