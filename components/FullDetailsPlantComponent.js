@@ -1,5 +1,5 @@
-import React from "react";
-import { Text, SafeAreaView, ScrollView, StyleSheet, Image, Alert, View } from "react-native";
+import React, { useState }  from "react";
+import { Text, SafeAreaView, ScrollView, StyleSheet, Image, Alert, View, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
@@ -8,8 +8,40 @@ import RegisterButton from "./RegisterButton";
 export default function FullDetailsPlantComponent() {
   console.log("plantDetails", plantDetails);
 
+  const [isWatered, setIsWatered] = useState(plantDetails.isWatered)
+  console.log(isWatered)
+
+
+
   const navigation = useNavigation();
 
+  // Icônes pour les saisons
+  const seasonIcons = {
+    Spring: { label: "Spring", icon: "seedling", color: "#4CAF50" },
+    Summer: { label: "Summer", icon: "sun", color: "#FFD700" },
+    Fall: { label: "Autumn", icon: "leaf", color: "#D2691E" },
+    Winter: { label: "Winter", icon: "snowflake", color: "#00BFFF" },
+  };
+
+  const currentSeason = seasonIcons[plantDetails.seasonality];
+
+  // Icônes pour l'exposition au soleil
+  const sunExposureIcons = {
+    "part shade": { label: "Needs shade", icon: "cloud", color: "#808080" },
+    "full sun": {
+      label: "Needs exposure to the sun",
+      icon: "sun",
+      color: "#FFD700",
+    },
+    default: {
+      label: "Needs exposure to light",
+      icon: "cloud-sun",
+      color: "#FFA500",
+    },
+  };
+
+  const currentSunExposure = sunExposureIcons[plantDetails.sunExposure.toLowerCase()] || sunExposureIcons["default"];
+  
   const deletePlant = async () => {
     Alert.alert(
       "Confirmation",
@@ -49,32 +81,43 @@ export default function FullDetailsPlantComponent() {
     );
   };
 
-  // Icônes pour les saisons
-  const seasonIcons = {
-    Spring: { label: "Spring", icon: "seedling", color: "#4CAF50" },
-    Summer: { label: "Summer", icon: "sun", color: "#FFD700" },
-    Fall: { label: "Autumn", icon: "leaf", color: "#D2691E" },
-    Winter: { label: "Winter", icon: "snowflake", color: "#00BFFF" },
-  };
+  const updateLastWatering = () => {
+    Alert.alert(
+      "Confirmation",
+      "Did you water the plant well? ",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: async () => {
+            try {
+              const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/updateLastWatering/${plantDetails.token}`, {
+                method: "PUT",
+                "Content-Type": "application/json",
+              });
 
-  const currentSeason = seasonIcons[plantDetails.seasonality];
+              if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+              }
+              const result = await response.json();
 
-  // Icônes pour l'exposition au soleil
-  const sunExposureIcons = {
-    "part shade": { label: "Needs shade", icon: "cloud", color: "#808080" },
-    "full sun": {
-      label: "Needs exposure to the sun",
-      icon: "sun",
-      color: "#FFD700",
-    },
-    default: {
-      label: "Needs exposure to light",
-      icon: "cloud-sun",
-      color: "#FFA500",
-    },
-  };
-
-  const currentSunExposure = sunExposureIcons[plantDetails.sunExposure.toLowerCase()] || sunExposureIcons["default"];
+              if (result.result) {
+                setIsWatered(true)
+              } else {
+                Alert.alert({ text: "Plant not removed" });
+              }
+            } catch (error) {
+              console.error("Error deleting a plant:", error);
+            }
+          },
+        },
+      ],
+      { cancelable: false }
+    )
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -103,7 +146,19 @@ export default function FullDetailsPlantComponent() {
             <FontAwesome5 name={currentSeason.icon} size={20} color={currentSeason.color} style={{ marginRight: 5 }} />
           </View>
         </ScrollView>
-        <Text style={styles.description}>{plantDetails.description}</Text>
+        {!isWatered && <TouchableOpacity style={styles.containBadgeIsWatered} onPress={updateLastWatering}>
+          <View style={styles.badgeIsWatered}>
+            <FontAwesome5 name="burn" size={20} color="white" />
+            <Text style={styles.textBadge}>This plant needs water !</Text>
+          </View>
+        </TouchableOpacity>}
+        <View style={styles.containerDescription}>
+          <View style={styles.containerTitle}>
+            <FontAwesome5 name="info-circle" size={20} color="#2D5334" />
+            <Text style={styles.titleInformations}>Informations</Text>
+          </View>
+          <Text style={styles.description}>{plantDetails.description}</Text>
+        </View>
         <RegisterButton title={"Delete from my inventory"} style={styles.button} onPress={deletePlant} />
       </ScrollView>
     </SafeAreaView>
@@ -149,16 +204,46 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans-Regular",
     marginBottom: 5,
   },
-  description: {
+  containBadgeIsWatered:{
+    alignItems: "center",
+  },
+  badgeIsWatered: {
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 16,
+    backgroundColor: "#3674B5",
+    maxWidth: "60%",
+    flexDirection: "row",
+    borderRadius: 16,
+    marginBottom: 10,
+    gap: 8,
+  },
+  textBadge: {
+    color: "white",
+  },
+  containerDescription: {
     width: "85%",
     alignSelf: "center",
-    padding: 10,
-    fontSize: 16,
-    fontFamily: "OpenSans-Regular",
     borderWidth: 2,
     borderColor: "#95AE7D",
     borderRadius: 10,
     backgroundColor: "white",
+    gap: 12,
+    padding: 16,
+  },
+  containerTitle: {
+    flexDirection: "row",
+    gap: 16,
+    alignItems: "center"
+  },
+  titleInformations: {
+    color: "#2D5334",
+    fontSize: 16,
+    fontFamily: "Merriweather-Bold",
+  },
+  description: {
+    fontSize: 16,
+    fontFamily: "OpenSans-Regular",
   },
   button: {
     fontFamily: "OpenSans-Regular",

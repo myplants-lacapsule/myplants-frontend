@@ -16,7 +16,6 @@ export default function HomeScreen() {
   const [plantsData, setPlantsData] = useState([]);
   const [noPlantData, setNoPlantData] = useState(false);
   const [numberPlantNeedsWater, setNumberPlantNeedsWater] = useState(0);
-  console.log(plantsData)
 
   useEffect(() => {
     fetchPlants();
@@ -28,17 +27,16 @@ export default function HomeScreen() {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/${userInStore.token}`);
 
       const data = await response.json();
-      console.log("data", data)
-      if (!data.result){
+
+      if (!data.result) {
         setPlantsData([])
         setNoPlantData(true);
       }
 
-      if (data.result) {
-        setNoPlantData(false);
-        setPlantsData(data.data);
-        setNumberPlantNeedsWater(data.numberPlantNeedsWater)
-      }
+      setNoPlantData(false);
+      setPlantsData(data.data);
+      setNumberPlantNeedsWater(data.numberPlantNeedsWater)
+
     } catch (error) {
       console.error("Error fetching plants:", error);
     }
@@ -121,7 +119,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     left: 15,
-    bottom : 25,
+    bottom: 25,
     zIndex: 1,
   },
   number: {
