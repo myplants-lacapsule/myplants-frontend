@@ -22,7 +22,7 @@ export default function SearchScreen() {
   const [showCamera, setShowCamera] = useState(false);
   const [plantsData, setPlantsData] = useState(null);
   const [inputResearch, setInputResearch] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const isFocused = useIsFocused();
   const [hasPermission, setHasPermission] = useState(false); // état de la permission
@@ -41,6 +41,7 @@ export default function SearchScreen() {
       setShowCamera(false);
       setInputResearch("");
       setShowSuggestions(false);
+      setLoading(false)
       if (!showSuggestions) {
         setPlantsData(null);
       }
@@ -50,6 +51,7 @@ export default function SearchScreen() {
   // fonction pour la prise de photo
   const takePicture = async () => {
     try {
+      setLoading(true)
       const photo = await cameraRef.current.takePictureAsync({ quality: 0.3 });
       // console.log(photo)
       if (photo && photo.uri) {
@@ -133,13 +135,16 @@ export default function SearchScreen() {
       }
     } catch (error) {
       console.error("Error when taking the picture", error);
+    } finally {
+      setLoading(false)
     }
   };
 
   const idenficationDetailsPlant = async (plantName, cloudinaryUrl) => {
     try {
       //appel 2ème API pour récupérer l'id de la plante
-      // plantName = plantName.toLowerCase();
+      
+      setLoading(true) // passage du loading à true
       const responsePerenual = await fetch(`https://perenual.com/api/v2/species-list?key=${perenualKey}&q=${plantName}`);
       // console.log("responsePerenual ", responsePerenual)
 
@@ -168,6 +173,7 @@ export default function SearchScreen() {
 
       // si l'id est trouvé, on récupère les détails de la plante
       if (idPerenual) {
+
         const fetchPerenualDetails = await fetch(`https://perenual.com/api/v2/species/details/${idPerenual}?key=${perenualKey}`);
         if (!fetchPerenualDetails.ok) {
           throw new Error("Invalid data received from Perenual API");
@@ -218,11 +224,14 @@ export default function SearchScreen() {
     } catch (error) {
       console.error("Plant not found", error);
       Alert.alert("Error", "An error occurred while fetching plant details.");
+    } finally {
+      setLoading(false)
     }
   };
 
   const addPlantToBackend = async (plantsData) => {
     try {
+      setLoading(true)
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/newPlant/${userInStore.token}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -246,16 +255,6 @@ export default function SearchScreen() {
     }
   };
 
-  // Affichage d'un écran de chargement si les données ne sont pas encore chargées
-  // if (loading) {
-  //   return (
-  //     <View style={styles.loadingContainer}>
-  //       <ActivityIndicator size="large" color="#2D5334" />
-  //       <Text style={styles.loadingText}>Loading ...</Text>
-  //     </View>
-  //   );
-  // }
-
   return (
     <SafeAreaView style={styles.container}>
       {!showCamera && !showSuggestions && (
@@ -267,12 +266,16 @@ export default function SearchScreen() {
               <FontAwesome name="camera" size={30} color="white" />
             </TouchableOpacity>
           </View>
+          {loading && <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#2D5334" />
+            <Text style={styles.loadingText}>Loading plant... please wait</Text>
+          </View>}
         </View>
       )}
 
-      {(hasPermission === true || isFocused) && showCamera && <CameraSearch takePicture={takePicture} cameraRef={cameraRef} setShowCamera={setShowCamera} showCamera={showCamera} />}
+      {(hasPermission === true || isFocused) && showCamera && <CameraSearch loading={loading} takePicture={takePicture} cameraRef={cameraRef} setShowCamera={setShowCamera} showCamera={showCamera} />}
 
-      {showSuggestions && !showCamera && (
+      {showSuggestions && !showCamera && !loading && (
         <View>
           <SuggestionPlantCard plantsData={plantsData} addPlantToBackend={() => addPlantToBackend(plantsData)} />
         </View>
@@ -284,7 +287,8 @@ export default function SearchScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-		paddingTop: 40,
+    paddingTop: 40,
+    backgroundColor: "#F1F0E9",
   },
   containsearch: {
     height: "15%",
@@ -327,10 +331,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   loadingContainer: {
-    flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#F1F0E9",
+    marginTop: 150,
   },
   loadingText: {
     marginTop: 10,
