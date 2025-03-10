@@ -17,6 +17,7 @@ export default function FullDetailsPlant(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+		paddingTop: 40,
     backgroundColor: "#F1F0E9",
   },
 });
