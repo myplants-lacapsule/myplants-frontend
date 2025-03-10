@@ -15,6 +15,8 @@ export default function HomeScreen() {
 
   const [plantsData, setPlantsData] = useState([]);
   const [noPlantData, setNoPlantData] = useState(false);
+  const [numberPlantNeedsWater, setNumberPlantNeedsWater] = useState("");
+  console.log(numberPlantNeedsWater)
 
   useEffect(() => {
     fetchPlants();
@@ -32,6 +34,7 @@ export default function HomeScreen() {
       if (data && data.data) {
         setPlantsData(data.data);
         setNoPlantData(false);
+        setNumberPlantNeedsWater(data.numberPlantNeedsWater)
       }
     } catch (error) {
       console.error("Error fetching plants:", error);
@@ -57,14 +60,17 @@ export default function HomeScreen() {
           <FontAwesome5
             style={styles.icon}
             name="bell"
-            size={25}
+            size={35}
             solid={true}
             onPress={() => navigation.navigate("NotificationScreen")}
           />
+          {numberPlantNeedsWater > 0 && <View style={styles.containerNumber}>
+            <Text style={styles.number}>{numberPlantNeedsWater}</Text>
+          </View>}
           <FontAwesome5
             style={styles.icon}
             name="user-circle"
-            size={40}
+            size={35}
             solid={true}
             onPress={() => navigation.navigate("UserScreen")}
           />
@@ -113,6 +119,22 @@ const styles = StyleSheet.create({
   },
   icon: {
     color: "#2D5334",
+
+  },
+  containerNumber: {
+    width: 20,
+    height: 20,
+    backgroundColor: "#BC4749",
+    position: "absolute",
+    borderRadius: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    left: 15,
+    bottom : 25,
+    zIndex: 1,
+  },
+  number: {
+    color: "white",
   },
   myplants: {
     color: "#2D5334",
