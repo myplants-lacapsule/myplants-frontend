@@ -15,11 +15,11 @@ export default function NotificationScreen({ route }) {
   const notificationsUnwateredPlant = unwateredPlant.length > 0 && unwateredPlant.map((data, i) => {
     return <Notifications key={i} name={data.name} lastWatering={Date(data.lastWatered)} />
   })
-  
+
   return (
     <SafeAreaView style={styles.container}>
-      <ReturnButton />
-      {notificationsUnwateredPlant ? <View style={styles.containerNotifications}>{notificationsUnwateredPlant}</View> : <Text>0 notifications</Text>}
+      <ReturnButton title={"Notifications"}/>
+      {notificationsUnwateredPlant ? <View style={styles.containerNotifications}>{notificationsUnwateredPlant}</View> : <Text style={styles.noNotificationsMessage}>No notifications.</Text>}
     </SafeAreaView>
   );
 }
@@ -33,6 +33,14 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "white"
-  }
+    backgroundColor: "white",
+    marginTop: 40,
+  },
+  noNotificationsMessage: {
+    color: "#2D5334",
+    fontSize: 14,
+    fontFamily: "Merriweather",
+    alignSelf: "center",
+    marginTop: "50%",
+  },
 });

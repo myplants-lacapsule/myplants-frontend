@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "#2D5334",
-    fontSize: 26,
+    fontSize: 22,
     paddingLeft: 25,
     fontFamily: "Merriweather-Bold",
   },
