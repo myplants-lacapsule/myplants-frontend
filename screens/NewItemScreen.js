@@ -155,14 +155,14 @@ export default function NewItemScreen() {
                 value={title}
                 onChangeText={setTitle}
                 returnKeyType="next"
-                style={{ width: "85%", alignSelf: "center" }}
+                style={{ width: "90%", alignSelf: "center" }}
               />
               <RegisterInput
                 placeholder="Description"
                 value={description}
                 onChangeText={setDescription}
                 returnKeyType="next"
-                style={{ width: "85%", alignSelf: "center" }}
+                style={{ width: "90%", alignSelf: "center" }}
               />
               {!isGiven && (
                 <RegisterInput
@@ -170,7 +170,7 @@ export default function NewItemScreen() {
                   value={price}
                   onChangeText={setPrice}
                   returnKeyType="next"
-                  style={{ width: "85%", alignSelf: "center" }}
+                  style={{ width: "90%", alignSelf: "center" }}
                 />
               )}
               <RegisterInput
@@ -178,10 +178,10 @@ export default function NewItemScreen() {
                 value={height}
                 onChangeText={setHeight}
                 returnKeyType="next"
-                style={{ width: "85%", alignSelf: "center" }}
+                style={{ width: "90%", alignSelf: "center" }}
               />
               <View style={styles.toggleContainer}>
-                <Text style={styles.label}>Accessory</Text>
+                <Text style={styles.label}>Plant</Text>
                 <Switch
                   trackColor={{ false: "#2D5334", true: "#2D5334" }}
                   thumbColor={"#95AE7D"}
@@ -189,24 +189,24 @@ export default function NewItemScreen() {
                   value={isPlant}
                   onValueChange={(newValue) => setIsPlant(newValue)}
                 />
-                <Text style={styles.label}>Plant</Text>
+                <Text style={styles.label}>Accessory</Text>
               </View>
               <RegisterInput
                 placeholder={
-                  isPlant ? "Plant condition" : "Accessory condition"
+                  isPlant ? "Accessory condition" : "Plant condition"
                 }
                 value={condition}
                 onChangeText={setCondition}
                 returnKeyType="done"
                 onSubmitEditing={handleSubmit}
-                style={{ width: "85%", alignSelf: "center" }}
+                style={{ width: "90%", alignSelf: "center" }}
               />
               <RegisterButton
                 title="Add my item"
                 onPress={handleSubmit}
                 disabled={isSubmitting}
                 loading={isSubmitting}
-                style={{ marginTop: 40, width: "85%", alignSelf: "center" }}
+                style={{ marginTop: 40, width: "90%", alignSelf: "center" }}
               />
             </View>
           </View>
@@ -240,7 +240,6 @@ const styles = StyleSheet.create({
   registerContainer: {
     height: "70%",
     width: "100%",
-    paddingTop: 5,
   },
   toggleContainer: {
     flexDirection: "row",
