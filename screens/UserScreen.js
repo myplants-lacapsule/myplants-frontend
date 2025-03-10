@@ -12,7 +12,7 @@ export default function UserScreen() {
   const userInStore = useSelector((state) => state.user.value);
 
   return (
-    <SafeAreaView style={styles.safeContainer}>
+    <SafeAreaView style={styles.container}>
       <ReturnButton destination={"Home"} />
       <View style={styles.componentsContainer}>
         <View style={styles.avatarContainer}>
@@ -30,21 +30,18 @@ export default function UserScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeContainer: {
+  container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 30,
+    paddingTop: 40,
     backgroundColor: "#F1F0E9",
   },
   componentsContainer: {
     height: "100%",
     width: "80%",
-    flexDirection: "column",
-    paddingTop: 60,
+    alignSelf: "center",
   },
   avatarContainer: {
-    height: "30%",
+    height: "25%",
     width: "100%",
     alignItems: "center",
     justifyContent: "center",

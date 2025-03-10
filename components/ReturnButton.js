@@ -1,9 +1,9 @@
 import React from "react";
-import { TouchableOpacity, StyleSheet, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-export default function ReturnButton({ destination }) {
+export default function ReturnButton({ destination, title }) {
   const navigation = useNavigation();
 
   const handlePress = () => {
@@ -16,11 +16,10 @@ export default function ReturnButton({ destination }) {
 
   return (
     <View style={styles.container}>
-      <View>
-        <TouchableOpacity style={styles.button} onPress={handlePress}>
-          <FontAwesome name="arrow-left" size={24} color="#2D5334" />
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={styles.button} onPress={handlePress}>
+        <FontAwesome name="arrow-left" size={24} color="#2D5334" />
+      </TouchableOpacity>
+      <Text style={styles.title}>{title}</Text>
     </View>
   );
 }
@@ -28,16 +27,21 @@ export default function ReturnButton({ destination }) {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    height: "10%",
+    height: "15%",
     alignItems: "center",
     flexDirection: "row",
-    paddingTop: 20,
   },
   button: {
     width: 50,
     height: 50,
-    padding: 10,
+    padding: 5,
     paddingLeft: 20,
     alignSelf: "flex-start",
+  },
+  title: {
+    color: "#2D5334",
+    fontSize: 26,
+    paddingLeft: 25,
+    fontFamily: "Merriweather-Bold",
   },
 });

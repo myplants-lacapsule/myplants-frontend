@@ -61,12 +61,13 @@ export default function SignInScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+		paddingTop: 40,
     backgroundColor: "#F1F0E9",
   },
   registerContainer: {
     width: "80%",
 		alignSelf: 'center',
-		marginTop: 220,
+		marginTop: 140,
   },
   errorText: {
     width: "80%",
