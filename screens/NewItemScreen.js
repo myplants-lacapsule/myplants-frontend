@@ -29,7 +29,7 @@ export default function NewItemScreen() {
   const [price, setPrice] = useState("");
   const [height, setHeight] = useState("");
   const [isGiven, setIsGiven] = useState(false);
-  const [isPlant, setIsPlant] = useState(false);
+  const [isPlant, setIsPlant] = useState(true);
   const [condition, setCondition] = useState("");
   const [imageUri, setImageUri] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -181,7 +181,7 @@ export default function NewItemScreen() {
                 style={{ width: "90%", alignSelf: "center" }}
               />
               <View style={styles.toggleContainer}>
-                <Text style={styles.label}>Plant</Text>
+                <Text style={styles.label}>Accessory</Text>
                 <Switch
                   trackColor={{ false: "#2D5334", true: "#2D5334" }}
                   thumbColor={"#95AE7D"}
@@ -189,11 +189,11 @@ export default function NewItemScreen() {
                   value={isPlant}
                   onValueChange={(newValue) => setIsPlant(newValue)}
                 />
-                <Text style={styles.label}>Accessory</Text>
+                <Text style={styles.label}>Plant</Text>
               </View>
               <RegisterInput
                 placeholder={
-                  isPlant ? "Accessory condition" : "Plant condition"
+                  isPlant ? "Plant condition" : "Accessory condition"
                 }
                 value={condition}
                 onChangeText={setCondition}
