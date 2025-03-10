@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  View,
-  Text,
-} from "react-native";
+import { Alert, KeyboardAvoidingView, Platform, StyleSheet, View, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import RegisterInput from "../components/RegisterInput.js";
@@ -27,19 +20,16 @@ export default function AddLocationScreen() {
       return;
     }
     try {
-      const response = await fetch(
-        `${process.env.EXPO_PUBLIC_API_URL}/users/updateLocation`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            token: userToken,
-            street,
-            city,
-            postalCode,
-          }),
-        }
-      );
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/users/updateLocation`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token: userToken,
+          street,
+          city,
+          postalCode,
+        }),
+      });
       const result = await response.json();
       if (result.result) {
         Alert.alert("Success", "Your address is updated", [
@@ -58,22 +48,11 @@ export default function AddLocationScreen() {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
+    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"}>
       <Text style={styles.title}>Please enter your address</Text>
       <View style={styles.registerContainer}>
-        <RegisterInput
-          placeholder="Address"
-          value={street}
-          onChangeText={setStreet}
-        />
-        <RegisterInput
-          placeholder="ZIP code"
-          value={postalCode}
-          onChangeText={setPostalCode}
-        />
+        <RegisterInput placeholder="Address" value={street} onChangeText={setStreet} />
+        <RegisterInput placeholder="ZIP code" value={postalCode} onChangeText={setPostalCode} />
         <RegisterInput placeholder="City" value={city} onChangeText={setCity} />
 
         <RegisterButton title="Submit" onPress={handleUpdate} />

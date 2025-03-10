@@ -1,23 +1,9 @@
 import { StyleSheet, TextInput, View } from "react-native";
 
-export default function RegisterInput({
-  placeholder,
-  onChangeText,
-  value,
-  style,
-  secureTextEntry,
-  ...otherProps
-}) {
+export default function RegisterInput({ placeholder, onChangeText, value, style, secureTextEntry, ...otherProps }) {
   return (
     <View>
-      <TextInput
-        placeholder={placeholder}
-        value={value}
-        onChangeText={onChangeText}
-        style={[styles.input, style]}
-        secureTextEntry={secureTextEntry}
-        {...otherProps}
-      />
+      <TextInput placeholder={placeholder} value={value} onChangeText={onChangeText} style={[styles.input, style]} secureTextEntry={secureTextEntry} {...otherProps} />
     </View>
   );
 }

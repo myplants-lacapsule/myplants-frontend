@@ -24,9 +24,7 @@ export default function UserItemsDetailsScreen() {
 
   const getItemsByUser = async () => {
     try {
-      const response = await fetch(
-        `${process.env.EXPO_PUBLIC_API_URL}/items/byUser/${userInStore.token}`
-      );
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/items/byUser/${userInStore.token}`);
 
       const data = await response.json();
 
@@ -41,14 +39,7 @@ export default function UserItemsDetailsScreen() {
 
   const hasItems = itemsForSale.length > 0 && isItemsForSale;
 
-  const userItems = hasItems ? (
-    itemsForSale.map((data, i) => <ItemCard key={i} {...data} />)
-  ) : (
-    <Text style={styles.noCardMessage}>
-      {" "}
-      You don't have any items for sale yet. Add one!{" "}
-    </Text>
-  );
+  const userItems = hasItems ? itemsForSale.map((data, i) => <ItemCard key={i} {...data} />) : <Text style={styles.noCardMessage}> You don't have any items for sale yet. Add one! </Text>;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -62,6 +53,7 @@ export default function UserItemsDetailsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#F1F0E9",
   },
   myitems: {
     color: "#2D5334",

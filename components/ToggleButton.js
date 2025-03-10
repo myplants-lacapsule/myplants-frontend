@@ -5,11 +5,7 @@ const ToggleButton = ({ value, onValueChange, trueLabel, falseLabel }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{value ? trueLabel : falseLabel}</Text>
-      <Switch
-        onValueChange={onValueChange}
-        value={value}
-        trackColor={{ false: "#2D5334", true: "#2D5334" }}
-      />
+      <Switch onValueChange={onValueChange} value={value} trackColor={{ false: "#2D5334", true: "#2D5334" }} />
     </View>
   );
 };

@@ -1,10 +1,4 @@
-import {
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  View,
-  Text,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet, View, Text } from "react-native";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
@@ -12,6 +6,7 @@ import { login } from "../reducers/user";
 
 import RegisterInput from "../components/RegisterInput.js";
 import RegisterButton from "../components/RegisterButton.js";
+import ReturnButton from "../components/ReturnButton";
 
 export default function SignInScreen() {
   const dispatch = useDispatch();
@@ -51,28 +46,11 @@ export default function SignInScreen() {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
+    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"}>
+      <ReturnButton />
       <View style={styles.registerContainer}>
-        <RegisterInput
-          placeholder="Email address"
-          autoCapitalize="none"
-          keyboardType="email-address"
-          textContentType="emailAddress"
-          autoComplete="email"
-          value={signInEmail}
-          onChangeText={setSignInEmail}
-        />
-        <RegisterInput
-          placeholder="Password"
-          secureTextEntry={true}
-          textContentType="password"
-          autoComplete="password"
-          value={signInPassword}
-          onChangeText={setSignInPassword}
-        />
+        <RegisterInput placeholder="Email address" autoCapitalize="none" keyboardType="email-address" textContentType="emailAddress" autoComplete="email" value={signInEmail} onChangeText={setSignInEmail} />
+        <RegisterInput placeholder="Password" secureTextEntry={true} textContentType="password" autoComplete="password" value={signInPassword} onChangeText={setSignInPassword} />
         <RegisterButton title="Sign in" onPress={handleConnection} />
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
       </View>

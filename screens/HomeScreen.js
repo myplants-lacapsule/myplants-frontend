@@ -23,9 +23,7 @@ export default function HomeScreen() {
 
   const fetchPlants = async () => {
     try {
-      const response = await fetch(
-        `${process.env.EXPO_PUBLIC_API_URL}/plants/${userInStore.token}`
-      );
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/${userInStore.token}`);
 
       const data = await response.json();
 
@@ -40,44 +38,20 @@ export default function HomeScreen() {
 
   const hasPlants = plantsData.length > 0 && !noPlantData;
 
-  const userPlants = hasPlants ? (
-    plantsData.map((data, i) => <PlantCard key={i} {...data} />)
-  ) : (
-    <Text style={styles.noCardMessage}>
-      {" "}
-      You don't have any plants yet. Add one!{" "}
-    </Text>
-  );
+  const userPlants = hasPlants ? plantsData.map((data, i) => <PlantCard key={i} {...data} />) : <Text style={styles.noCardMessage}> You don't have any plants yet. Add one! </Text>;
 
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
         <Text style={styles.hello}>Hello, {userInStore.username} !</Text>
         <View style={styles.iconContainer}>
-          <FontAwesome5
-            style={styles.icon}
-            name="bell"
-            size={25}
-            solid={true}
-            onPress={() => navigation.navigate("NotificationScreen")}
-          />
-          <FontAwesome5
-            style={styles.icon}
-            name="user-circle"
-            size={40}
-            solid={true}
-            onPress={() => navigation.navigate("UserScreen")}
-          />
+          <FontAwesome5 style={styles.icon} name="bell" size={25} solid={true} onPress={() => navigation.navigate("NotificationScreen")} />
+          <FontAwesome5 style={styles.icon} name="user-circle" size={40} solid={true} onPress={() => navigation.navigate("UserScreen")} />
         </View>
       </View>
       <Text style={styles.myplants}>My plants</Text>
       <View style={styles.buttonContainer}>
-        <CustomButton
-          iconName="plus-circle"
-          text="Add a plant"
-          onPress={() => navigation.navigate("Add a plant")}
-          style={styles.buttonText}
-        />
+        <CustomButton iconName="plus-circle" text="Add a plant" onPress={() => navigation.navigate("Add a plant")} style={styles.buttonText} />
       </View>
       <ScrollView style={styles.cardContainer}>{userPlants}</ScrollView>
     </View>

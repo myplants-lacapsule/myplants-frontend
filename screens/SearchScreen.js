@@ -1,10 +1,4 @@
-import {
-  StyleSheet,
-  View,
-  SafeAreaView,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
+import { StyleSheet, View, SafeAreaView, TouchableOpacity, Alert } from "react-native";
 import { Camera } from "expo-camera";
 import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
@@ -76,13 +70,10 @@ export default function SearchScreen() {
         type: "image/jpeg",
       });
 
-      const response = await fetch(
-        `${process.env.EXPO_PUBLIC_API_URL}/plants/upload`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/upload`, {
+        method: "POST",
+        body: formData,
+      });
 
       // console.log("response from plants/upload", response)
       if (!response.ok) {
@@ -121,10 +112,7 @@ export default function SearchScreen() {
     };
 
     try {
-      const response = await fetch(
-        "https://plant.id/api/v3/identification",
-        requestOptions
-      );
+      const response = await fetch("https://plant.id/api/v3/identification", requestOptions);
       // console.log("reponse from identificaiton", response)
 
       if (!response.ok) {
@@ -149,9 +137,7 @@ export default function SearchScreen() {
   const idenficationDetailsPlant = async (plantName, cloudinaryUrl) => {
     try {
       //appel 2ème API pour récupérer l'id de la plante
-      const responsePerenual = await fetch(
-        `https://perenual.com/api/v2/species-list?key=${perenualKey}&q=${plantName.toLowerCase()}`
-      );
+      const responsePerenual = await fetch(`https://perenual.com/api/v2/species-list?key=${perenualKey}&q=${plantName.toLowerCase()}`);
       // console.log("responsePerenual ", responsePerenual)
 
       if (!responsePerenual.ok) {
@@ -171,33 +157,23 @@ export default function SearchScreen() {
 
       const idPerenual = dataPerenual.data[0].id;
 
-      if (idPerenual >= 3000){
-        Alert.alert("ID de plante trop élevé", "On paie pas le premium alors cherche une autre plante")
-        return
+      if (idPerenual >= 3000) {
+        Alert.alert("ID de plante trop élevé", "On paie pas le premium alors cherche une autre plante");
+        return;
       }
       // console.log(idPerenual)
 
       // si l'id est trouvé, on récupère les détails de la plante
       if (idPerenual) {
-        const fetchPerenualDetails = await fetch(
-          `https://perenual.com/api/v2/species/details/${idPerenual}?key=${perenualKey}`
-        );
+        const fetchPerenualDetails = await fetch(`https://perenual.com/api/v2/species/details/${idPerenual}?key=${perenualKey}`);
         if (!fetchPerenualDetails.ok) {
           throw new Error("Invalid data received from Perenual API");
         }
-        const rateLimitRemaining = fetchPerenualDetails.headers.get('x-ratelimit-remaining');
-        console.log("IDperenual remaining :", rateLimitRemaining)
+        const rateLimitRemaining = fetchPerenualDetails.headers.get("x-ratelimit-remaining");
+        console.log("IDperenual remaining :", rateLimitRemaining);
 
         const data = await fetchPerenualDetails.json();
-        const {
-          description,
-          watering,
-          poisonous_to_humans,
-          poisonous_to_pets,
-          harvest_season,
-          sunlight,
-          cuisine,
-        } = data;
+        const { description, watering, poisonous_to_humans, poisonous_to_pets, harvest_season, sunlight, cuisine } = data;
 
         let plantWateringFrequency = watering.toLowerCase();
         if (plantWateringFrequency === "frequent") {
@@ -210,35 +186,13 @@ export default function SearchScreen() {
           plantWateringFrequency = 7;
         }
 
-        const plantToxicity =
-          poisonous_to_humans && poisonous_to_pets
-            ? "Toxic to humans and pets"
-            : poisonous_to_pets
-            ? "Toxic to animals"
-            : poisonous_to_humans
-            ? "Toxic to humans"
-            : "Non-toxic";
+        const plantToxicity = poisonous_to_humans && poisonous_to_pets ? "Toxic to humans and pets" : poisonous_to_pets ? "Toxic to animals" : poisonous_to_humans ? "Toxic to humans" : "Non-toxic";
 
+        const plantSeasonality = harvest_season === null ? "Fall" : plantSeasonality.toLowerCase() === "winter" ? "Winter" : plantSeasonality.toLowerCase() === "spring" ? "Spring" : plantSeasonality.toLowerCase() === "summer" ? "Summer" : "Fall";
 
-        const plantSeasonality = harvest_season === null
-        ? "Fall"
-        : plantSeasonality.toLowerCase() === "winter"
-        ? "Winter"
-        : plantSeasonality.toLowerCase() === "spring"
-        ? "Spring"
-        : plantSeasonality.toLowerCase() === "summer"
-        ? "Summer"
-        : "Fall"
+        console.log(plantSeasonality);
 
-
-        console.log(plantSeasonality)
-
-        const plantSunExposure =
-          sunlight[0].toLowerCase() === "part shade"
-            ? "Needs shade"
-            : sunlight[0] === "full-sun"
-            ? "Needs exposure to the sun"
-            : "Needs exposure to light";
+        const plantSunExposure = sunlight[0].toLowerCase() === "part shade" ? "Needs shade" : sunlight[0] === "full-sun" ? "Needs exposure to the sun" : "Needs exposure to light";
 
         const plantCuisine = cuisine ? "Is edible" : "Is not edible";
 
@@ -268,14 +222,11 @@ export default function SearchScreen() {
 
   const addPlantToBackend = async (plantsData) => {
     try {
-      const response = await fetch(
-        `${process.env.EXPO_PUBLIC_API_URL}/plants/newPlant/${userInStore.token}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(plantsData),
-        }
-      );
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/newPlant/${userInStore.token}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(plantsData),
+      });
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -298,32 +249,18 @@ export default function SearchScreen() {
     <SafeAreaView style={styles.container}>
       {!showCamera && !showSuggestions && (
         <View style={styles.containsearch}>
-          <SearchBar
-            inputResearch={inputResearch}
-            setInputResearch={setInputResearch}
-            onSearch={() => idenficationDetailsPlant(inputResearch)}
-          />
+          <SearchBar inputResearch={inputResearch} setInputResearch={setInputResearch} onSearch={() => idenficationDetailsPlant(inputResearch)} />
           <TouchableOpacity style={styles.takePhoto} onPress={getPermission}>
             <FontAwesome name="camera" size={30} color="white" />
           </TouchableOpacity>
         </View>
       )}
 
-      {(hasPermission === true || isFocused) && showCamera && (
-        <CameraSearch
-          takePicture={takePicture}
-          cameraRef={cameraRef}
-          setShowCamera={setShowCamera}
-          showCamera={showCamera}
-        />
-      )}
+      {(hasPermission === true || isFocused) && showCamera && <CameraSearch takePicture={takePicture} cameraRef={cameraRef} setShowCamera={setShowCamera} showCamera={showCamera} />}
 
       {showSuggestions && !showCamera && (
         <View>
-          <SuggestionPlantCard
-            plantsData={plantsData}
-            addPlantToBackend={() => addPlantToBackend(plantsData)}
-          />
+          <SuggestionPlantCard plantsData={plantsData} addPlantToBackend={() => addPlantToBackend(plantsData)} />
         </View>
       )}
     </SafeAreaView>

@@ -5,10 +5,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 function CameraSearch({ takePicture, cameraRef, showCamera, setShowCamera }) {
   return (
     <CameraView style={styles.camera} ref={cameraRef}>
-      <TouchableOpacity
-        style={styles.containerReturnButton}
-        onPress={() => setShowCamera(false)}
-      >
+      <TouchableOpacity style={styles.containerReturnButton} onPress={() => setShowCamera(false)}>
         <FontAwesome name="close" size={24} color="white" />
       </TouchableOpacity>
       <TouchableOpacity style={styles.snapButton} onPress={takePicture}>
