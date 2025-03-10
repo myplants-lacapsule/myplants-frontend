@@ -57,6 +57,7 @@ export default function NewItemScreen() {
 
     setIsSubmitting(true);
 
+    try{
     // Création de l'objet FormData
     const formData = new FormData();
     formData.append("title", title);
@@ -85,9 +86,13 @@ export default function NewItemScreen() {
     } else {
       Alert.alert("Erreur", result.error);
     }
+  } catch (error) {
+    console.error("An error occurred:", error);
+    Alert.alert("Erreur", "An unexpected error occurred.");
   } finally {
     setIsSubmitting(false);
-  }};
+  }
+}
 
   return (
     <SafeAreaView style={styles.safeContainer}>

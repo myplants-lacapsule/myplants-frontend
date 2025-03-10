@@ -31,13 +31,7 @@ export default function FullDetailsItemComponent({ itemDetails }) {
 
         <Text style={styles.description}>{itemDetails.description}</Text>
         <View style={styles.fieldsContainer}>
-<<<<<<< HEAD
-          {!itemDetails.isGiven && (
-            <Text style={styles.field}>Price : {itemDetails.price} €</Text>
-          )}
-=======
           {!itemDetails.isGiven && <Text style={styles.field}>Price : {itemDetails.price}€</Text>}
->>>>>>> b4802ed346e56cfe485abf01aedc098209c4313a
           <Text style={styles.field}>
             Height : {itemDetails.height} cm
           </Text>
