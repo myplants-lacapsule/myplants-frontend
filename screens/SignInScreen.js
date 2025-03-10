@@ -49,8 +49,8 @@ export default function SignInScreen() {
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"}>
       <ReturnButton />
       <View style={styles.registerContainer}>
-        <RegisterInput placeholder="Email address" autoCapitalize="none" keyboardType="email-address" textContentType="emailAddress" autoComplete="email" value={signInEmail} onChangeText={setSignInEmail} />
-        <RegisterInput placeholder="Password" secureTextEntry={true} textContentType="password" autoComplete="password" value={signInPassword} onChangeText={setSignInPassword} />
+        <RegisterInput title="Email address" placeholder="Email address" autoCapitalize="none" keyboardType="email-address" textContentType="emailAddress" autoComplete="email" value={signInEmail} onChangeText={setSignInEmail} />
+        <RegisterInput title="Password" placeholder="Password" secureTextEntry={true} textContentType="password" autoComplete="password" value={signInPassword} onChangeText={setSignInPassword} />
         <RegisterButton title="Sign in" onPress={handleConnection} />
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
       </View>

@@ -51,9 +51,9 @@ export default function AddLocationScreen() {
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"}>
       <Text style={styles.title}>Please enter your address</Text>
       <View style={styles.registerContainer}>
-        <RegisterInput placeholder="Address" value={street} onChangeText={setStreet} />
-        <RegisterInput placeholder="ZIP code" value={postalCode} onChangeText={setPostalCode} />
-        <RegisterInput placeholder="City" value={city} onChangeText={setCity} />
+        <RegisterInput title="Address" placeholder="Address" value={street} onChangeText={setStreet} />
+        <RegisterInput title="ZIP code" placeholder="ZIP code" value={postalCode} onChangeText={setPostalCode} />
+        <RegisterInput title="City" placeholder="City" value={city} onChangeText={setCity} />
 
         <RegisterButton title="Submit" onPress={handleUpdate} />
       </View>
