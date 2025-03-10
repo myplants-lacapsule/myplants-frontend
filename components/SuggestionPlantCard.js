@@ -5,24 +5,26 @@ import RegisterButton from "./RegisterButton";
 
 export default function SuggestionPlantCard({ plantsData, addPlantToBackend }) {
   return (
-    <View style={styles.cardContainer}>
+    <View style={styles.container}>
       <View style={styles.card}>
-        <Image source={{ uri: plantsData.photo }} style={styles.image} />
-        <View style={styles.containText}>
-          <View style={styles.firstrow}>
-            <Text style={styles.title}>{plantsData.name}</Text>
+        <View style={styles.topContainer}>
+          <Image source={{ uri: plantsData.photo }} style={styles.image} />
+          <View style={styles.containText}>
+            <View style={styles.firstrow}>
+              <Text style={styles.title}>{plantsData.name}</Text>
+            </View>
+            <Text style={styles.description}>{plantsData.description.length > 250 ? plantsData.description.slice(0, 250) + "..." : plantsData.description}</Text>
           </View>
-          <Text style={styles.description}>{plantsData.description.length > 150 ? plantsData.description.slice(0, 150) + "..." : plantsData.description}</Text>
         </View>
-      </View>
-      <View style={styles.badges}>
-        <View style={styles.badgeWatering}>
-          <FontAwesome name="tint" size={25} color="white" />
-          <Text style={styles.textBadges}>Every {plantsData.wateringFrequency} days</Text>
-        </View>
-        <View style={styles.badgeToxicity}>
-          <FontAwesome name="fire" size={25} color="white" />
-          <Text style={styles.textBadges}>{plantsData.toxicity}</Text>
+        <View style={styles.badges}>
+          <View style={styles.badgeWatering}>
+            <FontAwesome name="tint" size={25} color="white" />
+            <Text style={styles.textBadges}>Every {plantsData.wateringFrequency} days</Text>
+          </View>
+          <View style={styles.badgeToxicity}>
+            <FontAwesome name="fire" size={25} color="white" />
+            <Text style={styles.textBadges}>{plantsData.toxicity}</Text>
+          </View>
         </View>
       </View>
       <RegisterButton title={"Add to my inventory"} onPress={addPlantToBackend} />
@@ -31,32 +33,36 @@ export default function SuggestionPlantCard({ plantsData, addPlantToBackend }) {
 }
 
 const styles = StyleSheet.create({
-  cardContainer: {
-    flexWrap: "wrap",
-    justifyContent: "center",
-    padding: 10,
-    gap: 10,
+  container: {
+		alignItems: "center",
+    marginTop: 40,
+		gap: 10,
   },
   card: {
-    flexDirection: "row",
-    width: "100%",
-    height: "auto",
-    backgroundColor: "#FBFBFB",
+    flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 8,
+    width: "96%",
+    height: '330',
+    paddingHorizontal: 5,
+    borderRadius: 10,
+    borderWidth: 1,
     borderColor: "#D0DDD0",
+    backgroundColor: "white",
+  },
+  topContainer: {
+    flexDirection: "row",
+    width: "95%",
+    height: "70%",
   },
   image: {
     width: "40%",
-    height: "95%",
-    padding: 5,
-    borderRadius: 10,
+    height: "100%",
+    borderRadius: 5,
   },
   containText: {
-    width: "50%",
+    width: "60%",
     height: "100%",
-    justifyContent: "center",
     gap: 5,
     padding: 10,
   },
@@ -74,22 +80,25 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    padding: 20,
+    width: "90%",
+    marginTop: 15,
   },
   badgeWatering: {
+    flexDirection: "row",
     backgroundColor: "#3674B5",
     borderRadius: 80,
-    padding: 8,
+    padding: 4,
     width: "45%",
-    justifyContent: "center",
+    justifyContent: "space-around",
     alignItems: "center",
   },
   badgeToxicity: {
+    flexDirection: "row",
     backgroundColor: "#BC4749",
     borderRadius: 80,
-    padding: 8,
+    padding: 4,
     width: "45%",
-    justifyContent: "center",
+    justifyContent: "space-around",
     alignItems: "center",
   },
   textBadges: {
