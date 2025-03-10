@@ -11,8 +11,6 @@ export default function FullDetailsPlantComponent() {
   const [isWatered, setIsWatered] = useState(plantDetails.isWatered)
   console.log(isWatered)
 
-
-
   const navigation = useNavigation();
 
   // Icônes pour les saisons
@@ -168,7 +166,6 @@ export default function FullDetailsPlantComponent() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F1F0E9",
   },
   image: {
     height: 200,

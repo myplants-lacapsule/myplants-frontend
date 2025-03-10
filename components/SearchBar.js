@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   textInputResearch: {
-    backgroundColor: "#FBFBFB",
+    backgroundColor: "white",
     width: "250",
     height: "60",
     alignItems: "center",

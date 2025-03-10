@@ -27,14 +27,13 @@ export default function ReturnButton({ destination, title }) {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    height: "15%",
     alignItems: "center",
     flexDirection: "row",
   },
   button: {
     width: 50,
     height: 50,
-    padding: 5,
+    padding: 10,
     paddingLeft: 20,
     alignSelf: "flex-start",
   },
