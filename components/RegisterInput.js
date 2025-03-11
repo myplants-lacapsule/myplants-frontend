@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   title: {
     color: "#2D5334",
     fontFamily: "OpenSans-Regular",
-    paddingLeft: 7,
+    paddingLeft: 20,
   },
   input: {
     height: 45,
