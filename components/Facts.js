@@ -16,14 +16,13 @@ export default function Facts() {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/facts`);
 
       const data = await response.json();
-      console.log("data en front", data)
 
       if (!data.result) {
         Alert.alert("No fact found", "Please try again");
       }
 
       setFact(data.data);
-      
+
     } catch (error) {
       console.error("Error fetching facts:", error);
     }
