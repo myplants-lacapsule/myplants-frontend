@@ -6,10 +6,8 @@ import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import RegisterButton from "./RegisterButton";
 
 export default function FullDetailsPlantComponent() {
-  console.log("plantDetails", plantDetails);
 
   const [isWatered, setIsWatered] = useState(plantDetails.isWatered)
-  console.log(isWatered)
 
   const navigation = useNavigation();
 
