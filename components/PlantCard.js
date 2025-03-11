@@ -3,10 +3,17 @@ import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
+import moment from "moment";
+
 export default function PlantCard(props) {
   const navigation = useNavigation();
 
+  //tronquer la description à 120 caractères
   const truncatedDescription = props.description.length > 120 ? props.description.substring(0, 120) + "..." : props.description;
+
+  //ajoute de moment pour récupérer la date du dernier arrosage
+  const date = moment(props.lastWatering)
+  const lastWatered = moment(date).format('MMMM Do YYYY');
 
   return (
     <View style={styles.container}>
@@ -21,12 +28,7 @@ export default function PlantCard(props) {
             <View style={[styles.badge, !props.isWatered ? styles.notWatered : styles.watered]}>
               {!props.isWatered ? <FontAwesome5 name="tint" size={16} color="#F1F0E9" /> : <FontAwesome5 name="tint-slash" size={16} color="#F1F0E9" />}
               <Text style={styles.textBadge}>
-                {""}
-                {new Date(props.lastWatering).toLocaleDateString("en-US", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                })}
+                {lastWatered}
               </Text>
             </View>
           </View>
