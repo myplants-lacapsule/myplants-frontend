@@ -16,6 +16,7 @@ export default function MapScreen() {
 
   const [itemsData, setItemsData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [pinsLoading, setPinsLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [currentPosition, setCurrentPosition] = useState(null);
   const [initialRegion, setInitialRegion] = useState({
@@ -76,6 +77,7 @@ export default function MapScreen() {
   // Fonction pour récupérer toutes les annonces depuis le backend
   const fetchItems = async () => {
     try {
+      setPinsLoading(true);
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/items/allItems`);
       const data = await response.json();
       if (data.result) {
@@ -97,7 +99,7 @@ export default function MapScreen() {
       }
     } catch (error) {
       console.error("Error fetching items:", error);
-    }
+    } finally {setPinsLoading(false)}
   };
 
   // Affichage de la modale lorsque l'utilisateur appuie sur un marqueur
@@ -155,10 +157,14 @@ export default function MapScreen() {
   return (
     <View style={{ flex: 1 }}>
       <MapView style={{ flex: 1 }} initialRegion={initialRegion}>
-        {currentPosition && <Marker coordinate={currentPosition} pinColor="red" />}
+        {currentPosition && (
+          <Marker coordinate={currentPosition} pinColor="red" />
+        )}
         {uniquePin.map((pin, i) => (
           <Marker
-            key={`${pin.token}-${selectedPin === pin.token ? "selected" : "default"}`}
+            key={`${pin.token}-${
+              selectedPin === pin.token ? "selected" : "default"
+            }`}
             token={pin.token}
             coordinate={{
               latitude: pin.lat,
@@ -174,16 +180,34 @@ export default function MapScreen() {
           />
         ))}
       </MapView>
+      {pinsLoading && (
+        <View style={styles.loaderOverlay}>
+          <ActivityIndicator size="large" color="#2D5334" />
+        </View>
+      )}
+
       <Modal visible={modalVisible} animationType="fade" transparent>
         <View style={styles.modalContainer}>
           <SafeAreaView style={styles.modal}>
-            <FontAwesome5 name="times-circle" size={25} solid={true} style={styles.closeButton} onPress={closeModal} />
-            <ScrollView showsVerticalScrollIndicator={true} style={styles.cardContainer}>
+            <FontAwesome5
+              name="times-circle"
+              size={25}
+              solid={true}
+              style={styles.closeButton}
+              onPress={closeModal}
+            />
+            <ScrollView
+              showsVerticalScrollIndicator={true}
+              style={styles.cardContainer}
+            >
               {userItems}
             </ScrollView>
           </SafeAreaView>
         </View>
       </Modal>
+      <TouchableOpacity style={styles.refreshButton} onPress={fetchItems}>
+        <FontAwesome5 name="sync-alt" size={20} color="#FBFBFB" />
+      </TouchableOpacity>
       <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
         <Text style={styles.addButtonText}>+</Text>
       </TouchableOpacity>
@@ -252,5 +276,28 @@ const styles = StyleSheet.create({
     color: "#FBFBFB",
     fontWeight: "bold",
     fontSize: 30,
+  },
+  loaderOverlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(255,255,255,0.6)", // optionnel, pour atténuer la vue en dessous
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 10, // s'assure que l'indicateur est au-dessus de la MapView
+  },
+  refreshButton: {
+    position: "absolute",
+    top: 80, // positionné en haut
+    right: 30, // positionné à droite
+    backgroundColor: "#2D5334",
+    width: 40,
+    height: 40,
+    borderRadius: 35,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 10,
   },
 });
