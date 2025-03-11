@@ -13,7 +13,7 @@ export default function Notifications(props) {
         Your plant <Text style={styles.boldText}>{props.name}</Text> needs water !
       </Text>
       <Text style={styles.text}>
-        The last watering was : <Text style={styles.boldText}>{lastWatered}</Text>
+        The last watering was on: <Text style={styles.boldText}>{lastWatered}</Text>
       </Text>
     </View>
   );
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: "OpenSans-Regular",
-		fontSize: 16,
+		fontSize: 14,
   },
   boldText: {
     fontFamily: "OpenSans-Bold",
