@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
@@ -25,7 +25,7 @@ export default function ItemCard({ photo, title, description, price, height, isG
             condition,
             createdAt,
             createdBy,
-            token
+            token,
           },
         });
       }}
@@ -38,12 +38,12 @@ export default function ItemCard({ photo, title, description, price, height, isG
           <View style={styles.infoContainer}>
             <Text style={styles.name}>{title}</Text>
             <View style={styles.badge}>
-              {isPlant ? <FontAwesome5 name="leaf" size={16} color="#2D5334" style={{ marginRight: 5 }} /> : <FontAwesome5 name="hammer" size={16} color="#2D5334" style={{ marginRight: 5 }} />}
-              <Text style={styles.badgeText}>{isPlant ? "Plant" : "Accessory"}</Text>
-            </View>
-            <View style={styles.badge}>
               {isGiven ? <FontAwesome5 name="hands-helping" size={16} color="#2D5334" style={{ marginRight: 5 }} /> : <FontAwesome5 name="shopping-cart" size={16} color="#2D5334" style={{ marginRight: 5 }} />}
               <Text style={styles.badgeText}>{isGiven ? "Donation" : "Sale"}</Text>
+            </View>
+            <View style={styles.badge}>
+              {isPlant ? <FontAwesome5 name="leaf" size={16} color="#2D5334" style={{ marginRight: 5 }} /> : <FontAwesome5 name="hammer" size={16} color="#2D5334" style={{ marginRight: 5 }} />}
+              <Text style={styles.badgeText}>{isPlant ? "Plant" : "Accessory"}</Text>
             </View>
             {!isGiven && (
               <View style={styles.badge}>
@@ -83,8 +83,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   photoContainer: {
-    borderRadius: 5,
     width: "35%",
+		borderRadius: 5,
   },
   photo: {
     width: "100%",

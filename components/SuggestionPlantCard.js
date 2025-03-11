@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Image, Text } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import RegisterButton from "./RegisterButton";
 
@@ -9,21 +9,21 @@ export default function SuggestionPlantCard({ plantsData, addPlantToBackend }) {
       <View style={styles.card}>
         <View style={styles.topContainer}>
           <Image source={{ uri: plantsData.photo }} style={styles.image} />
-          <View style={styles.containText}>
-            <View style={styles.firstrow}>
+          <View style={styles.textContainer}>
+            <View style={styles.firstRow}>
               <Text style={styles.title}>{plantsData.name}</Text>
             </View>
             <Text style={styles.description}>{plantsData.description.length > 250 ? plantsData.description.slice(0, 250) + "..." : plantsData.description}</Text>
           </View>
         </View>
         <View style={styles.badges}>
-          <View style={styles.badgeWatering}>
+          <View style={styles.wateringBadge}>
             <FontAwesome name="tint" size={25} color="white" />
-            <Text style={styles.textBadges}>Every {plantsData.wateringFrequency} days</Text>
+            <Text style={styles.badgeText}>Every {plantsData.wateringFrequency} days</Text>
           </View>
-          <View style={styles.badgeToxicity}>
+          <View style={styles.toxicityBadge}>
             <FontAwesome name="fire" size={25} color="white" />
-            <Text style={styles.textBadges}>{plantsData.toxicity}</Text>
+            <Text style={styles.badgeText}>{plantsData.toxicity}</Text>
           </View>
         </View>
       </View>
@@ -34,16 +34,16 @@ export default function SuggestionPlantCard({ plantsData, addPlantToBackend }) {
 
 const styles = StyleSheet.create({
   container: {
-		alignItems: "center",
+    alignItems: "center",
     marginTop: 40,
-		gap: 10,
+    gap: 10,
   },
   card: {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
     width: "96%",
-    height: '330',
+    height: "330",
     paddingHorizontal: 5,
     borderRadius: 10,
     borderWidth: 1,
@@ -60,13 +60,13 @@ const styles = StyleSheet.create({
     height: "100%",
     borderRadius: 5,
   },
-  containText: {
+  textContainer: {
     width: "60%",
     height: "100%",
     gap: 5,
     padding: 10,
   },
-  firstrow: {
+  firstRow: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
@@ -79,29 +79,33 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     width: "90%",
     marginTop: 15,
   },
-  badgeWatering: {
+  wateringBadge: {
     flexDirection: "row",
-    backgroundColor: "#3674B5",
-    borderRadius: 80,
-    padding: 4,
-    width: "auto",
+		alignItems: "center",
     justifyContent: "space-around",
-    alignItems: "center",
+    width: "auto",
+		gap: 6,
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+		backgroundColor: "#3674B5",
   },
-  badgeToxicity: {
+  toxicityBadge: {
     flexDirection: "row",
-    backgroundColor: "#BC4749",
-    borderRadius: 80,
-    padding: 4,
-    width: "auto",
+		alignItems: "center",
     justifyContent: "space-around",
-    alignItems: "center",
+    width: "auto",
+		gap: 6,
+		paddingVertical: 5,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+		backgroundColor: "#BC4749",
   },
-  textBadges: {
+  badgeText: {
     color: "white",
   },
 });

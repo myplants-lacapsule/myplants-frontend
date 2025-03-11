@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
@@ -8,10 +8,10 @@ import moment from "moment";
 export default function PlantCard(props) {
   const navigation = useNavigation();
 
-  //tronquer la description à 120 caractères
+  // Tronquer la description à 120 caractères
   const truncatedDescription = props.description.length > 120 ? props.description.substring(0, 120) + "..." : props.description;
 
-  //ajoute de moment pour récupérer la date du dernier arrosage
+  // Ajout de moment pour récupérer la date du dernier arrosage
   const date = moment(props.lastWatering)
   const lastWatered = moment(date).format('MMMM Do YYYY');
 
@@ -58,8 +58,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   photoContainer: {
+		width: "35%",
     borderRadius: 5,
-    width: "35%",
   },
   photo: {
     width: "100%",
@@ -77,21 +77,20 @@ const styles = StyleSheet.create({
     fontFamily: "Merriweather-Bold",
   },
   description: {
+		flexWrap: "wrap",
     fontFamily: "OpenSans-Regular",
-    fontSize: 14,
-    flexWrap: "wrap",
   },
   lastWatered: {
-    width: "60%",
+    width: "65%",
   },
   badge: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 8,
-    borderRadius: 24,
-    height: 25,
+		height: 25,
+    gap: 6,
     marginVertical: 5,
+		borderRadius: 25,
   },
   watered: {
     backgroundColor: "#95AE7D",
@@ -101,6 +100,6 @@ const styles = StyleSheet.create({
   },
   textBadge: {
     fontSize: 11,
-    color: "white",
+    color: "#F1F0E9",
   },
 });

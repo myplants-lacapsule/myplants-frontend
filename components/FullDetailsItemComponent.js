@@ -1,19 +1,17 @@
 import React from "react";
-import { Text, SafeAreaView, ScrollView, StyleSheet, Image, View, Linking, Alert} from "react-native";
+import { Alert, Image, Linking, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useState } from "react";
-import RegisterButton from "./RegisterButton";
 import { useSelector } from "react-redux";
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { useNavigation } from "@react-navigation/native";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import RegisterButton from "./RegisterButton";
 
 export default function FullDetailsItemComponent({ itemDetails }) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigation = useNavigation();
   const currentUser = useSelector((state) => state.user.value);
   const isOwner = currentUser.token === itemDetails.createdBy.token;
-  const navigation= useNavigation();
 
-  console.log("Details de l'item", itemDetails)
- 
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Fonction pour mettre la 1ère lettre en minuscule
   const formatCondition = (condition) => {
@@ -24,7 +22,7 @@ export default function FullDetailsItemComponent({ itemDetails }) {
   const handleContactSeller = async () => {
     setIsSubmitting(true);
     const subject = `Interest in your listing ${itemDetails.title}`;
-    const body = `Hello ${itemDetails.createdBy.username} , I'm interested in your listing ${itemDetails.title}. Is it still available and if so how could we proceed? Thank you!`;
+    const body = `Hello ${itemDetails.createdBy.username}, I'm interested in your listing ${itemDetails.title}. Is it still available and if so, how could we proceed? Thank you!`;
     const mailtoURL = `mailto:${itemDetails.createdBy.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     try {
       await Linking.openURL(mailtoURL);
@@ -35,37 +33,40 @@ export default function FullDetailsItemComponent({ itemDetails }) {
     }
   };
 
-
-  const handleDelete = async () => {
-// Demander une confirmation à l'utilisateur
+  const handleDeleteItem = async () => {
+    // Demander confirmation à l'utilisateur
     Alert.alert(
       "Confirmation",
-      "Are you sure you want to delete this item?",
+      "Are you sure you want to remove this item from your inventory?",
       [
         {
           text: "Cancel",
           style: "cancel",
         },
         {
-          text: "Delete",
-          style: "destructive",
-          onPress: async () => { 
+          text: "Yes, remove",
+          onPress: async () => {
             try {
-            const itemToken = itemDetails.token;
-            const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/items/deleteItem/${itemToken}`, {
-              method: "DELETE",
-            });
-            const data = await response.json();
-          if (data.result) {
-            Alert.alert("Success", "The item has been deleted.");
-            navigation.goBack(); 
-          }else{
-            Alert.alert("Error", data.error || "Deletion failed.");
-          }
-        }catch(error){Alert.alert("Error", "An error occurred while deleting the item.");}
-        },},], {cancelable:true});
-
-      }
+              const itemToken = itemDetails.token;
+              const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/items/deleteItem/${itemToken}`, {
+                method: "DELETE",
+              });
+              const data = await response.json();
+              if (data.result) {
+                Alert.alert("Success", "The item has been removed.");
+                navigation.goBack();
+              } else {
+                Alert.alert("Error", data.error || "Deletion failed.");
+              }
+            } catch (error) {
+              Alert.alert("Error", "An error occurred while removing the item.");
+            }
+          },
+        },
+      ],
+      { cancelable: true }
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -78,52 +79,24 @@ export default function FullDetailsItemComponent({ itemDetails }) {
               <FontAwesome5 name="hands-helping" size={16} color="#2D5334" />
             ) : (
               <View style={styles.priceContainer}>
-                <FontAwesome5
-                  name="euro-sign"
-                  size={16}
-                  color="#2D5334"
-                  style={{ marginRight: 5 }}
-                />
-                <Text style={styles.priceText}>{itemDetails.price}</Text>
+                <FontAwesome5 name="shopping-cart" size={16} color="#2D5334" />
               </View>
             )}
-            <Text style={styles.badgeText}>
-              {itemDetails.isGiven ? "Donation" : "Sale"}
-            </Text>
+            <Text style={styles.badgeText}>{itemDetails.isGiven ? "Donation" : "Sale"}</Text>
           </View>
           <View style={styles.badge}>
-            {itemDetails.isPlant ? (
-              <FontAwesome5 name="leaf" size={16} color="#2D5334" />
-            ) : (
-              <FontAwesome5 name="hammer" size={16} color="#2D5334" />
-            )}
-            <Text style={styles.badgeText}>
-              {itemDetails.isPlant ? "Plant" : "Accessory"}
-            </Text>
+            {itemDetails.isPlant ? <FontAwesome5 name="leaf" size={16} color="#2D5334" /> : <FontAwesome5 name="hammer" size={16} color="#2D5334" />}
+            <Text style={styles.badgeText}>{itemDetails.isPlant ? "Plant" : "Accessory"}</Text>
           </View>
         </View>
         <Text style={styles.description}>{itemDetails.description}</Text>
         <View style={styles.fieldsContainer}>
+          {itemDetails.price > 0 && <Text style={styles.field}>Price : {itemDetails.price} €</Text>}
           <Text style={styles.field}>Height : {itemDetails.height} cm</Text>
-          <Text style={styles.field}>
-            Condition : {formatCondition(itemDetails.condition)}
-          </Text>
-          {isOwner ? (
-            <RegisterButton
-              title={"Remove from my inventory"}
-              onPress={() => handleDelete()}
-              style={styles.removeButton}
-            />
-          ) : (
-            <RegisterButton
-              title="Contact seller"
-              onPress={() => handleContactSeller()}
-              style={{ marginTop: 40 }}
-              loading={isSubmitting}
-              disabled={isSubmitting}
-            />
-          )}
-          <Text style={styles.dateField}>
+          <Text style={styles.field}>Condition : {formatCondition(itemDetails.condition)}</Text>
+        </View>
+        <View style={styles.bottomContainer}>
+          <Text style={styles.date}>
             Listing posted on {""}
             {new Date(itemDetails.createdAt).toLocaleDateString("en-US", {
               day: "numeric",
@@ -131,6 +104,7 @@ export default function FullDetailsItemComponent({ itemDetails }) {
               year: "numeric",
             })}
           </Text>
+          {isOwner ? <RegisterButton title={"Remove from my inventory"} onPress={() => handleDeleteItem()} style={styles.removeButton} /> : <RegisterButton title="Contact the seller" onPress={() => handleContactSeller()} loading={isSubmitting} disabled={isSubmitting} />}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -143,8 +117,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#F1F0E9",
   },
   content: {
+    flexGrow: 1,
     alignItems: "center",
     padding: 10,
+    marginBottom: 15,
   },
   image: {
     height: 200,
@@ -159,24 +135,17 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontFamily: "Merriweather-Bold",
   },
-  badgeContainer: {
-    marginLeft: 10,
-    paddingVertical: 10,
-  },
   badgeRow: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
     width: "85%",
     marginVertical: 10,
   },
   badge: {
     width: 130,
-    marginRight: 10,
-    paddingVertical: 4,
+    paddingVertical: 5,
     paddingHorizontal: 15,
-    borderRadius: 35,
-    borderWidth: 1,
-    borderColor: "#2D5334",
+    borderRadius: 5,
     backgroundColor: "#95AE7D",
     alignItems: "center",
     justifyContent: "space-around",
@@ -205,29 +174,23 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
   field: {
+    color: "#2D5334",
+    marginVertical: 5,
     fontSize: 16,
     fontFamily: "OpenSans-Regular",
-    color: "#2D5334",
-    marginVertical: 5,
   },
-  dateField: {
+  bottomContainer: {
+    width: "96%",
+    marginTop: "auto",
+  },
+  date: {
+    marginVertical: 10,
+    marginLeft: 10,
+    color: "#2D5334",
+    fontSize: 16,
     fontStyle: "italic",
-    fontSize: 16,
-    color: "#2D5334",
-    marginVertical: 5,
-    marginTop: 10,
-  },
-  priceContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  priceText: {
-    color: "#2D5334",
-    fontSize: 16,
-    fontFamily: "OpenSans-Bold",
   },
   removeButton: {
-    fontFamily: "OpenSans-Regular",
     backgroundColor: "#BC4749",
   },
 });
