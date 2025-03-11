@@ -16,6 +16,8 @@ export default function UserScreen() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
+  const userInStore = useSelector((state) => state.user.value)
+
   const logoutUser = () => {
     dispatch(logout())
     navigation.navigate("WelcomeScreen")
