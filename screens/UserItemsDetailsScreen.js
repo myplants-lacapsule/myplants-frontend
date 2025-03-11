@@ -12,14 +12,17 @@ export default function UserItemsDetailsScreen() {
   const userInStore = useSelector((state) => state.user.value);
 
   const [itemsForSale, setItemsForSale] = useState([]);
-  const [isItemsForSale, setIsItemsForSale] = useState(true);
+  const [isItemsForSale, setIsItemsForSale] = useState(false);
 
   useEffect(() => {
     getItemsByUser();
   }, []);
 
   useEffect(() => {
-    setIsItemsForSale(true);
+    if (!isFocused) {
+      setIsItemsForSale(false)
+    }
+    getItemsByUser();
   }, [isFocused]);
 
   const getItemsByUser = async () => {
@@ -28,7 +31,7 @@ export default function UserItemsDetailsScreen() {
 
       const data = await response.json();
 
-      if (data && data.items) {
+      if (data.result) {
         setItemsForSale(data.items);
         setIsItemsForSale(true);
       }
@@ -43,7 +46,7 @@ export default function UserItemsDetailsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ReturnButton title="My items for sale"/>
+      <ReturnButton title="My items for sale" />
       <ScrollView style={styles.cardContainer}>{userItems}</ScrollView>
     </SafeAreaView>
   );
@@ -52,7 +55,7 @@ export default function UserItemsDetailsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-		paddingTop: 40,
+    paddingTop: 40,
     backgroundColor: "#F1F0E9",
   },
   noCardMessage: {
