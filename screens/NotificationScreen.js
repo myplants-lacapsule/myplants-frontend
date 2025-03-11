@@ -12,7 +12,7 @@ export default function NotificationScreen({ route }) {
   const { unwateredPlant } = route.params;
 
   const notificationsUnwateredPlant = unwateredPlant.length > 0 && unwateredPlant.map((data, i) => {
-    return <Notifications key={i} name={data.name} lastWatering={Date(data.lastWatered)} />
+    return <Notifications key={i} name={data.name} lastWatering={data.lastWatering} />
   })
 
   return (
