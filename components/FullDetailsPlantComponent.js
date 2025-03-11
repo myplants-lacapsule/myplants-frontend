@@ -1,15 +1,14 @@
 import React, { useState } from "react";
-import { Text, SafeAreaView, ScrollView, StyleSheet, Image, Alert, View, TouchableOpacity } from "react-native";
+import { Alert, Image, Text, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import RegisterButton from "./RegisterButton";
 
 export default function FullDetailsPlantComponent() {
-
-  const [isWatered, setIsWatered] = useState(plantDetails.isWatered)
-
   const navigation = useNavigation();
+
+  const [isWatered, setIsWatered] = useState(plantDetails.isWatered);
 
   // Icônes pour les saisons
   const seasonIcons = {
@@ -38,14 +37,13 @@ export default function FullDetailsPlantComponent() {
 
   const currentSunExposure = sunExposureIcons[plantDetails.sunExposure.toLowerCase()] || sunExposureIcons["default"];
 
-  const deletePlant = async () => {
+  const handleDeletePlant = async () => {
     Alert.alert(
       "Confirmation",
       "Are you sure you want to remove this plant from your inventory? ",
       [
         {
           text: "Cancel",
-          onPress: () => console.log("Deletion canceled"),
           style: "cancel",
         },
         {
@@ -68,7 +66,7 @@ export default function FullDetailsPlantComponent() {
                 Alert.alert({ text: "Plant not removed" });
               }
             } catch (error) {
-              console.error("Error deleting a plant:", error);
+              console.error("Error", "An error occurred while removing the plant.");
             }
           },
         },
@@ -80,7 +78,7 @@ export default function FullDetailsPlantComponent() {
   const updateLastWatering = () => {
     Alert.alert(
       "Confirmation",
-      "Did you water the plant well? ",
+      "Did you water the plant today? ",
       [
         {
           text: "Cancel",
@@ -103,10 +101,10 @@ export default function FullDetailsPlantComponent() {
               if (result.result) {
                 setIsWatered(true);
               } else {
-                Alert.alert({ text: "Plant not removed" });
+                Alert.alert({ text: "Plant not watered" });
               }
             } catch (error) {
-              console.error("Error deleting a plant:", error);
+              console.error("Error watering a plant:", error);
             }
           },
         },
@@ -117,14 +115,14 @@ export default function FullDetailsPlantComponent() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView  showsVerticalScrollIndicator={true}>
+      <ScrollView showsVerticalScrollIndicator={true}>
         <Image source={{ uri: plantDetails.photo }} style={styles.image} />
         <Text style={styles.name}>{plantDetails.name}</Text>
         {!isWatered && (
-          <TouchableOpacity style={styles.badgeIsWateredContainer} onPress={updateLastWatering}>
-            <View style={styles.badgeIsWatered}>
+          <TouchableOpacity style={styles.isWateredBadgeContainer} onPress={updateLastWatering}>
+            <View style={styles.isWateredBadge}>
               <FontAwesome name="tint" size={25} color="#F1F0E9" />
-              <Text style={styles.badgeIsWateredText}>This plant needs water !</Text>
+              <Text style={styles.isWateredBadgeText}>This plant needs water !</Text>
             </View>
           </TouchableOpacity>
         )}
@@ -157,7 +155,7 @@ export default function FullDetailsPlantComponent() {
           </View>
           <Text style={styles.description}>{plantDetails.description}</Text>
         </View>
-        <RegisterButton title={"Remove from my inventory"} style={styles.button} onPress={deletePlant} />
+        <RegisterButton title={"Remove from my inventory"} style={styles.button} onPress={handleDeletePlant} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -180,16 +178,16 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontFamily: "Merriweather-Bold",
   },
-  badgeIsWateredContainer: {
+  isWateredBadgeContainer: {
     alignItems: "center",
   },
-  badgeIsWatered: {
+  isWateredBadge: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     width: "auto",
     gap: 8,
-		marginBottom: 10,
+    marginBottom: 10,
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 30,
@@ -200,7 +198,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 10,
   },
-  badgeIsWateredText: {
+  isWateredBadgeText: {
     color: "#F1F0E9",
     fontFamily: "OpenSans-Bold",
   },
@@ -218,31 +216,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#A8A8A8",
-  },
-  wateringFrequencyBadge: {
-    width: "auto",
-    gap: 6,
-    marginRight: 10,
-    paddingVertical: 5,
-    paddingHorizontal: 15,
-    borderRadius: 5,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#3674B5",
-  },
-  sunExposureBadge: {
-    width: "auto",
-    gap: 6,
-    marginRight: 10,
-    paddingVertical: 5,
-    paddingHorizontal: 15,
-    borderRadius: 5,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#E27A26",
+    backgroundColor: "#9C9A7E",
   },
   cuisineBadge: {
     width: "auto",
@@ -268,6 +242,30 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#BC4749",
   },
+  sunExposureBadge: {
+    width: "auto",
+    gap: 6,
+    marginRight: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#D0A14B",
+  },
+  wateringFrequencyBadge: {
+    width: "auto",
+    gap: 6,
+    marginRight: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#3674B5",
+  },
   badgeText: {
     color: "#F1F0E9",
     fontFamily: "OpenSans-Regular",
@@ -281,7 +279,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     gap: 12,
     padding: 16,
-		marginTop: 10,
+    marginTop: 10,
   },
   titleContainer: {
     flexDirection: "row",

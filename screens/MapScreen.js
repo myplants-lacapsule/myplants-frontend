@@ -26,7 +26,6 @@ export default function MapScreen() {
   });
   const [uniquePin, setUniquePin] = useState([]);
   const [selectedPin, setSelectedPin] = useState(null);
-  
 
   // Récupération de la position actuelle de l'utilisateur
   useEffect(() => {
@@ -69,10 +68,10 @@ export default function MapScreen() {
     }
   }, [route.params?.refresh]);
 
-    const closeModal = () => {
-      setModalVisible(false);
-      setSelectedPin(null);
-    };
+  const closeModal = () => {
+    setModalVisible(false);
+    setSelectedPin(null);
+  };
 
   // Fonction pour récupérer toutes les annonces depuis le backend
   const fetchItems = async () => {
@@ -116,7 +115,7 @@ export default function MapScreen() {
   };
 
   // Articles à afficher dans la modale
-  const userItems = itemsData.map((data, i) => <ItemCard key={i} {...data} closeModal={closeModal} />)
+  const userItems = itemsData.map((data, i) => <ItemCard key={i} {...data} closeModal={closeModal} />);
 
   // Fonction déclenchée lorsque l'utilisateur appuie sur le bouton "+"
   const handleAddPress = async () => {
@@ -147,35 +146,29 @@ export default function MapScreen() {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator
-          size="large"
-          color="#2D5334"/>
+        <ActivityIndicator size="large" color="#2D5334" />
         <Text style={styles.loadingText}>Loading... please wait</Text>
       </View>
     );
   }
 
-
-
   return (
     <View style={{ flex: 1 }}>
       <MapView style={{ flex: 1 }} initialRegion={initialRegion}>
-        {currentPosition && (
-          <Marker coordinate={currentPosition} pinColor="red" />
-        )}
+        {currentPosition && <Marker coordinate={currentPosition} pinColor="red" />}
         {uniquePin.map((pin, i) => (
           <Marker
-            key={`${pin.token}-${
-              selectedPin === pin.token ? "selected" : "default"
-            }`}
+            key={`${pin.token}-${selectedPin === pin.token ? "selected" : "default"}`}
             token={pin.token}
             coordinate={{
               latitude: pin.lat,
               longitude: pin.long,
             }}
             pinColor="blue"
-            onPress={() => {setSelectedPin(pin.token); // Mise à jour de l'état du marker sélectionné
-            handleMarkerPress(pin.token);}}
+            onPress={() => {
+              setSelectedPin(pin.token); // Mise à jour de l'état du marker sélectionné
+              handleMarkerPress(pin.token);
+            }}
             calloutEnabled={false}
             tracksViewChanges={false}
           />
@@ -184,14 +177,10 @@ export default function MapScreen() {
       <Modal visible={modalVisible} animationType="fade" transparent>
         <View style={styles.modalContainer}>
           <SafeAreaView style={styles.modal}>
-            <FontAwesome5
-              name="times-circle"
-              size={25}
-              solid={true}
-              style={styles.closeButton}
-              onPress={closeModal}
-            />
-            <ScrollView style={styles.cardContainer}>{userItems}</ScrollView>
+            <FontAwesome5 name="times-circle" size={25} solid={true} style={styles.closeButton} onPress={closeModal} />
+            <ScrollView showsVerticalScrollIndicator={true} style={styles.cardContainer}>
+              {userItems}
+            </ScrollView>
           </SafeAreaView>
         </View>
       </Modal>
@@ -228,7 +217,7 @@ const styles = StyleSheet.create({
   },
   modal: {
     position: "relative",
-    maxHeight: "45%",
+    maxHeight: "50%",
     minHeight: 100,
     width: "90%",
     padding: 5,

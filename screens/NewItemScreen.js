@@ -120,7 +120,7 @@ export default function NewItemScreen() {
               <Switch trackColor={{ false: "#2D5334", true: "#2D5334" }} thumbColor={"#95AE7D"} ios_backgroundColor="#2D5334" value={isPlant} onValueChange={(newValue) => setIsPlant(newValue)} />
               <Text style={styles.label}>Plant</Text>
             </View>
-            <RegisterInput title={isPlant ? "Plant condition" : "Accessory condition"} placeholder={isPlant ? "Plant condition" : "Accessory condition"} value={condition} onChangeText={setCondition} returnKeyType="done" onSubmitEditing={handleSubmit} style={{ width: "90%", alignSelf: "center" }} />
+            <RegisterInput title={isPlant ? "Plant condition" : "Accessory condition"} placeholder={isPlant ? "Plant condition" : "Accessory condition"} value={condition} onChangeText={setCondition} returnKeyType="next" style={{ width: "90%", alignSelf: "center" }} />
             <RegisterButton title="Add my item" onPress={handleSubmit} disabled={isSubmitting} loading={isSubmitting} style={styles.addButton} />
           </View>
         </ScrollView>
