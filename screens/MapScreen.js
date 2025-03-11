@@ -284,15 +284,15 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "rgba(255,255,255,0.6)", // optionnel, pour atténuer la vue en dessous
+    backgroundColor: "rgba(255,255,255,0.6)", // pour atténuer la vue en dessous
     justifyContent: "center",
     alignItems: "center",
     zIndex: 10, // s'assure que l'indicateur est au-dessus de la MapView
   },
   refreshButton: {
     position: "absolute",
-    top: 80, // positionné en haut
-    right: 30, // positionné à droite
+    bottom: 32,
+    left: 30, 
     backgroundColor: "#2D5334",
     width: 40,
     height: 40,
