@@ -11,23 +11,23 @@ export default function ItemCard({ photo, title, description, price, height, isG
       style={styles.card}
       onPress={() => {
         if (closeModal) {
-          closeModal()
-          navigation.navigate("FullDetailsItem", {
-              itemDetails: {
-                photo,
-                title,
-                description,
-                price,
-                height,
-                isGiven,
-                isPlant,
-                condition,
-                createdAt,
-                createdBy,
-              },
-            });
-          }}
+          closeModal();
         }
+        navigation.navigate("FullDetailsItem", {
+          itemDetails: {
+            photo,
+            title,
+            description,
+            price,
+            height,
+            isGiven,
+            isPlant,
+            condition,
+            createdAt,
+            createdBy,
+          },
+        });
+      }}
     >
       <View style={styles.container}>
         <View style={styles.cardContent}>
@@ -37,53 +37,16 @@ export default function ItemCard({ photo, title, description, price, height, isG
           <View style={styles.infoContainer}>
             <Text style={styles.name}>{title}</Text>
             <View style={styles.badge}>
-              {isPlant ? (
-                <FontAwesome5
-                  name="leaf"
-                  size={16}
-                  color="#2D5334"
-                  style={{ marginRight: 5 }}
-                />
-              ) : (
-                <FontAwesome5
-                  name="hammer"
-                  size={16}
-                  color="#2D5334"
-                  style={{ marginRight: 5 }}
-                />
-              )}
-              <Text style={styles.badgeText}>
-                {isPlant ? "Plant" : "Accessory"}
-              </Text>
+              {isPlant ? <FontAwesome5 name="leaf" size={16} color="#2D5334" style={{ marginRight: 5 }} /> : <FontAwesome5 name="hammer" size={16} color="#2D5334" style={{ marginRight: 5 }} />}
+              <Text style={styles.badgeText}>{isPlant ? "Plant" : "Accessory"}</Text>
             </View>
             <View style={styles.badge}>
-              {isGiven ? (
-                <FontAwesome5
-                  name="hands-helping"
-                  size={16}
-                  color="#2D5334"
-                  style={{ marginRight: 5 }}
-                />
-              ) : (
-                <FontAwesome5
-                  name="shopping-cart"
-                  size={16}
-                  color="#2D5334"
-                  style={{ marginRight: 5 }}
-                />
-              )}
-              <Text style={styles.badgeText}>
-                {isGiven ? "Donation" : "Sale"}
-              </Text>
+              {isGiven ? <FontAwesome5 name="hands-helping" size={16} color="#2D5334" style={{ marginRight: 5 }} /> : <FontAwesome5 name="shopping-cart" size={16} color="#2D5334" style={{ marginRight: 5 }} />}
+              <Text style={styles.badgeText}>{isGiven ? "Donation" : "Sale"}</Text>
             </View>
             {!isGiven && (
               <View style={styles.badge}>
-                <FontAwesome5
-                  name="euro-sign"
-                  size={16}
-                  color="#2D5334"
-                  style={{ marginRight: 5 }}
-                />
+                <FontAwesome5 name="euro-sign" size={16} color="#2D5334" style={{ marginRight: 5 }} />
                 <Text style={styles.badgeText}>{price}</Text>
               </View>
             )}
@@ -106,7 +69,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderWidth: 1,
     borderColor: "#D0DDD0",
-		shadowColor: "#000",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 4,

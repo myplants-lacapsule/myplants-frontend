@@ -150,7 +150,7 @@ export default function MapScreen() {
         <ActivityIndicator
           size="large"
           color="#2D5334"/>
-        <Text style={styles.loadingText}>Loading ...</Text>
+        <Text style={styles.loadingText}>Loading... please wait</Text>
       </View>
     );
   }
