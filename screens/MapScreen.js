@@ -221,6 +221,7 @@ const styles = StyleSheet.create({
     minHeight: 100,
     width: "90%",
     padding: 5,
+		paddingBottom: 15,
     borderRadius: 15,
     backgroundColor: "white",
     marginVertical: 110,
