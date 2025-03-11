@@ -1,4 +1,4 @@
-import React, { useState }  from "react";
+import React, { useState } from "react";
 import { Text, SafeAreaView, ScrollView, StyleSheet, Image, Alert, View, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -13,31 +13,31 @@ export default function FullDetailsPlantComponent() {
 
   // Icônes pour les saisons
   const seasonIcons = {
-    Spring: { label: "Spring", icon: "seedling", color: "#4CAF50" },
-    Summer: { label: "Summer", icon: "sun", color: "#FFD700" },
-    Fall: { label: "Autumn", icon: "leaf", color: "#D2691E" },
-    Winter: { label: "Winter", icon: "snowflake", color: "#00BFFF" },
+    Spring: { label: "Spring", icon: "seedling", color: "#F1F0E9" },
+    Summer: { label: "Summer", icon: "sun", color: "#F1F0E9" },
+    Fall: { label: "Autumn", icon: "leaf", color: "#F1F0E9" },
+    Winter: { label: "Winter", icon: "snowflake", color: "#F1F0E9" },
   };
 
   const currentSeason = seasonIcons[plantDetails.seasonality];
 
   // Icônes pour l'exposition au soleil
   const sunExposureIcons = {
-    "part shade": { label: "Needs shade", icon: "cloud", color: "#808080" },
+    "part shade": { label: "Needs shade", icon: "cloud", color: "#F1F0E9" },
     "full sun": {
       label: "Needs exposure to the sun",
       icon: "sun",
-      color: "#FFD700",
+      color: "#F1F0E9",
     },
     default: {
       label: "Needs exposure to light",
       icon: "cloud-sun",
-      color: "#FFA500",
+      color: "#F1F0E9",
     },
   };
 
   const currentSunExposure = sunExposureIcons[plantDetails.sunExposure.toLowerCase()] || sunExposureIcons["default"];
-  
+
   const deletePlant = async () => {
     Alert.alert(
       "Confirmation",
@@ -101,7 +101,7 @@ export default function FullDetailsPlantComponent() {
               const result = await response.json();
 
               if (result.result) {
-                setIsWatered(true)
+                setIsWatered(true);
               } else {
                 Alert.alert({ text: "Plant not removed" });
               }
@@ -112,46 +112,48 @@ export default function FullDetailsPlantComponent() {
         },
       ],
       { cancelable: false }
-    )
-  }
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
+      <ScrollView  showsVerticalScrollIndicator={true}>
         <Image source={{ uri: plantDetails.photo }} style={styles.image} />
         <Text style={styles.name}>{plantDetails.name}</Text>
-        <ScrollView horizontal={true} style={styles.badgeContainer}>
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>Water every {plantDetails.wateringFrequency} days</Text>
-            <FontAwesome name="tint" size={25} color="#00BFFF" />
-          </View>
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>{plantDetails.sunExposure}</Text>
-            <FontAwesome5 name={currentSunExposure.icon} size={20} color={currentSunExposure.color} style={{ marginRight: 5 }} />
-          </View>
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>{plantDetails.cuisine === "the plant is edible" ? "is edible" : "is not edible"}</Text>
-            <FontAwesome5 name={plantDetails.cuisine === "the plant is edible" ? "check" : "times"} size={20} color={plantDetails.cuisine === "the plant is edible" ? "#2D5334" : "#BC4749"} style={{ marginRight: 5 }} />
-          </View>
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>{plantDetails.toxicity === "Non-toxic" ? "non-toxic" : "is toxic"}</Text>
-            <FontAwesome5 name={plantDetails.toxicity === "Non-toxic" ? "check" : "times"} size={20} color={plantDetails.toxicity === "Non-toxic" ? "#2D5334" : "#BC4749"} style={{ marginRight: 5 }} />
-          </View>
-          <View style={styles.badge}>
+        {!isWatered && (
+          <TouchableOpacity style={styles.badgeIsWateredContainer} onPress={updateLastWatering}>
+            <View style={styles.badgeIsWatered}>
+              <FontAwesome name="tint" size={25} color="#F1F0E9" />
+              <Text style={styles.badgeIsWateredText}>This plant needs water !</Text>
+            </View>
+          </TouchableOpacity>
+        )}
+        <ScrollView showsVerticalScrollIndicator={true} horizontal={true} style={styles.badgeContainer}>
+          <View style={styles.seasonalityBadge}>
+            <FontAwesome5 name={currentSeason.icon} size={20} color={currentSeason.color} />
             <Text style={styles.badgeText}>{plantDetails.seasonality}</Text>
-            <FontAwesome5 name={currentSeason.icon} size={20} color={currentSeason.color} style={{ marginRight: 5 }} />
+          </View>
+          <View style={styles.cuisineBadge}>
+            <FontAwesome5 name={plantDetails.cuisine === "the plant is edible" ? "check" : "times"} size={20} color="#F1F0E9" />
+            <Text style={styles.badgeText}>{plantDetails.cuisine === "the plant is edible" ? "is edible" : "is not edible"}</Text>
+          </View>
+          <View style={styles.toxicityBadge}>
+            <FontAwesome5 name={plantDetails.toxicity === "Non-toxic" ? "check" : "times"} size={20} color="#F1F0E9" />
+            <Text style={styles.badgeText}>{plantDetails.toxicity === "Non-toxic" ? "non-toxic" : "is toxic"}</Text>
+          </View>
+          <View style={styles.sunExposureBadge}>
+            <FontAwesome5 name={currentSunExposure.icon} size={20} color={currentSunExposure.color} />
+            <Text style={styles.badgeText}>{plantDetails.sunExposure}</Text>
+          </View>
+          <View style={styles.wateringFrequencyBadge}>
+            <FontAwesome name="tint" size={20} color="#F1F0E9" />
+            <Text style={styles.badgeText}>Water every {plantDetails.wateringFrequency} days</Text>
           </View>
         </ScrollView>
-        {!isWatered && <TouchableOpacity style={styles.containBadgeIsWatered} onPress={updateLastWatering}>
-          <View style={styles.badgeIsWatered}>
-            <FontAwesome5 name="burn" size={20} color="white" />
-            <Text style={styles.textBadge}>This plant needs water !</Text>
-          </View>
-        </TouchableOpacity>}
-        <View style={styles.containerDescription}>
-          <View style={styles.containerTitle}>
+        <View style={styles.descriptionContainer}>
+          <View style={styles.titleContainer}>
             <FontAwesome5 name="info-circle" size={20} color="#2D5334" />
-            <Text style={styles.titleInformations}>Informations</Text>
+            <Text style={styles.title}>Informations</Text>
           </View>
           <Text style={styles.description}>{plantDetails.description}</Text>
         </View>
@@ -178,45 +180,99 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontFamily: "Merriweather-Bold",
   },
+  badgeIsWateredContainer: {
+    alignItems: "center",
+  },
+  badgeIsWatered: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "auto",
+    gap: 8,
+		marginBottom: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 30,
+    backgroundColor: "#4C9ED9",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 10,
+  },
+  badgeIsWateredText: {
+    color: "#F1F0E9",
+    fontFamily: "OpenSans-Bold",
+  },
   badgeContainer: {
     marginLeft: 10,
     paddingVertical: 10,
   },
-  badge: {
-    width: 190,
+  seasonalityBadge: {
+    width: "auto",
+    gap: 6,
     marginRight: 10,
-    paddingVertical: 3,
+    paddingVertical: 5,
     paddingHorizontal: 15,
-    borderRadius: 35,
-    borderWidth: 1,
-    borderColor: "#2D5334",
-    backgroundColor: "#95AE7D",
+    borderRadius: 5,
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#A8A8A8",
+  },
+  wateringFrequencyBadge: {
+    width: "auto",
+    gap: 6,
+    marginRight: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#3674B5",
+  },
+  sunExposureBadge: {
+    width: "auto",
+    gap: 6,
+    marginRight: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#E27A26",
+  },
+  cuisineBadge: {
+    width: "auto",
+    gap: 6,
+    marginRight: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#95AE7D",
+  },
+  toxicityBadge: {
+    width: "auto",
+    gap: 6,
+    marginRight: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#BC4749",
   },
   badgeText: {
     color: "#F1F0E9",
     fontFamily: "OpenSans-Regular",
-    marginBottom: 5,
   },
-  containBadgeIsWatered:{
-    alignItems: "center",
-  },
-  badgeIsWatered: {
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 16,
-    backgroundColor: "#3674B5",
-    maxWidth: "60%",
-    flexDirection: "row",
-    borderRadius: 16,
-    marginBottom: 10,
-    gap: 8,
-  },
-  textBadge: {
-    color: "white",
-  },
-  containerDescription: {
+  descriptionContainer: {
     width: "85%",
     alignSelf: "center",
     borderWidth: 2,
@@ -225,13 +281,14 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     gap: 12,
     padding: 16,
+		marginTop: 10,
   },
-  containerTitle: {
+  titleContainer: {
     flexDirection: "row",
     gap: 16,
-    alignItems: "center"
+    alignItems: "center",
   },
-  titleInformations: {
+  title: {
     color: "#2D5334",
     fontSize: 16,
     fontFamily: "Merriweather-Bold",
