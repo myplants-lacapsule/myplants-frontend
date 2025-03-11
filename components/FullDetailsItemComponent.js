@@ -99,11 +99,12 @@ export default function FullDetailsItemComponent({ itemDetails }) {
           {itemDetails.price > 0 && <Text style={styles.field}>Price : {itemDetails.price} €</Text>}
           <Text style={styles.field}>Height : {itemDetails.height} cm</Text>
           <Text style={styles.field}>Condition : {formatCondition(itemDetails.condition)}</Text>
-        </View>
-        <View style={styles.bottomContainer}>
-          <Text style={styles.date}>
+					<Text style={styles.date}>
             Listing posted on {createdAt}
           </Text>
+        </View>
+        <View style={styles.bottomContainer}>
+          
           {isOwner ? <RegisterButton title={"Remove from my inventory"} onPress={() => handleDeleteItem()} style={styles.removeButton} /> : <RegisterButton title="Contact the seller" onPress={() => handleContactSeller()} loading={isSubmitting} disabled={isSubmitting} />}
         </View>
       </ScrollView>
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
   title: {
     color: "#2D5334",
     alignSelf: "center",
-    paddingVertical: 10,
+    paddingVertical: 20,
     fontSize: 24,
     fontFamily: "Merriweather-Bold",
   },
