@@ -2,13 +2,19 @@ import React from 'react'
 
 import { View, Text, StyleSheet } from 'react-native'
 
+import moment from 'moment';
+
 export default function Notifications(props) {
+
+    // utilisation de moment pour afficher la date du dernier arrosage
+    const date = moment(props.lastWatering)
+    const lastWatered = moment(date).format('MMMM Do YYYY');
 
     return (
         <View style={styles.notifications}>
             <Text style={styles.text}>Your plant <Text style={styles.textbold}>{props.name}</Text> needs water !</Text>
                 <Text style={styles.text}>The last watering was : <Text style={styles.textbold}>
-                    {""}{new Date(props.lastWatering).toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" })}
+                    {lastWatered}
                 </Text>
             </Text>
         </View>

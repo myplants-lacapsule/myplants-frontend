@@ -14,15 +14,14 @@ export default function UserItemsDetailsScreen() {
   const [itemsForSale, setItemsForSale] = useState([]);
   const [isItemsForSale, setIsItemsForSale] = useState(false);
 
-  useEffect(() => {
-    getItemsByUser();
-  }, []);
+  console.log("itemsForSale", itemsForSale)
 
   useEffect(() => {
     if (!isFocused) {
       setIsItemsForSale(false)
+    } else {
+      getItemsByUser();
     }
-    getItemsByUser();
   }, [isFocused]);
 
   const getItemsByUser = async () => {
