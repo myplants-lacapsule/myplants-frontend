@@ -6,6 +6,8 @@ import { useNavigation } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import RegisterButton from "./RegisterButton";
 
+import moment from 'moment'
+
 export default function FullDetailsItemComponent({ itemDetails }) {
   const navigation = useNavigation();
   const currentUser = useSelector((state) => state.user.value);
