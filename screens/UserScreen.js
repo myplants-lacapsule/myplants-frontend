@@ -1,16 +1,12 @@
 import React from "react";
-import { StyleSheet, Text, View, SafeAreaView } from "react-native";
-
-import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../reducers/user.js"
-
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { useDispatch, useSelector,  } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-
+import { logout } from "../reducers/user.js"
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
-import RegisterButton from "../components/RegisterButton.js";
-import ReturnButton from "../components/ReturnButton.js";
-
+import RegisterButton from "../components/RegisterButton";
+import ReturnButton from "../components/ReturnButton";
 
 export default function UserScreen() {
   const navigation = useNavigation();
@@ -28,7 +24,7 @@ export default function UserScreen() {
       <ReturnButton destination={"Home"} />
       <View style={styles.componentsContainer}>
         <View style={styles.avatarContainer}>
-          <FontAwesome5 name="user-ninja" size={150} color={"#2D5334"} solid={true} />
+          <FontAwesome5 name="user-ninja" size={120} color={"#2D5334"} solid={true} />
         </View>
         <View style={styles.usernameContainer}>
           <Text style={styles.username}>{userInStore.username}</Text>
@@ -53,7 +49,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   avatarContainer: {
-    height: "25%",
+    height: "20%",
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
