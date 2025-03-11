@@ -69,6 +69,11 @@ export default function MapScreen() {
     }
   }, [route.params?.refresh]);
 
+    const closeModal = () => {
+      setModalVisible(false);
+      setSelectedPin(null);
+    };
+
   // Fonction pour récupérer toutes les annonces depuis le backend
   const fetchItems = async () => {
     try {
@@ -150,10 +155,7 @@ export default function MapScreen() {
     );
   }
 
-  const closeModal = () => {
-  setModalVisible(false);
-  setSelectedPin(null);
-};
+
 
   return (
     <View style={{ flex: 1 }}>
