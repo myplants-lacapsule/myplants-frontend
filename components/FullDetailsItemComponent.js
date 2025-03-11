@@ -1,12 +1,19 @@
 import React from "react";
-import { Text, SafeAreaView, ScrollView, StyleSheet, Image, View, Linking } from "react-native";
+import { Text, SafeAreaView, ScrollView, StyleSheet, Image, View, Linking, Alert} from "react-native";
 import { useState } from "react";
 import RegisterButton from "./RegisterButton";
-
+import { useSelector } from "react-redux";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import { useNavigation } from "@react-navigation/native";
 
 export default function FullDetailsItemComponent({ itemDetails }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const currentUser = useSelector((state) => state.user.value);
+  const isOwner = currentUser.token === itemDetails.createdBy.token;
+  const navigation= useNavigation();
+
+  console.log("Details de l'item", itemDetails)
+ 
 
   // Fonction pour mettre la 1ère lettre en minuscule
   const formatCondition = (condition) => {
@@ -28,6 +35,38 @@ export default function FullDetailsItemComponent({ itemDetails }) {
     }
   };
 
+
+  const handleDelete = async () => {
+// Demander une confirmation à l'utilisateur
+    Alert.alert(
+      "Confirmation",
+      "Are you sure you want to delete this item?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: async () => { 
+            try {
+            const itemToken = itemDetails.token;
+            const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/items/deleteItem/${itemToken}`, {
+              method: "DELETE",
+            });
+            const data = await response.json();
+          if (data.result) {
+            Alert.alert("Success", "The item has been deleted.");
+            navigation.goBack(); 
+          }else{
+            Alert.alert("Error", data.error || "Deletion failed.");
+          }
+        }catch(error){Alert.alert("Error", "An error occurred while deleting the item.");}
+        },},], {cancelable:true});
+
+      }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
@@ -39,22 +78,51 @@ export default function FullDetailsItemComponent({ itemDetails }) {
               <FontAwesome5 name="hands-helping" size={16} color="#2D5334" />
             ) : (
               <View style={styles.priceContainer}>
-                <FontAwesome5 name="euro-sign" size={16} color="#2D5334" style={{ marginRight: 5 }} />
+                <FontAwesome5
+                  name="euro-sign"
+                  size={16}
+                  color="#2D5334"
+                  style={{ marginRight: 5 }}
+                />
                 <Text style={styles.priceText}>{itemDetails.price}</Text>
               </View>
             )}
-            <Text style={styles.badgeText}>{itemDetails.isGiven ? "Donation" : "Sale"}</Text>
+            <Text style={styles.badgeText}>
+              {itemDetails.isGiven ? "Donation" : "Sale"}
+            </Text>
           </View>
           <View style={styles.badge}>
-            {itemDetails.isPlant ? <FontAwesome5 name="leaf" size={16} color="#2D5334" /> : <FontAwesome5 name="hammer" size={16} color="#2D5334" />}
-            <Text style={styles.badgeText}>{itemDetails.isPlant ? "Plant" : "Accessory"}</Text>
+            {itemDetails.isPlant ? (
+              <FontAwesome5 name="leaf" size={16} color="#2D5334" />
+            ) : (
+              <FontAwesome5 name="hammer" size={16} color="#2D5334" />
+            )}
+            <Text style={styles.badgeText}>
+              {itemDetails.isPlant ? "Plant" : "Accessory"}
+            </Text>
           </View>
         </View>
         <Text style={styles.description}>{itemDetails.description}</Text>
         <View style={styles.fieldsContainer}>
           <Text style={styles.field}>Height : {itemDetails.height} cm</Text>
-          <Text style={styles.field}>Condition : {formatCondition(itemDetails.condition)}</Text>
-          <RegisterButton title="Contact seller" onPress={() => handleContactSeller()} style={{ marginTop: 40 }} loading={isSubmitting} disabled={isSubmitting} />
+          <Text style={styles.field}>
+            Condition : {formatCondition(itemDetails.condition)}
+          </Text>
+          {isOwner ? (
+            <RegisterButton
+              title={"Remove from my inventory"}
+              onPress={() => handleDelete()}
+              style={styles.removeButton}
+            />
+          ) : (
+            <RegisterButton
+              title="Contact seller"
+              onPress={() => handleContactSeller()}
+              style={{ marginTop: 40 }}
+              loading={isSubmitting}
+              disabled={isSubmitting}
+            />
+          )}
           <Text style={styles.dateField}>
             Listing posted on {""}
             {new Date(itemDetails.createdAt).toLocaleDateString("en-US", {
@@ -64,7 +132,6 @@ export default function FullDetailsItemComponent({ itemDetails }) {
             })}
           </Text>
         </View>
-        <RegisterButton title={"Remove from my inventory"} style={styles.removeButton} />
       </ScrollView>
     </SafeAreaView>
   );
