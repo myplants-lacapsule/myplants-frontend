@@ -41,7 +41,7 @@ export default function SearchScreen() {
       setShowCamera(false);
       setInputResearch("");
       setShowSuggestions(false);
-      setLoading(false)
+      setLoading(false);
       if (!showSuggestions) {
         setPlantsData(null);
       }
@@ -51,7 +51,7 @@ export default function SearchScreen() {
   // fonction pour la prise de photo
   const takePicture = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       const photo = await cameraRef.current.takePictureAsync({ quality: 0.3 });
       // console.log(photo)
       if (photo && photo.uri) {
@@ -136,15 +136,15 @@ export default function SearchScreen() {
     } catch (error) {
       console.error("Error when taking the picture", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
   const idenficationDetailsPlant = async (plantName, cloudinaryUrl) => {
     try {
       //appel 2ème API pour récupérer l'id de la plante
-      
-      setLoading(true) // passage du loading à true
+
+      setLoading(true); // passage du loading à true
       const responsePerenual = await fetch(`https://perenual.com/api/v2/species-list?key=${perenualKey}&q=${plantName}`);
       // console.log("responsePerenual ", responsePerenual)
 
@@ -173,7 +173,6 @@ export default function SearchScreen() {
 
       // si l'id est trouvé, on récupère les détails de la plante
       if (idPerenual) {
-
         const fetchPerenualDetails = await fetch(`https://perenual.com/api/v2/species/details/${idPerenual}?key=${perenualKey}`);
         if (!fetchPerenualDetails.ok) {
           throw new Error("Invalid data received from Perenual API");
@@ -225,13 +224,13 @@ export default function SearchScreen() {
       console.error("Plant not found", error);
       Alert.alert("Error", "An error occurred while fetching plant details.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
   const addPlantToBackend = async (plantsData) => {
     try {
-      setLoading(true)
+      setLoading(true);
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/newPlant/${userInStore.token}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -266,10 +265,12 @@ export default function SearchScreen() {
               <FontAwesome name="camera" size={30} color="white" />
             </TouchableOpacity>
           </View>
-          {loading && <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#2D5334" />
-            <Text style={styles.loadingText}>Loading... please wait</Text>
-          </View>}
+          {loading && (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color="#2D5334" />
+              <Text style={styles.loadingText}>Loading... please wait</Text>
+            </View>
+          )}
         </View>
       )}
 

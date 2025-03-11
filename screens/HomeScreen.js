@@ -18,8 +18,11 @@ export default function HomeScreen() {
   const [numberPlantNeedsWater, setNumberPlantNeedsWater] = useState(0);
 
   useEffect(() => {
-    fetchPlants();
-    setNoPlantData(false);
+    if (!isFocused) {
+      setNoPlantData(false);
+    } else {
+      fetchPlants();
+    }
   }, [isFocused]);
 
   const fetchPlants = async () => {
@@ -32,7 +35,6 @@ export default function HomeScreen() {
         setPlantsData([])
         setNoPlantData(true);
       } else {
-        setNoPlantData(false);
         setPlantsData(data.data);
         setNumberPlantNeedsWater(data.numberPlantNeedsWater)
       }
