@@ -81,16 +81,16 @@ export default function FullDetailsItemComponent({ itemDetails }) {
         <View style={styles.badgeRow}>
           <View style={styles.badge}>
             {itemDetails.isGiven ? (
-              <FontAwesome5 name="hands-helping" size={16} color="#2D5334" />
+              <FontAwesome5 name="hands-helping" size={16} color="#F1F0E9" />
             ) : (
               <View style={styles.priceContainer}>
-                <FontAwesome5 name="shopping-cart" size={16} color="#2D5334" />
+                <FontAwesome5 name="shopping-cart" size={16} color="#F1F0E9" />
               </View>
             )}
             <Text style={styles.badgeText}>{itemDetails.isGiven ? "Donation" : "Sale"}</Text>
           </View>
           <View style={styles.badge}>
-            {itemDetails.isPlant ? <FontAwesome5 name="leaf" size={16} color="#2D5334" /> : <FontAwesome5 name="hammer" size={16} color="#2D5334" />}
+            {itemDetails.isPlant ? <FontAwesome5 name="leaf" size={16} color="#F1F0E9" /> : <FontAwesome5 name="hammer" size={16} color="#F1F0E9" />}
             <Text style={styles.badgeText}>{itemDetails.isPlant ? "Plant" : "Accessory"}</Text>
           </View>
         </View>
@@ -144,10 +144,10 @@ const styles = StyleSheet.create({
   },
   badge: {
     width: 130,
-    paddingVertical: 5,
+    paddingVertical: 8,
     paddingHorizontal: 15,
     borderRadius: 5,
-    backgroundColor: "#95AE7D",
+    backgroundColor: "#2D5334",
     alignItems: "center",
     justifyContent: "space-around",
     flexDirection: "row",
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
   },
   date: {
     marginVertical: 10,
-    marginLeft: 10,
+    marginLeft: 3,
     color: "#2D5334",
     fontSize: 16,
     fontStyle: "italic",
