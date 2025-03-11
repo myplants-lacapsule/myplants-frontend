@@ -5,6 +5,8 @@ import RegisterButton from "./RegisterButton";
 
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
+import moment from "moment"
+
 export default function FullDetailsItemComponent({ itemDetails }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -27,6 +29,9 @@ export default function FullDetailsItemComponent({ itemDetails }) {
       setIsSubmitting(false);
     }
   };
+  //moment pour formater la date
+  const date = moment(itemDetails.createdAt)
+  const createdAt = date.format("MMMM Do YYYY")
 
   return (
     <SafeAreaView style={styles.container}>
@@ -56,12 +61,7 @@ export default function FullDetailsItemComponent({ itemDetails }) {
           <Text style={styles.field}>Condition : {formatCondition(itemDetails.condition)}</Text>
           <RegisterButton title="Contact seller" onPress={() => handleContactSeller()} style={{ marginTop: 40 }} loading={isSubmitting} disabled={isSubmitting} />
           <Text style={styles.dateField}>
-            Listing posted on {""}
-            {new Date(itemDetails.createdAt).toLocaleDateString("en-US", {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-            })}
+            Listing posted on {createdAt}
           </Text>
         </View>
         <RegisterButton title={"Remove from my inventory"} style={styles.removeButton} />
