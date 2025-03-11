@@ -10,7 +10,9 @@ export default function ItemCard({ photo, title, description, price, height, isG
     <TouchableOpacity
       style={styles.card}
       onPress={() => {
-        if (closeModal) closeModal();
+        if (closeModal) {
+          closeModal();
+        }
         navigation.navigate("FullDetailsItem", {
           itemDetails: {
             photo,
@@ -22,7 +24,7 @@ export default function ItemCard({ photo, title, description, price, height, isG
             isPlant,
             condition,
             createdAt,
-            createdBy
+            createdBy,
           },
         });
       }}
@@ -67,7 +69,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderWidth: 1,
     borderColor: "#D0DDD0",
-		shadowColor: "#000",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
