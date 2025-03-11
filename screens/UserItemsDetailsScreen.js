@@ -14,8 +14,6 @@ export default function UserItemsDetailsScreen() {
   const [itemsForSale, setItemsForSale] = useState([]);
   const [isItemsForSale, setIsItemsForSale] = useState(false);
 
-  console.log("itemsForSale", itemsForSale)
-
   useEffect(() => {
     if (!isFocused) {
       setIsItemsForSale(false)
