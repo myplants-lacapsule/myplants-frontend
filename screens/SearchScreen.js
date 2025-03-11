@@ -9,6 +9,7 @@ import CameraSearch from "../components/CameraSearch";
 import SearchBar from "../components/SearchBar";
 import ReturnButton from "../components/ReturnButton.js";
 import SuggestionPlantCard from "../components/SuggestionPlantCard";
+import Facts from '../components/Facts.js'
 
 export default function SearchScreen() {
   const perenualKey = "sk-RB2z67cecb13330dc9059";
@@ -265,12 +266,12 @@ export default function SearchScreen() {
               <FontAwesome name="camera" size={30} color="white" />
             </TouchableOpacity>
           </View>
-          {loading && (
+          {loading ? (
             <View style={styles.loadingContainer}>
               <ActivityIndicator size="large" color="#2D5334" />
               <Text style={styles.loadingText}>Loading... please wait</Text>
             </View>
-          )}
+          ): <Facts />}
         </View>
       )}
 
