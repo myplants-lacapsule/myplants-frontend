@@ -1,15 +1,25 @@
 import React from "react";
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
-import { useSelector } from "react-redux";
+
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../reducers/user.js"
+
 import { useNavigation } from "@react-navigation/native";
+
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 import RegisterButton from "../components/RegisterButton.js";
 import ReturnButton from "../components/ReturnButton.js";
 
+
 export default function UserScreen() {
   const navigation = useNavigation();
-  const userInStore = useSelector((state) => state.user.value);
+  const dispatch = useDispatch();
+
+  const logoutUser = () => {
+    dispatch(logout())
+    navigation.navigate("WelcomeScreen")
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -23,7 +33,7 @@ export default function UserScreen() {
         </View>
         <RegisterButton title="My items for sale" onPress={() => navigation.navigate("UserItemsDetailsScreen")} style={styles.button} />
         <RegisterButton title="Settings" style={styles.button} />
-        <RegisterButton title="Log out" onPress={() => navigation.navigate("WelcomeScreen")} style={styles.button} />
+        <RegisterButton title="Log out" onPress={logoutUser} style={styles.button} />
       </View>
     </SafeAreaView>
   );
