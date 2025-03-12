@@ -9,8 +9,7 @@ export default function NotificationScreen({ route }) {
 
   // Affichage des notifications pour chaque plante non arrosée
   const notificationsUnwateredPlant =
-    unwateredPlant.length > 0 &&
-    unwateredPlant.map((data, i) => {
+    unwateredPlant.length > 0 && unwateredPlant.map((data, i) => {
       return <Notifications key={i} {...data} />;
     });
 

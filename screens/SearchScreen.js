@@ -159,7 +159,7 @@ export default function SearchScreen() {
       const dataPerenual = await responsePerenual.json();
       // console.log("dataPerenual", dataPerenual)
 
-      console.log(dataPerenual)
+      // console.log(dataPerenual)
 
 			// Vérification si la plante est bien référencée
       if (dataPerenual.total === 0) {
