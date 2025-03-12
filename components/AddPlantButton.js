@@ -1,31 +1,29 @@
 import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-function AddPlantButton() {
+export default function AddPlantButton() {
   return (
-    <View style={styles.btn}>
+    <View style={styles.button}>
       <FontAwesome name="check" size={32} color={"white"} />
-      <Text style={styles.textbtn}>Add to my inventory</Text>
+      <Text style={styles.textButton}>Add to my inventory</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  btn: {
-    width: "100%",
-    borderRadius: 5,
-    backgroundColor: "#95AE7D",
-    padding: 24,
+  button: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    width: "100%",
+    padding: 24,
+    borderRadius: 5,
+    backgroundColor: "#95AE7D",
   },
-  textbtn: {
+  textButton: {
     color: "#F1F0E9",
-    fontWeight: "600",
     fontSize: 16,
+    fontWeight: "600",
   },
 });
-
-export default AddPlantButton;

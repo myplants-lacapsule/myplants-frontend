@@ -2,7 +2,7 @@ import React from "react";
 import { View, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-function SearchBar({ inputResearch, setInputResearch, onSearch }) {
+export default function SearchBar({ inputResearch, setInputResearch, onSearch }) {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => onSearch(inputResearch)} style={styles.searchIcon}>
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   searchIcon: {
-		position: "absolute",
+    position: "absolute",
     left: 20,
     zIndex: 30,
   },
@@ -36,5 +36,3 @@ const styles = StyleSheet.create({
     paddingLeft: 60,
   },
 });
-
-export default SearchBar;
