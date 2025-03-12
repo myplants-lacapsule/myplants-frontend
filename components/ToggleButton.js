@@ -1,7 +1,7 @@
 import React from "react";
-import { View, Text, Switch, StyleSheet } from "react-native";
+import { StyleSheet, Switch, Text, View } from "react-native";
 
-const ToggleButton = ({ value, onValueChange, trueLabel, falseLabel }) => {
+export default function ToggleButton ({ value, onValueChange, trueLabel, falseLabel }) {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{value ? trueLabel : falseLabel}</Text>
@@ -12,13 +12,11 @@ const ToggleButton = ({ value, onValueChange, trueLabel, falseLabel }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row", // Affiche l'étiquette et le switch sur la même ligne
     alignItems: "center",
+    flexDirection: "row",
   },
   label: {
-    marginRight: 10,
     fontSize: 16,
+    marginRight: 10,
   },
 });
-
-export default ToggleButton;

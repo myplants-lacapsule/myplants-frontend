@@ -182,30 +182,24 @@ export default function MapScreen() {
   return (
     <View style={{ flex: 1 }}>
       <MapView style={{ flex: 1 }} initialRegion={initialRegion}>
-        {currentPosition && (
-          <Marker coordinate={currentPosition} pinColor="red" />
-        )}
-        {uniquePin && uniquePin.length > 0
-          ? uniquePin.map((pin, i) => (
-              <Marker
-                key={`${pin.token}-${
-                  selectedPin === pin.token ? "selected" : "default"
-                }`}
-                token={pin.token}
-                coordinate={{
-                  latitude: pin.lat,
-                  longitude: pin.long,
-                }}
-                pinColor="blue"
-                onPress={() => {
-                  setSelectedPin(pin.token); // Mise à jour de l'état du marker sélectionné
-                  handleMarkerPress(pin.token);
-                }}
-                calloutEnabled={false}
-                tracksViewChanges={false}
-              />
-            ))
-          : null}
+        {currentPosition && <Marker coordinate={currentPosition} pinColor="red" />}
+        {uniquePin.map((pin, i) => (
+          <Marker
+            key={`${pin.token}-${selectedPin === pin.token ? "selected" : "default"}`}
+            token={pin.token}
+            coordinate={{
+              latitude: pin.lat,
+              longitude: pin.long,
+            }}
+            pinColor="blue"
+            onPress={() => {
+              setSelectedPin(pin.token); // Mise à jour de l'état du marker sélectionné
+              handleMarkerPress(pin.token);
+            }}
+            calloutEnabled={false}
+            tracksViewChanges={false}
+          />
+        ))}
       </MapView>
       {pinsLoading && (
         <View style={styles.loaderOverlay}>
@@ -216,30 +210,18 @@ export default function MapScreen() {
       <Modal visible={modalVisible} animationType="fade" transparent>
         <View style={styles.modalContainer}>
           <SafeAreaView style={styles.modal}>
-            <FontAwesome5
-              name="times-circle"
-              size={25}
-              solid={true}
-              style={styles.closeButton}
-              onPress={closeModal}
-            />
-            <ScrollView
-              showsVerticalScrollIndicator={true}
-              style={styles.cardContainer}
-            >
+            <FontAwesome5 name="times-circle" size={25} solid={true} style={styles.closeButton} onPress={closeModal} />
+            <ScrollView showsVerticalScrollIndicator={true} style={styles.cardContainer}>
               {userItems}
             </ScrollView>
           </SafeAreaView>
         </View>
       </Modal>
       <TouchableOpacity style={styles.refreshButton} onPress={fetchItems}>
-        <FontAwesome5 name="sync-alt" size={20} color="#FBFBFB" />
+        <FontAwesome5 name="sync-alt" size={20} color="#F1F0E9" />
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.MyItemsForSaleButton}
-        onPress={() => navigation.navigate("UserItemsDetailsScreen")}
-      >
-        <Text style={styles.MyItemsFosSaleButtonText}>My items for sale</Text>
+      <TouchableOpacity style={styles.myItemsForSaleButton} onPress={() => navigation.navigate("UserItemsDetailsScreen")}>
+        <Text style={styles.myItemsFosSaleButtonText}>My items for sale</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
         <Text style={styles.addButtonText}>+</Text>
@@ -262,15 +244,15 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     marginTop: 10,
+    color: "#2D5334",
     fontSize: 18,
     fontFamily: "OpenSans-Regular",
-    color: "#2D5334",
   },
   modalContainer: {
     flex: 1,
     height: 150,
-    justifyContent: "center",
     alignItems: "center",
+    justifyContent: "center",
   },
   modal: {
     position: "relative",
@@ -279,9 +261,9 @@ const styles = StyleSheet.create({
     width: "90%",
     padding: 5,
     paddingBottom: 15,
+    marginVertical: 110,
     borderRadius: 15,
     backgroundColor: "white",
-    marginVertical: 110,
   },
   closeButton: {
     color: "#2D5334",
@@ -292,14 +274,14 @@ const styles = StyleSheet.create({
   },
   addButton: {
     position: "absolute",
-    bottom: 28,
+    bottom: 60,
     right: 30,
-    backgroundColor: "#2D5334",
     width: 50,
     height: 50,
     borderRadius: 35,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#2D5334",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
@@ -307,7 +289,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   addButtonText: {
-    color: "#FBFBFB",
+    color: "#F1F0E9",
     fontWeight: "bold",
     fontSize: 30,
     textAlign: "center",
@@ -319,37 +301,44 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "rgba(255,255,255,0.6)", // pour atténuer la vue en dessous
-    justifyContent: "center",
     alignItems: "center",
+    justifyContent: "center",
     zIndex: 10, // s'assure que l'indicateur est au-dessus de la MapView
+    backgroundColor: "rgba(255,255,255,0.6)", // pour atténuer la vue en dessous
   },
   refreshButton: {
     position: "absolute",
-    bottom: 32,
+    bottom: 65,
     left: 30,
-    backgroundColor: "#2D5334",
     width: 40,
     height: 40,
     borderRadius: 35,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#2D5334",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
     elevation: 10,
   },
-  MyItemsForSaleButton: {
+  myItemsForSaleButton: {
     position: "absolute",
-    bottom: 32,
-    left: 119,
-    textAlign: "center",
-    backgroundColor: "#2D5334",
+    bottom: 65,
     width: 170,
     height: 40,
     borderRadius: 35,
-    alignItems: "center",
+    alignSelf: "center",
     justifyContent: "center",
+    textAlign: "center",
+    backgroundColor: "#2D5334",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
     elevation: 10,
   },
-  MyItemsFosSaleButtonText: {
+  myItemsFosSaleButtonText: {
     color: "#F1F0E9",
     fontSize: 16,
     fontWeight: "bold",

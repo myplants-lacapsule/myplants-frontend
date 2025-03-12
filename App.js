@@ -56,6 +56,7 @@ const TabNavigator = () => {
         tabBarActiveTintColor: "#F1F0E9",
         tabBarInactiveTintColor: "#F1F0E9",
         tabBarStyle: {
+					position: 'absolute',
           backgroundColor: "#2D5334",
           borderTopLeftRadius: 10,
           borderTopRightRadius: 10,
@@ -124,4 +125,5 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans-Regular",
     fontSize: 12,
   },
+	
 });

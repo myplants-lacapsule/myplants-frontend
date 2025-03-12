@@ -158,16 +158,25 @@ export default function SearchScreen() {
 
       const dataPerenual = await responsePerenual.json();
       // console.log("dataPerenual", dataPerenual)
-      const idPerenual = dataPerenual.data[0].id;
+
+      console.log(dataPerenual)
 
 			// Vérification si la plante est bien référencée
-      if (dataPerenual.total === 0 || idPerenual >= 3000) {
+      if (dataPerenual.total === 0) {
         setInputResearch("");
         Alert.alert("The plant you are looking for is not in our database", "Please try another");
         return;
       }
 
       // console.log(idPerenual)
+
+      // Vérification si l'id de la plante < 3000 car l'api en free propose seulement 3000 ID
+      const idPerenual = dataPerenual.data[0].id;
+      if (idPerenual >= 3000){
+        setInputResearch("");
+        Alert.alert("The plant you are looking for is not in our database", "Please try another");
+        return;
+      }
 
       // Récupération des détails de la plante
       if (idPerenual) {
@@ -287,7 +296,7 @@ export default function SearchScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 40,
+    paddingTop: 20,
     backgroundColor: "#F1F0E9",
   },
   searchContainer: {
@@ -295,7 +304,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     alignItems: "center",
     height: "15%",
-    marginTop: 40,
+    marginTop: 20,
   },
   takePhoto: {
     width: 90,
