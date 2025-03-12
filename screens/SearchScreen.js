@@ -287,7 +287,7 @@ export default function SearchScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 40,
+    paddingTop: 20,
     backgroundColor: "#F1F0E9",
   },
   searchContainer: {
@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     alignItems: "center",
     height: "15%",
-    marginTop: 40,
+    marginTop: 20,
   },
   takePhoto: {
     width: 90,

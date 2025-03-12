@@ -119,7 +119,9 @@ export default function FullDetailsPlantComponent() {
       <ScrollView showsVerticalScrollIndicator={true}>
         {!isWatered && (
           <View style={styles.waterAlertBanner}>
-            <Text style={styles.waterAlertText}>This plant needs water</Text>
+						<FontAwesome name="exclamation-triangle" size={20} color="#F1F0E9" />
+            <Text style={styles.waterAlertText}>NEEDS</Text>
+						<Text style={styles.waterAlertText}>WATER</Text>
           </View>
         )}
         <Image source={{ uri: plantDetails.photo }} style={styles.image} />
@@ -187,18 +189,19 @@ const styles = StyleSheet.create({
   },
   waterAlertBanner: {
     position: "absolute",
-    bottom: 725,
-    left: 150,
-    backgroundColor: "#BC4749",
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    borderRadius: 25,
-		transform: [{ rotate: "-35deg" }],
-    zIndex: 1,
+		zIndex: 1,
+    top: 25,
+    left: 45,
+		alignItems: 'center',
+		justifyContent: 'center',
+		width: 80,
+		height: 80,
+    borderRadius: 40,
+		backgroundColor: "#BC4749",
   },
   waterAlertText: {
     color: "#F1F0E9",
-    fontSize: 14,
+    fontSize: 12,
     fontFamily: "OpenSans-Bold",
   },
   isWateredBadgeContainer: {
