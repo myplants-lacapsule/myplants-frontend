@@ -14,7 +14,7 @@ import Facts from "../components/Facts";
 export default function SearchScreen() {
 	// Clés API pour la reconnaissance et la recherche de plantes
   const perenualKey = "sk-RB2z67cecb13330dc9059";
-  const plantidKey = "MPTt3cQB5Z8PlOmOhGC3XBagUam7WtPUfCJ66Q9e4p0YdSvOAS";
+  const plantidKey = "T2LrJMPADWmtW0HvyWVLSz42OQz5OgXtZO1Ep8pqvjHWLiNqjX";
 
   const userInStore = useSelector((state) => state.user.value);
   const navigation = useNavigation();
