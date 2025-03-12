@@ -7,17 +7,17 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 import CameraSearch from "../components/CameraSearch";
 import SearchBar from "../components/SearchBar";
-import ReturnButton from "../components/ReturnButton.js";
+import ReturnButton from "../components/ReturnButton";
 import SuggestionPlantCard from "../components/SuggestionPlantCard";
-import Facts from '../components/Facts.js'
+import Facts from "../components/Facts";
 
 export default function SearchScreen() {
   const perenualKey = "sk-RB2z67cecb13330dc9059";
   const plantidKey = "MPTt3cQB5Z8PlOmOhGC3XBagUam7WtPUfCJ66Q9e4p0YdSvOAS";
 
   const userInStore = useSelector((state) => state.user.value);
-
   const navigation = useNavigation();
+  const cameraRef = useRef(null);
 
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
@@ -28,9 +28,7 @@ export default function SearchScreen() {
   const isFocused = useIsFocused();
   const [hasPermission, setHasPermission] = useState(false); // état de la permission
 
-  const cameraRef = useRef(null);
-
-  // obtenir la permission de la caméra au clic sur le bouton photo
+  // Obtenir la permission de la caméra au clic sur le bouton photo
   const getPermission = async () => {
     const status = await Camera.requestCameraPermissionsAsync();
     setHasPermission(status && status?.status === "granted");
@@ -49,7 +47,7 @@ export default function SearchScreen() {
     }
   }, [isFocused, showSuggestions]);
 
-  // fonction pour la prise de photo
+  // Fonction pour la prise de photo
   const takePicture = async () => {
     try {
       setLoading(true);
@@ -58,14 +56,14 @@ export default function SearchScreen() {
       if (photo && photo.uri) {
         sendPictureToBack(photo.uri);
       } else {
-        Alert.alert("Photo not found", "Please retry");
+        Alert.alert("An error occurred while taking the picture", "Please try again");
       }
     } catch (error) {
       console.error("Error taking picture:", error);
     }
   };
 
-  // fonction pour envoyer la photo vers le back
+  // Fonction pour envoyer la photo vers le backend
   const sendPictureToBack = async (photoUri) => {
     try {
       const formData = new FormData();
@@ -81,9 +79,10 @@ export default function SearchScreen() {
       });
 
       // console.log("response from plants/upload", response)
+
       if (!response.ok) {
         // throw new Error("Network response was not ok");
-        Alert.alert("Error sending the photo", "Please retry");
+        Alert.alert("A network error occurred", "Please try again");
       }
 
       const responseFromCloudinary = await response.json();
@@ -92,13 +91,14 @@ export default function SearchScreen() {
       if (responseFromCloudinary.url) {
         identificationPlantId(responseFromCloudinary.url);
       } else {
-        Alert.alert("Error", "Please retry");
+        Alert.alert("Error", "Please try again");
       }
     } catch (error) {
       console.error("Error sending picture:", error);
     }
   };
 
+  // Fonction pour identifier la plante grâce à la photo
   const identificationPlantId = async (cloudinaryUrl) => {
     var myHeaders = new Headers();
     myHeaders.append("Api-Key", plantidKey);
@@ -121,7 +121,7 @@ export default function SearchScreen() {
       // console.log("reponse from identificaiton", response)
 
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        throw new Error("Network response invalid");
       }
 
       const data = await response.json();
@@ -130,22 +130,21 @@ export default function SearchScreen() {
       const plantName = data.result.classification.suggestions[0].name;
 
       if (plantProbability < 0.75 || !plantProbability) {
-        Alert.alert("Plant not found", "Please try again");
+        Alert.alert("The plant you are looking for is not in our database", "Please try another.");
       } else {
         await idenficationDetailsPlant(plantName, cloudinaryUrl);
       }
     } catch (error) {
-      console.error("Error when taking the picture", error);
+      console.error("Error taking picture", error);
     } finally {
       setLoading(false);
     }
   };
 
+  // Fonction pour chercher l'ID de la plante en fonction de son nom dans une 2e API
   const idenficationDetailsPlant = async (plantName, cloudinaryUrl) => {
     try {
-      //appel 2ème API pour récupérer l'id de la plante
-
-      setLoading(true); // passage du loading à true
+      setLoading(true);
       const responsePerenual = await fetch(`https://perenual.com/api/v2/species-list?key=${perenualKey}&q=${plantName}`);
       // console.log("responsePerenual ", responsePerenual)
 
@@ -157,22 +156,18 @@ export default function SearchScreen() {
       const dataPerenual = await responsePerenual.json();
       // console.log("dataPerenual", dataPerenual)
 
-      // check si la plante est trouvée
-      if (dataPerenual.total === 0) {
-        setInputResearch("");
-        Alert.alert("Plant not found", "Please try again");
-        return;
-      }
-
+      // Vérification si la plante est trouvée
       const idPerenual = dataPerenual.data[0].id;
 
-      if (idPerenual >= 3000) {
-        Alert.alert("ID de plante trop élevé", "On paie pas le premium alors cherche une autre plante");
+      if (dataPerenual.total === 0 || idPerenual >= 3000) {
+        setInputResearch("");
+        Alert.alert("The plant you are looking for is not in our database", "Please try another");
         return;
       }
+
       // console.log(idPerenual)
 
-      // si l'id est trouvé, on récupère les détails de la plante
+      // Si elle est trouvée, on récupère les détails de la plante
       if (idPerenual) {
         const fetchPerenualDetails = await fetch(`https://perenual.com/api/v2/species/details/${idPerenual}?key=${perenualKey}`);
         if (!fetchPerenualDetails.ok) {
@@ -229,6 +224,7 @@ export default function SearchScreen() {
     }
   };
 
+  // Fonction pour enregistrer la plante dans le backend (dans l'inventaire de l'utilisateur)
   const addPlantToBackend = async (plantsData) => {
     try {
       setLoading(true);
@@ -238,7 +234,7 @@ export default function SearchScreen() {
         body: JSON.stringify(plantsData),
       });
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        throw new Error("Network response invalid");
       }
       const newPlant = await response.json();
 
@@ -248,7 +244,7 @@ export default function SearchScreen() {
         setPlantsData({});
         navigation.navigate("Home");
       } else {
-        Alert.alert("Error", "Please retry");
+        Alert.alert("Error", "Please try again");
       }
     } catch (error) {
       console.error("Error adding plant to backend", error);
@@ -260,7 +256,7 @@ export default function SearchScreen() {
       {!showCamera && !showSuggestions && (
         <View>
           <ReturnButton title="Search for a plant" />
-          <View style={styles.containsearch}>
+          <View style={styles.searchContainer}>
             <SearchBar inputResearch={inputResearch} setInputResearch={setInputResearch} onSearch={() => idenficationDetailsPlant(inputResearch)} />
             <TouchableOpacity style={styles.takePhoto} onPress={getPermission}>
               <FontAwesome name="camera" size={30} color="white" />
@@ -271,12 +267,12 @@ export default function SearchScreen() {
               <ActivityIndicator size="large" color="#2D5334" />
               <Text style={styles.loadingText}>Loading... please wait</Text>
             </View>
-          ): <Facts />}
+          ) : (
+            <Facts />
+          )}
         </View>
       )}
-
       {(hasPermission === true || isFocused) && showCamera && <CameraSearch loading={loading} takePicture={takePicture} cameraRef={cameraRef} setShowCamera={setShowCamera} showCamera={showCamera} />}
-
       {showSuggestions && !showCamera && !loading && (
         <View>
           <SuggestionPlantCard plantsData={plantsData} addPlantToBackend={() => addPlantToBackend(plantsData)} />
@@ -292,55 +288,30 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     backgroundColor: "#F1F0E9",
   },
-  containsearch: {
-    height: "15%",
-    display: "flex",
+  searchContainer: {
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
+    height: "15%",
     marginTop: 40,
   },
   takePhoto: {
-    backgroundColor: "#2D5334",
     width: 90,
     height: 60,
     borderRadius: 30,
     alignItems: "center",
     justifyContent: "center",
-  },
-  camera: {
-    width: "100%",
-    height: "100%",
-    justifyContent: "flex-end",
-    alignItems: "center",
-  },
-  cameraContainer: {
-    height: 100,
-    width: 100,
-    borderRadius: "100%",
-    borderColor: "red",
-    backgroundColor: "#F8F3D9",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  snapButton: {
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: "30",
-  },
-  btn: {
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: "#2D5334",
   },
   loadingContainer: {
+		marginTop: 150,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 150,
   },
   loadingText: {
     marginTop: 10,
+		color: "#2D5334",
     fontSize: 18,
     fontFamily: "OpenSans-Regular",
-    color: "#2D5334",
   },
 });
