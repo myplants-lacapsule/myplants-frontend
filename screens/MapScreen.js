@@ -210,6 +210,14 @@ export default function MapScreen() {
       <TouchableOpacity style={styles.refreshButton} onPress={fetchItems}>
         <FontAwesome5 name="sync-alt" size={20} color="#FBFBFB" />
       </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.MyItemsForSaleButton}
+        onPress={() =>
+          navigation.navigate("UserItemsDetailsScreen")
+        }
+      >
+        <Text style={styles.MyItemsFosSaleButtonText}>My items for sale</Text>
+      </TouchableOpacity>
       <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
         <Text style={styles.addButtonText}>+</Text>
       </TouchableOpacity>
@@ -247,7 +255,7 @@ const styles = StyleSheet.create({
     minHeight: 100,
     width: "90%",
     padding: 5,
-		paddingBottom: 15,
+    paddingBottom: 15,
     borderRadius: 15,
     backgroundColor: "white",
     marginVertical: 110,
@@ -261,7 +269,7 @@ const styles = StyleSheet.create({
   },
   addButton: {
     position: "absolute",
-    bottom: 30,
+    bottom: 28,
     right: 30,
     backgroundColor: "#2D5334",
     width: 50,
@@ -279,6 +287,8 @@ const styles = StyleSheet.create({
     color: "#FBFBFB",
     fontWeight: "bold",
     fontSize: 30,
+    textAlign: "center",
+    transform: [{ translateY: -2 }], // pour centrer le + dans le bouton
   },
   loaderOverlay: {
     position: "absolute",
@@ -294,7 +304,7 @@ const styles = StyleSheet.create({
   refreshButton: {
     position: "absolute",
     bottom: 32,
-    left: 30, 
+    left: 30,
     backgroundColor: "#2D5334",
     width: 40,
     height: 40,
@@ -302,5 +312,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     elevation: 10,
+  },
+  MyItemsForSaleButton: {
+    position: "absolute",
+    bottom: 32,
+    left: 119,
+    textAlign: "center",
+    backgroundColor: "#2D5334",
+    width: 170,
+    height: 40,
+    borderRadius: 35,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 10,
+  },
+  MyItemsFosSaleButtonText: {
+    color: "#F1F0E9",
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
