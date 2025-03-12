@@ -1,7 +1,21 @@
-import { ActivityIndicator, Alert, Modal, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  Modal,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
+import {
+  useIsFocused,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
@@ -57,19 +71,14 @@ export default function MapScreen() {
   }, []);
 
   // Appeler fetchItems une fois que le composant MapScreen est chargé
-  useEffect(() => {
-    if (!isFocused) {
-      setUniquePin([]);
-    }
-    fetchItems();
-  }, [isFocused]);
-
+  // ou
   // Rafraîchir la carte si on revient depuis NewItemScreen avec refresh: true
+
   useEffect(() => {
-    if (route.params?.refresh) {
+    if (isFocused || route.params?.refresh) {
       fetchItems();
     }
-  }, [route.params?.refresh]);
+  }, [isFocused, route.params]);
 
   const closeModal = () => {
     setModalVisible(false);
@@ -80,9 +89,11 @@ export default function MapScreen() {
   const fetchItems = async () => {
     try {
       setPinsLoading(true);
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/items/allItems`);
+      const response = await fetch(
+        `${process.env.EXPO_PUBLIC_API_URL}/items/allItems`
+      );
       const data = await response.json();
-      if (data.result) {
+      if (data.result && data.items && data.items.length > 0) {
         // Regrouper les annonces par utilisateur pour n'afficher qu'un seul marker par user
         const pinsMap = {};
         data.items.forEach((item) => {
@@ -98,6 +109,7 @@ export default function MapScreen() {
           }
         });
         setUniquePin(Object.values(pinsMap));
+        // S'il n'y a aucun article, on s'assure que uniquePin reste un tableau vide
       }
     } catch (error) {
       console.error("Error fetching items:", error);
@@ -109,19 +121,26 @@ export default function MapScreen() {
   // Affichage de la modale lorsque l'utilisateur appuie sur un marqueur
   const handleMarkerPress = async (userToken) => {
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/items/byUser/${userToken}`);
+      const response = await fetch(
+        `${process.env.EXPO_PUBLIC_API_URL}/items/byUser/${userToken}`
+      );
       const data = await response.json();
       if (data.result) {
         setItemsData(data.items);
         setModalVisible(true);
       }
     } catch (error) {
-      Alert.alert("Erreur", "Impossible de récupérer les annonces de cet utilisateur.");
+      Alert.alert(
+        "Erreur",
+        "Impossible de récupérer les annonces de cet utilisateur."
+      );
     }
   };
 
   // Articles à afficher dans la modale
-  const userItems = itemsData.map((data, i) => <ItemCard key={i} {...data} closeModal={closeModal} />);
+  const userItems = itemsData.map((data, i) => (
+    <ItemCard key={i} {...data} closeModal={closeModal} />
+  ));
 
   // Fonction déclenchée lorsque l'utilisateur appuie sur le bouton "+"
   const handleAddPress = async () => {
@@ -139,7 +158,9 @@ export default function MapScreen() {
   // Fonction qui vérifie si l'utilisateur a déjà des coordonnées enregistrées
   const checkUserLocation = async () => {
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/users/getUserLocation/${userToken}`);
+      const response = await fetch(
+        `${process.env.EXPO_PUBLIC_API_URL}/users/getUserLocation/${userToken}`
+      );
       const result = await response.json();
       return result;
     } catch (error) {
