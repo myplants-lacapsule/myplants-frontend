@@ -322,6 +322,7 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans-Regular",
   },
   button: {
+		marginTop: 20,
     fontFamily: "OpenSans-Regular",
     backgroundColor: "#BC4749",
   },

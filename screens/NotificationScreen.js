@@ -7,10 +7,11 @@ import Notifications from "../components/Notifications";
 export default function NotificationScreen({ route }) {
   const { unwateredPlant } = route.params;
 
-	// Affichage des notifications pour chaque plante non arrosée
+  // Affichage des notifications pour chaque plante non arrosée
   const notificationsUnwateredPlant =
-    unwateredPlant.length > 0 && unwateredPlant.map((data, i) => {
-      return <Notifications key={i} name={data.name} lastWatering={data.lastWatering} />;
+    unwateredPlant.length > 0 &&
+    unwateredPlant.map((data, i) => {
+      return <Notifications key={i} {...data} />;
     });
 
   return (

@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
 		gap: 6,
     paddingVertical: 5,
     paddingHorizontal: 15,
-    borderRadius: 5,
+    borderRadius: 25,
 		backgroundColor: "#3674B5",
   },
   toxicityBadge: {
@@ -101,10 +101,11 @@ const styles = StyleSheet.create({
 		gap: 6,
 		paddingVertical: 5,
     paddingHorizontal: 15,
-    borderRadius: 5,
+    borderRadius: 25,
 		backgroundColor: "#BC4749",
   },
   badgeText: {
-    color: "white",
+    color: "#F1F0E9",
+    fontFamily: "OpenSans-Regular",
   },
 });
