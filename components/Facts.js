@@ -11,6 +11,7 @@ export default function Facts() {
     getFact();
   }, []);
 
+	// Fonction pour afficher les fun facts
   const getFact = async () => {
     try {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/facts`);

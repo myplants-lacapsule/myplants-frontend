@@ -1,4 +1,4 @@
-import { StyleSheet, View, TouchableOpacity, ActivityIndicator } from "react-native";
+import { ActivityIndicator, StyleSheet, TouchableOpacity, View } from "react-native";
 import { CameraView } from "expo-camera";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
@@ -6,7 +6,7 @@ function CameraSearch({ takePicture, cameraRef, showCamera, setShowCamera, loadi
 
   return (
     <CameraView style={styles.camera} ref={cameraRef}>
-      <TouchableOpacity style={styles.containerReturnButton} onPress={() => setShowCamera(false)}>
+      <TouchableOpacity style={styles.returnButtonContainer} onPress={() => setShowCamera(false)}>
         <FontAwesome name="close" size={24} color="white" />
       </TouchableOpacity>
       <View style={styles.snapButton}>
@@ -32,26 +32,24 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "space-between",
   },
-  containerReturnButton: {
+  returnButtonContainer: {
     height: "10%",
-    justifyContent: "center",
     padding: 10,
     paddingLeft: 20,
+    justifyContent: "center",
   },
   snapButton: {
+    marginBottom: "30",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: "30",
   },
   cameraContainer: {
     height: 100,
     width: 100,
+    alignItems: "center",
+    justifyContent: "center",
     borderRadius: "100%",
     borderColor: "red",
     backgroundColor: "#F8F3D9",
-    justifyContent: "center",
-    alignItems: "center",
   },
 });
-
-export default CameraSearch;

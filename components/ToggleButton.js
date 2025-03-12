@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Switch, Text, View } from "react-native";
 
-const ToggleButton = ({ value, onValueChange, trueLabel, falseLabel }) => {
+export default function ToggleButton ({ value, onValueChange, trueLabel, falseLabel }) {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{value ? trueLabel : falseLabel}</Text>
@@ -20,5 +20,3 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
 });
-
-export default ToggleButton;
