@@ -8,7 +8,7 @@ export default function FullDetailsPlant(props) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ReturnButton />
+      <ReturnButton destination={"Home"} />
       <FullDetailsPlantComponent plantDetails={plantDetails} />
     </SafeAreaView>
   );
