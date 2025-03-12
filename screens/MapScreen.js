@@ -3,9 +3,10 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import ItemCard from "../components/ItemCard";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
+
+import ItemCard from "../components/ItemCard";
 
 export default function MapScreen() {
   const isFocused = useIsFocused();
@@ -48,6 +49,7 @@ export default function MapScreen() {
       });
       setLoading(false);
 
+			// Mise à jour en temps réel de la position de l'utilisateur
       Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
         setCurrentPosition(location.coords);
       });

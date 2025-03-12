@@ -12,6 +12,7 @@ import SuggestionPlantCard from "../components/SuggestionPlantCard";
 import Facts from "../components/Facts";
 
 export default function SearchScreen() {
+	// Clés API pour la reconnaissance et la recherche de plantes
   const perenualKey = "sk-RB2z67cecb13330dc9059";
   const plantidKey = "MPTt3cQB5Z8PlOmOhGC3XBagUam7WtPUfCJ66Q9e4p0YdSvOAS";
 
@@ -26,16 +27,17 @@ export default function SearchScreen() {
   const [loading, setLoading] = useState(false);
 
   const isFocused = useIsFocused();
-  const [hasPermission, setHasPermission] = useState(false); // état de la permission
+  const [hasPermission, setHasPermission] = useState(false);
 
-  // Obtenir la permission de la caméra au clic sur le bouton photo
+  // Fonction pour demander l'autorisation d'accès à la caméra
   const getPermission = async () => {
     const status = await Camera.requestCameraPermissionsAsync();
     setHasPermission(status && status?.status === "granted");
-    setShowCamera(true); // set l'état pour afficher la caméra
+    setShowCamera(true);
   };
 
   useEffect(() => {
+		// Réinitialisation des états lorsque l'écran perd le focus
     if (!isFocused) {
       setShowCamera(false);
       setInputResearch("");
@@ -47,7 +49,7 @@ export default function SearchScreen() {
     }
   }, [isFocused, showSuggestions]);
 
-  // Fonction pour la prise de photo
+  // Fonction pour capturer une photo avec la caméra
   const takePicture = async () => {
     try {
       setLoading(true);
@@ -63,7 +65,7 @@ export default function SearchScreen() {
     }
   };
 
-  // Fonction pour envoyer la photo vers le backend
+  // Fonction pour envoyer la photo au backend
   const sendPictureToBack = async (photoUri) => {
     try {
       const formData = new FormData();
@@ -98,7 +100,7 @@ export default function SearchScreen() {
     }
   };
 
-  // Fonction pour identifier la plante grâce à la photo
+  // Fonction pour identifier la plante en envoyant l'image à l'API de reconnaissance
   const identificationPlantId = async (cloudinaryUrl) => {
     var myHeaders = new Headers();
     myHeaders.append("Api-Key", plantidKey);
@@ -129,6 +131,7 @@ export default function SearchScreen() {
       const plantProbability = data.result.is_plant.probability;
       const plantName = data.result.classification.suggestions[0].name;
 
+			// Vérification de la fiabilité de l'identification
       if (plantProbability < 0.75 || !plantProbability) {
         Alert.alert("The plant you are looking for is not in our database", "Please try another.");
       } else {
@@ -141,7 +144,7 @@ export default function SearchScreen() {
     }
   };
 
-  // Fonction pour chercher l'ID de la plante en fonction de son nom dans une 2e API
+  // Fonction pour récupérer les détails de la plante via une seconde API
   const idenficationDetailsPlant = async (plantName, cloudinaryUrl) => {
     try {
       setLoading(true);
@@ -155,10 +158,9 @@ export default function SearchScreen() {
 
       const dataPerenual = await responsePerenual.json();
       // console.log("dataPerenual", dataPerenual)
-
-      // Vérification si la plante est trouvée
       const idPerenual = dataPerenual.data[0].id;
 
+			// Vérification si la plante est bien référencée
       if (dataPerenual.total === 0 || idPerenual >= 3000) {
         setInputResearch("");
         Alert.alert("The plant you are looking for is not in our database", "Please try another");
@@ -167,7 +169,7 @@ export default function SearchScreen() {
 
       // console.log(idPerenual)
 
-      // Si elle est trouvée, on récupère les détails de la plante
+      // Récupération des détails de la plante
       if (idPerenual) {
         const fetchPerenualDetails = await fetch(`https://perenual.com/api/v2/species/details/${idPerenual}?key=${perenualKey}`);
         if (!fetchPerenualDetails.ok) {

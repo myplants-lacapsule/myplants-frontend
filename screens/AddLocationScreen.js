@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { Alert, KeyboardAvoidingView, Platform, StyleSheet, View, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
-import RegisterInput from "../components/RegisterInput.js";
-import RegisterButton from "../components/RegisterButton.js";
+
+import RegisterInput from "../components/RegisterInput";
+import RegisterButton from "../components/RegisterButton";
 
 export default function AddLocationScreen() {
   const navigation = useNavigation();
@@ -14,6 +15,7 @@ export default function AddLocationScreen() {
   const [postalCode, setPostalCode] = useState("");
   const [city, setCity] = useState("");
 
+	// Fonction pour mettre à jour l'adresse de l'utilisateur
   const handleUpdate = async () => {
     if (!street || !city || !postalCode) {
       Alert.alert("Error", "Please enter address, city and zip code.");

@@ -3,10 +3,10 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 
-import RegisterButton from "../components/RegisterButton.js";
-import RegisterInput from "../components/RegisterInput.js";
-import ReturnButton from "../components/ReturnButton.js";
-import CustomButton from "../components/CustomButton.js";
+import RegisterButton from "../components/RegisterButton";
+import RegisterInput from "../components/RegisterInput";
+import ReturnButton from "../components/ReturnButton";
+import CustomButton from "../components/CustomButton";
 
 import * as ImagePicker from "expo-image-picker";
 

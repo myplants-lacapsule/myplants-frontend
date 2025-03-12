@@ -17,11 +17,13 @@ export default function SignUpScreen() {
   const [signUpPassword, setSignUpPassword] = useState("");
   const [error, setError] = useState("");
 
+	// Fonction pour valider le format d'une adresse e-mail
   const validateEmail = (email) => {
     const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return pattern.test(String(email).toLowerCase());
   };
 
+	// Fonction pour gérer l'inscription de l'utilisateur
   const handleRegister = () => {
     if (!signUpUsername) {
       setError("Empty username");

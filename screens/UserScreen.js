@@ -1,8 +1,8 @@
 import React from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { useDispatch, useSelector,  } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-import { logout } from "../reducers/user.js"
+import { logout } from "../reducers/user.js";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 import RegisterButton from "../components/RegisterButton";
@@ -11,13 +11,13 @@ import ReturnButton from "../components/ReturnButton";
 export default function UserScreen() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const userInStore = useSelector((state) => state.user.value);
 
-  const userInStore = useSelector((state) => state.user.value)
-
+  // Fonction déconnexion
   const logoutUser = () => {
-    dispatch(logout())
-    navigation.navigate("WelcomeScreen")
-  }
+    dispatch(logout());
+    navigation.navigate("WelcomeScreen");
+  };
 
   return (
     <SafeAreaView style={styles.container}>

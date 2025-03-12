@@ -14,6 +14,7 @@ export default function UserItemsDetailsScreen() {
   const [itemsForSale, setItemsForSale] = useState([]);
   const [isItemsForSale, setIsItemsForSale] = useState(false);
 
+	// Si le focus sur l'écran, on récupère les articles en vente de l'utilisateur
   useEffect(() => {
     if (!isFocused) {
       setIsItemsForSale(false)
@@ -22,6 +23,7 @@ export default function UserItemsDetailsScreen() {
     }
   }, [isFocused]);
 
+	// Fonction pour récupérer les articles en vente de l'utilisateur
   const getItemsByUser = async () => {
     try {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/items/byUser/${userInStore.token}`);
@@ -37,8 +39,10 @@ export default function UserItemsDetailsScreen() {
     }
   };
 
+	// Vérification si l'utilisateur possède des articles en vente
   const hasItems = itemsForSale.length > 0 && isItemsForSale;
 
+	 // Affichage de la liste d'articles
   const userItems = hasItems ? itemsForSale.map((data, i) => <ItemCard key={i} {...data} />) : <Text style={styles.noCardMessage}> You don't have any items for sale yet. Add one! </Text>;
 
   return (

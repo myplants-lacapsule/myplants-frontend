@@ -25,6 +25,7 @@ export default function HomeScreen() {
     }
   }, [isFocused]);
 
+	// Fonction qui récupère les plantes depuis l'API
   const fetchPlants = async () => {
     try {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/plants/${userInStore.token}`);
@@ -44,10 +45,14 @@ export default function HomeScreen() {
     }
   };
 
+	// Filtrer les plantes qui ont besoin d'eau
   const plantsNeedsWater = plantsData.length > 0 && !noPlantData
   const unwateredPlant = plantsNeedsWater && plantsData.filter(data => !data.isWatered)
 
+	// Vérifier si l'utilisateur a des plantes ou non
   const hasPlants = plantsData.length > 0 && !noPlantData;
+
+	// Affichage des plantes de l'utilisateur
   const userPlants = hasPlants ? plantsData.map((data, i) => <PlantCard key={i} {...data} />) : <Text style={styles.noCardMessage}> You don't have any plants yet. Add one! </Text>;
 
   return (

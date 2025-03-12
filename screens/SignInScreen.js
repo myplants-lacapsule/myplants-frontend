@@ -16,6 +16,7 @@ export default function SignInScreen() {
   const [signInPassword, setSignInPassword] = useState("");
   const [error, setError] = useState("");
 
+	// Fonction pour gérer la connexion de l'utilisateur
   const handleConnection = () => {
     if (!signInEmail) {
       setError("Incorrect email address");
