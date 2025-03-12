@@ -34,7 +34,7 @@ export default function AddLocationScreen() {
       });
       const result = await response.json();
       if (result.result) {
-        Alert.alert("Success", "Your address is updated", [
+        Alert.alert("Success", "Your address has been updated", [
           {
             text: "OK",
             onPress: () => navigation.navigate("NewItemScreen"),

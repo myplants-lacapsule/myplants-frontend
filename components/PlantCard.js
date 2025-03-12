@@ -2,7 +2,6 @@ import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-
 import moment from "moment";
 
 export default function PlantCard(props) {
@@ -11,7 +10,7 @@ export default function PlantCard(props) {
   // Tronquer la description à 120 caractères
   const truncatedDescription = props.description.length > 120 ? props.description.substring(0, 120) + "..." : props.description;
 
-  // Ajout de moment pour récupérer la date du dernier arrosage
+  // Utilisation de moment pour récupérer la date du dernier arrosage
   const date = moment(props.lastWatering)
   const lastWatered = moment(date).format('MMMM Do YYYY');
 
