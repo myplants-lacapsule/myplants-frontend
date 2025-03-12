@@ -1,10 +1,9 @@
 import { Image, KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import RegisterButton from "../components/RegisterButton.js";
+import RegisterButton from "../components/RegisterButton";
 
 export default function WelcomeScreen() {
   const navigation = useNavigation();
-
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"}>

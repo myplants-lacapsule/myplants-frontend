@@ -4,9 +4,9 @@ import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { login } from "../reducers/user";
 
-import RegisterInput from "../components/RegisterInput.js";
-import RegisterButton from "../components/RegisterButton.js";
-import ReturnButton from "../components/ReturnButton.js";
+import RegisterInput from "../components/RegisterInput";
+import RegisterButton from "../components/RegisterButton";
+import ReturnButton from "../components/ReturnButton";
 
 export default function SignInScreen() {
   const dispatch = useDispatch();
