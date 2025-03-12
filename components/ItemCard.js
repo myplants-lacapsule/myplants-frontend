@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   },
   photoContainer: {
     width: "35%",
-		borderRadius: 5,
+    borderRadius: 5,
   },
   photo: {
     width: "100%",
