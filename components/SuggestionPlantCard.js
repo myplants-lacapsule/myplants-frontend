@@ -71,12 +71,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   title: {
-    fontWeight: "bold",
     color: "#2D5334",
     fontSize: 20,
+		fontWeight: "bold",
   },
   badges: {
-    display: "flex",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",

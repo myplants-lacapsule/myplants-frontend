@@ -4,9 +4,9 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import RegisterButton from "./RegisterButton";
+import moment from "moment";
 
-import moment from 'moment'
+import RegisterButton from "./RegisterButton";
 
 export default function FullDetailsItemComponent({ itemDetails }) {
   const navigation = useNavigation();
@@ -21,6 +21,7 @@ export default function FullDetailsItemComponent({ itemDetails }) {
     return condition.charAt(0).toLowerCase() + condition.slice(1);
   };
 
+	// Fonction pour envoyer un mail formaté au vendeur
   const handleContactSeller = async () => {
     setIsSubmitting(true);
     const subject = `Interest in your listing ${itemDetails.title}`;
@@ -34,15 +35,16 @@ export default function FullDetailsItemComponent({ itemDetails }) {
       setIsSubmitting(false);
     }
   };
-  //moment pour formater la date
-  const date = moment(itemDetails.createdAt)
-  const createdAt = date.format("MMMM Do YYYY")
+	
+  // Utilisation de moment pour formater la date
+  const date = moment(itemDetails.createdAt);
+  const createdAt = date.format("MMMM Do YYYY");
 
+	// Fonction pour supprimer un article
   const handleDeleteItem = async () => {
-    // Demander confirmation à l'utilisateur
     Alert.alert(
       "Confirmation",
-      "Are you sure you want to remove this item from your inventory?",
+      "Are you sure you want to remove this item from your listing?",
       [
         {
           text: "Cancel",
@@ -99,14 +101,9 @@ export default function FullDetailsItemComponent({ itemDetails }) {
           {itemDetails.price > 0 && <Text style={styles.field}>Price : {itemDetails.price} €</Text>}
           <Text style={styles.field}>Height : {itemDetails.height} cm</Text>
           <Text style={styles.field}>Condition : {formatCondition(itemDetails.condition)}</Text>
-					<Text style={styles.date}>
-            Listing posted on {createdAt}
-          </Text>
+          <Text style={styles.date}>Listing posted on {createdAt}</Text>
         </View>
-        <View style={styles.bottomContainer}>
-          
-          {isOwner ? <RegisterButton title={"Remove from my inventory"} onPress={() => handleDeleteItem()} style={styles.removeButton} /> : <RegisterButton title="Contact the seller" onPress={() => handleContactSeller()} loading={isSubmitting} disabled={isSubmitting} />}
-        </View>
+        <View style={styles.bottomContainer}>{isOwner ? <RegisterButton title={"Remove from the sale listing"} onPress={() => handleDeleteItem()} style={styles.removeButton} /> : <RegisterButton title="Contact the seller" onPress={() => handleContactSeller()} loading={isSubmitting} disabled={isSubmitting} />}</View>
       </ScrollView>
     </SafeAreaView>
   );

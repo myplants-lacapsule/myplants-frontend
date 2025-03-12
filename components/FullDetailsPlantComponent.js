@@ -3,6 +3,7 @@ import { Alert, Image, Text, SafeAreaView, ScrollView, StyleSheet, TouchableOpac
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+
 import RegisterButton from "./RegisterButton";
 
 export default function FullDetailsPlantComponent() {
@@ -17,7 +18,6 @@ export default function FullDetailsPlantComponent() {
     Fall: { label: "Autumn", icon: "leaf", color: "#F1F0E9" },
     Winter: { label: "Winter", icon: "snowflake", color: "#F1F0E9" },
   };
-
   const currentSeason = seasonIcons[plantDetails.seasonality];
 
   // Icônes pour l'exposition au soleil
@@ -34,9 +34,9 @@ export default function FullDetailsPlantComponent() {
       color: "#F1F0E9",
     },
   };
-
   const currentSunExposure = sunExposureIcons[plantDetails.sunExposure.toLowerCase()] || sunExposureIcons["default"];
 
+	// Fonction pour supprimer la plante de l'inventaire
   const handleDeletePlant = async () => {
     Alert.alert(
       "Confirmation",
@@ -75,6 +75,7 @@ export default function FullDetailsPlantComponent() {
     );
   };
 
+	// Fonction pour mettre à jour l'arrosage de la plante
   const updateLastWatering = () => {
     Alert.alert(
       "Confirmation",
@@ -116,13 +117,18 @@ export default function FullDetailsPlantComponent() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={true}>
+        {!isWatered && (
+          <View style={styles.waterAlertBanner}>
+            <Text style={styles.waterAlertText}>This plant needs water</Text>
+          </View>
+        )}
         <Image source={{ uri: plantDetails.photo }} style={styles.image} />
         <Text style={styles.name}>{plantDetails.name}</Text>
         {!isWatered && (
           <TouchableOpacity style={styles.isWateredBadgeContainer} onPress={updateLastWatering}>
             <View style={styles.isWateredBadge}>
               <FontAwesome name="tint" size={25} color="#F1F0E9" />
-              <Text style={styles.isWateredBadgeText}>This plant needs water !</Text>
+              <Text style={styles.isWateredBadgeText}>Mark as watered</Text>
             </View>
           </TouchableOpacity>
         )}
@@ -175,8 +181,25 @@ const styles = StyleSheet.create({
     color: "#2D5334",
     alignSelf: "center",
     paddingVertical: 10,
+		marginTop: 15,
     fontSize: 24,
     fontFamily: "Merriweather-Bold",
+  },
+  waterAlertBanner: {
+    position: "absolute",
+    bottom: 725,
+    left: 150,
+    backgroundColor: "#BC4749",
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 25,
+		transform: [{ rotate: "-35deg" }],
+    zIndex: 1,
+  },
+  waterAlertText: {
+    color: "#F1F0E9",
+    fontSize: 14,
+    fontFamily: "OpenSans-Bold",
   },
   isWateredBadgeContainer: {
     alignItems: "center",
@@ -190,7 +213,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingVertical: 12,
     paddingHorizontal: 20,
-    borderRadius: 30,
+    borderRadius: 5,
     backgroundColor: "#4C9ED9",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
@@ -203,16 +226,16 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans-Bold",
   },
   badgeContainer: {
-    marginLeft: 10,
+    marginLeft: 5,
     paddingVertical: 10,
   },
   seasonalityBadge: {
     width: "auto",
     gap: 6,
-    marginRight: 10,
-    paddingVertical: 8,
+    marginRight: 5,
+    paddingVertical: 5,
     paddingHorizontal: 15,
-    borderRadius: 5,
+    borderRadius: 25,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -221,10 +244,10 @@ const styles = StyleSheet.create({
   cuisineBadge: {
     width: "auto",
     gap: 6,
-    marginRight: 10,
-    paddingVertical: 8,
+    marginRight: 5,
+    paddingVertical: 5,
     paddingHorizontal: 15,
-    borderRadius: 5,
+    borderRadius: 25,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -233,10 +256,10 @@ const styles = StyleSheet.create({
   toxicityBadge: {
     width: "auto",
     gap: 6,
-    marginRight: 10,
-    paddingVertical: 8,
+    marginRight: 5,
+    paddingVertical: 5,
     paddingHorizontal: 15,
-    borderRadius: 5,
+    borderRadius: 25,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -245,10 +268,10 @@ const styles = StyleSheet.create({
   sunExposureBadge: {
     width: "auto",
     gap: 6,
-    marginRight: 10,
-    paddingVertical: 8,
+    marginRight: 5,
+    paddingVertical: 5,
     paddingHorizontal: 15,
-    borderRadius: 5,
+    borderRadius: 25,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -257,10 +280,10 @@ const styles = StyleSheet.create({
   wateringFrequencyBadge: {
     width: "auto",
     gap: 6,
-    marginRight: 10,
-    paddingVertical: 8,
+    marginRight: 5,
+    paddingVertical: 5,
     paddingHorizontal: 15,
-    borderRadius: 5,
+    borderRadius: 25,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",

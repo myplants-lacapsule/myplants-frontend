@@ -39,7 +39,7 @@ export default function NewItemScreen() {
       allowsEditing: true,
       quality: 0.3,
     });
-    console.log("Result from ImagePicker:", result);
+    console.log("Result from ImagedPicker:", result);
     if (!result.canceled && result.assets && result.assets.length > 0) {
       setImageUri(result.assets[0].uri);
     }
