@@ -103,7 +103,7 @@ export default function FullDetailsItemComponent({ itemDetails }) {
           <Text style={styles.field}>Condition : {formatCondition(itemDetails.condition)}</Text>
           <Text style={styles.date}>Listing posted on {createdAt}</Text>
         </View>
-        <View style={styles.bottomContainer}>{isOwner ? <RegisterButton title={"Remove from the sale listing"} onPress={() => handleDeleteItem()} style={styles.removeButton} /> : <RegisterButton title="Contact the seller" onPress={() => handleContactSeller()} loading={isSubmitting} disabled={isSubmitting} />}</View>
+        <View style={styles.bottomContainer}>{isOwner ? <RegisterButton title={"Remove from the sale listing"} onPress={() => handleDeleteItem()} style={styles.removeButton} /> : <RegisterButton title="Contact seller" onPress={() => handleContactSeller()} loading={isSubmitting} disabled={isSubmitting} />}</View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
   },
   badgeRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     width: "85%",
     marginVertical: 10,
   },
