@@ -12,7 +12,7 @@ import SuggestionPlantCard from "../components/SuggestionPlantCard";
 import Facts from "../components/Facts";
 
 export default function SearchScreen() {
-	// Clés API pour la reconnaissance et la recherche de plantes
+  // Clés API pour la reconnaissance et la recherche de plantes
   const perenualKey = "sk-RB2z67cecb13330dc9059";
   const plantidKey = "T2LrJMPADWmtW0HvyWVLSz42OQz5OgXtZO1Ep8pqvjHWLiNqjX";
 
@@ -37,7 +37,7 @@ export default function SearchScreen() {
   };
 
   useEffect(() => {
-		// Réinitialisation des états lorsque l'écran perd le focus
+    // Réinitialisation des états lorsque l'écran perd le focus
     if (!isFocused) {
       setShowCamera(false);
       setInputResearch("");
@@ -61,7 +61,8 @@ export default function SearchScreen() {
         Alert.alert("An error occurred while taking the picture", "Please try again");
       }
     } catch (error) {
-      console.error("Error taking picture:", error);
+      // console.error("Error taking picture:", error);
+      Alert.alert("An error occurred while taking the picture", "Please try again");
     }
   };
 
@@ -93,10 +94,11 @@ export default function SearchScreen() {
       if (responseFromCloudinary.url) {
         identificationPlantId(responseFromCloudinary.url);
       } else {
-        Alert.alert("Error", "Please try again");
+        Alert.alert("An error occurred while taking the picture", "Please try again");
       }
     } catch (error) {
-      console.error("Error sending picture:", error);
+      // console.error("Error sending picture:", error);
+      Alert.alert("An error occurred while taking the picture", "Please try again");
     }
   };
 
@@ -131,14 +133,15 @@ export default function SearchScreen() {
       const plantProbability = data.result.is_plant.probability;
       const plantName = data.result.classification.suggestions[0].name;
 
-			// Vérification de la fiabilité de l'identification
+      // Vérification de la fiabilité de l'identification
       if (plantProbability < 0.75 || !plantProbability) {
         Alert.alert("The plant you are looking for is not in our database", "Please try another.");
       } else {
         await idenficationDetailsPlant(plantName, cloudinaryUrl);
       }
     } catch (error) {
-      console.error("Error taking picture", error);
+      // console.error("Error taking picture", error);
+      Alert.alert("An error occurred while taking the picture", "Please try again")
     } finally {
       setLoading(false);
     }
@@ -161,8 +164,9 @@ export default function SearchScreen() {
 
       // console.log(dataPerenual)
 
-			// Vérification si la plante est bien référencée
+      // Vérification si la plante est bien référencée
       if (dataPerenual.total === 0) {
+        console.error("Id de plante trop élevé", error);
         setInputResearch("");
         Alert.alert("The plant you are looking for is not in our database", "Please try another");
         return;
@@ -172,7 +176,7 @@ export default function SearchScreen() {
 
       // Vérification si l'id de la plante < 3000 car l'api en free propose seulement 3000 ID
       const idPerenual = dataPerenual.data[0].id;
-      if (idPerenual >= 3000){
+      if (idPerenual >= 3000) {
         setInputResearch("");
         Alert.alert("The plant you are looking for is not in our database", "Please try another");
         return;
@@ -188,7 +192,7 @@ export default function SearchScreen() {
         console.log("IDperenual remaining :", rateLimitRemaining);
 
         const data = await fetchPerenualDetails.json();
-        const { description, watering, poisonous_to_humans, poisonous_to_pets, flowering_season, sunlight, cuisine } = data;
+        const { description, watering, poisonous_to_humans, poisonous_to_pets, flowering_season, sunlight, cuisine, harvest_season } = data;
 
         let plantWateringFrequency = watering.toLowerCase();
         if (plantWateringFrequency === "frequent") {
@@ -203,7 +207,7 @@ export default function SearchScreen() {
 
         const plantToxicity = poisonous_to_humans && poisonous_to_pets ? "Toxic to humans and pets" : poisonous_to_pets ? "Toxic to animals" : poisonous_to_humans ? "Toxic to humans" : "Non-toxic";
 
-        const plantSeasonality = flowering_season === null ? "Fall" : plantSeasonality.toLowerCase() === "winter" ? "Winter" : plantSeasonality.toLowerCase() === "spring" ? "Spring" : plantSeasonality.toLowerCase() === "summer" ? "Summer" : "Fall";
+        const plantSeasonality = (flowering_season || harvest_season) ? (flowering_season ? flowering_season : harvest_season) : "Fall";
 
         const plantSunExposure = sunlight[0].toLowerCase() === "part shade" ? "Needs shade" : sunlight[0] === "full-sun" ? "Needs exposure to the sun" : "Needs exposure to light";
 
@@ -228,7 +232,7 @@ export default function SearchScreen() {
         Alert.alert("Plant not found", "Please try again");
       }
     } catch (error) {
-      console.error("Plant not found", error);
+      // console.error("Plant not found", error);
       Alert.alert("Error", "An error occurred while fetching plant details.");
     } finally {
       setLoading(false);
@@ -258,7 +262,8 @@ export default function SearchScreen() {
         Alert.alert("Error", "Please try again");
       }
     } catch (error) {
-      console.error("Error adding plant to backend", error);
+      // console.error("Error adding plant to backend", error);
+      Alert.alert("Error", "An error occurred while saving plant, please retry.");
     }
   };
 
@@ -315,13 +320,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#2D5334",
   },
   loadingContainer: {
-		marginTop: 150,
+    marginTop: 150,
     alignItems: "center",
     justifyContent: "center",
   },
   loadingText: {
     marginTop: 10,
-		color: "#2D5334",
+    color: "#2D5334",
     fontSize: 18,
     fontFamily: "OpenSans-Regular",
   },

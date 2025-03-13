@@ -1,4 +1,4 @@
-import { Image, KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
+import { Image, KeyboardAvoidingView, Platform, StyleSheet, View, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import RegisterButton from "../components/RegisterButton";
 
@@ -21,6 +21,7 @@ export default function WelcomeScreen() {
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"}>
       <Image style={styles.image} source={require("../assets/logo.jpg")} />
+      <Text style={styles.title}><Text style={styles.ttitle}>my</Text>Plants</Text>
       <View style={styles.buttonContainer}>
         <RegisterButton title="Sign in" onPress={() => navigation.navigate("SignInScreen")} />
         <RegisterButton title="Sign up" onPress={() => navigation.navigate("SignUpScreen")} />
@@ -41,7 +42,6 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     borderRadius: 15,
-    marginBottom: 55,
   },
   buttonContainer: {
     height: "10px",
@@ -51,4 +51,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: "#F1F0E9",
   },
+  title:{
+    color: "#95AE7D",
+    fontFamily: "Merriweather-Bold",
+    fontSize: 40,
+    paddingBottom: 40,
+  },
+  ttitle:{
+    fontFamily: "Merriweather-Black",
+    fontSize: 35,
+  }
 });
