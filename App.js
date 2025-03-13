@@ -93,8 +93,10 @@ export default function App() {
         await Font.loadAsync({
           Merriweather: require("./assets/fonts/Merriweather/Merriweather-Regular.ttf"),
           "Merriweather-Bold": require("./assets/fonts/Merriweather/Merriweather-Bold.ttf"),
+          "Merriweather-BoldItalic": require("./assets/fonts/Merriweather/Merriweather-BoldItalic.ttf"),
           "OpenSans-Regular": require("./assets/fonts/Open_Sans/OpenSans-Regular.ttf"),
           "OpenSans-Bold": require("./assets/fonts/Open_Sans/OpenSans-Bold.ttf"),
+          "Nunito-ExtraBoldItalic": require("./assets/fonts/Nunito/Nunito-ExtraBoldItalic.ttf"),
         });
       } catch (e) {
         console.warn(e);
