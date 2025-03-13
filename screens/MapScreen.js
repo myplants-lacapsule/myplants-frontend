@@ -158,7 +158,7 @@ export default function MapScreen() {
 
   return (
     <View style={{ flex: 1 }}>
-      <MapView style={{ flex: 1 }} initialRegion={initialRegion}>
+      <MapView style={{ flex: 1, justifyContent: "flex-end" }} initialRegion={initialRegion}>
         {currentPosition && <Marker coordinate={currentPosition} pinColor="red" />}
         {uniquePin.map((pin, i) => (
           <Marker
@@ -176,6 +176,17 @@ export default function MapScreen() {
             tracksViewChanges={false}
           />
         ))}
+        <View style={styles.containBtn}>
+          <TouchableOpacity style={styles.bottomBtn} onPress={fetchItems}>
+            <FontAwesome5 name="sync-alt" size={20} color="#F1F0E9" />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.myItemsForSaleButton} onPress={() => navigation.navigate("UserItemsDetailsScreen")}>
+            <Text style={styles.myItemsFosSaleButtonText}>My items for sale</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.bottomBtn} onPress={handleAddPress}>
+            <FontAwesome5 name="plus" size={20} solid={true} color="white" />
+          </TouchableOpacity>
+        </View>
       </MapView>
       {pinsLoading && (
         <View style={styles.loaderOverlay}>
@@ -193,15 +204,6 @@ export default function MapScreen() {
           </SafeAreaView>
         </View>
       </Modal>
-      <TouchableOpacity style={styles.refreshButton} onPress={fetchItems}>
-        <FontAwesome5 name="sync-alt" size={20} color="#F1F0E9" />
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.myItemsForSaleButton} onPress={() => navigation.navigate("UserItemsDetailsScreen")}>
-        <Text style={styles.myItemsFosSaleButtonText}>My items for sale</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
-        <FontAwesome5 name="plus" size={20} solid={true} color="white" />
-      </TouchableOpacity>
     </View>
   );
 }
@@ -248,22 +250,6 @@ const styles = StyleSheet.create({
   cardContainer: {
     marginTop: 10,
   },
-  addButton: {
-    position: "absolute",
-    bottom: 30,
-    right: 25,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#2D5334",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 10,
-  },
   loaderOverlay: {
     position: "absolute",
     top: 0,
@@ -275,13 +261,18 @@ const styles = StyleSheet.create({
     zIndex: 10, // s'assure que l'indicateur est au-dessus de la MapView
     backgroundColor: "rgba(255,255,255,0.6)", // pour atténuer la vue en dessous
   },
-  refreshButton: {
-    position: "absolute",
-    bottom: 35,
-    left: 25,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+  containBtn: {
+    width: "100%",
+    height: "15%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 30,
+  },
+  bottomBtn: {
+    width: 50,
+    height: 50,
+    borderRadius: 30,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#2D5334",
@@ -292,8 +283,6 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   myItemsForSaleButton: {
-    position: "absolute",
-    bottom: 35,
     width: 170,
     height: 40,
     borderRadius: 35,
