@@ -17,53 +17,55 @@ export default function SignUpScreen() {
   const [signUpPassword, setSignUpPassword] = useState("");
   const [error, setError] = useState("");
 
-	// Fonction pour valider le format d'une adresse e-mail
+  // Fonction pour valider le format d'une adresse e-mail
   const validateEmail = (email) => {
     const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return pattern.test(String(email).toLowerCase());
   };
 
-	// Fonction pour gérer l'inscription de l'utilisateur
-  const handleRegister = () => {
-    if (!signUpUsername) {
-      setError("Empty username");
-      return;
-    }
-    if (!signUpEmail || !validateEmail(signUpEmail)) {
-      setError("Incorrect email address");
-      return;
-    }
-    if (!signUpPassword) {
-      setError("Empty password");
-      return;
-    }
-    if (signUpPassword.length < 8) {
-      setError("Password must be at least 8 characters long");
-      return;
-    }
-
-    fetch(`${process.env.EXPO_PUBLIC_API_URL}/users/signup`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username: signUpUsername,
-        email: signUpEmail.toLowerCase(),
-        password: signUpPassword,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          dispatch(login({ username: data.username, token: data.token }));
-          setSignUpUsername("");
-          setSignUpEmail("");
-          setSignUpPassword("");
-          setError("");
-          navigation.navigate("TabNavigator");
-        } else {
-          setError("An error has occurred.");
-        }
+  // Fonction pour gérer l'inscription de l'utilisateur
+  const handleRegister = async () => {
+    try {
+      if (!signUpUsername) {
+        setError("Empty username");
+        return;
+      }
+      if (!signUpEmail || !validateEmail(signUpEmail)) {
+        setError("Incorrect email address");
+        return;
+      }
+      if (!signUpPassword) {
+        setError("Empty password");
+        return;
+      }
+      if (signUpPassword.length < 8) {
+        setError("Password must be at least 8 characters long");
+        return;
+      }
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/users/signup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: signUpUsername,
+          email: signUpEmail.toLowerCase(),
+          password: signUpPassword,
+        }),
       });
+      const data = await response.json();
+
+      if (data.result) {
+        dispatch(login({ username: data.username, token: data.token }));
+        setSignUpUsername("");
+        setSignUpEmail("");
+        setSignUpPassword("");
+        setError("");
+        navigation.navigate("TabNavigator");
+      } else {
+        setError("An error has occurred.");
+      }
+    } catch (error) {
+      console.error("Error signing up", error);
+    }
   };
 
   return (
@@ -83,7 +85,7 @@ export default function SignUpScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-		paddingTop: 40,
+    paddingTop: 40,
     backgroundColor: "#F1F0E9",
   },
   registerContainer: {

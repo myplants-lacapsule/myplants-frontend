@@ -30,8 +30,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import user from "./reducers/user";
 
-
-// persistance du store
+// Persistance du store
 const reducers = combineReducers({ user })
 const persistConfig = {
   key: 'myPlants',
@@ -43,7 +42,6 @@ const store = configureStore({
     getDefaultMiddleware({ serializableCheck: false})
 });
 const persistor = persistStore(store)
-
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
