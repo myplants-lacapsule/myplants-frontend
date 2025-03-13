@@ -194,13 +194,13 @@ export default function MapScreen() {
         </View>
       </Modal>
       <TouchableOpacity style={styles.refreshButton} onPress={fetchItems}>
-        <FontAwesome5 name="sync-alt" size={20} color="#F1F0E9" />
+        <FontAwesome5 name="sync-alt" size={25} color="#F1F0E9" />
       </TouchableOpacity>
       <TouchableOpacity style={styles.myItemsForSaleButton} onPress={() => navigation.navigate("UserItemsDetailsScreen")}>
         <Text style={styles.myItemsFosSaleButtonText}>My items for sale</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
-        <FontAwesome5 name="plus" size={20} solid={true} color="white" />
+        <FontAwesome5 name="plus" size={25} solid={true} color="white" />
       </TouchableOpacity>
     </View>
   );
@@ -252,9 +252,9 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 30,
     right: 25,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#2D5334",
@@ -277,11 +277,11 @@ const styles = StyleSheet.create({
   },
   refreshButton: {
     position: "absolute",
-    bottom: 35,
+    bottom: 30,
     left: 25,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#2D5334",
