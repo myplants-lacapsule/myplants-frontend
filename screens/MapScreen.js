@@ -20,6 +20,7 @@ export default function MapScreen() {
   const [pinsLoading, setPinsLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [currentPosition, setCurrentPosition] = useState(null);
+  const [mapLoaded, setMapLoaded] = useState(false)
   const [initialRegion, setInitialRegion] = useState({
     latitude: 46.603354,
     longitude: 1.888334,
@@ -97,7 +98,8 @@ export default function MapScreen() {
       }
     } catch (error) {
       console.error("Error fetching items:", error);
-    } finally {
+    }
+    finally {
       setPinsLoading(false);
     }
   };
@@ -155,27 +157,36 @@ export default function MapScreen() {
       </View>
     );
   }
+  const markers = uniquePin.map((pin, i) => (
+    <Marker
+      key={`${pin.token}-${selectedPin === pin.token ? "selected" : "default"}`}
+      token={pin.token}
+      coordinate={{
+        latitude: pin.lat,
+        longitude: pin.long,
+      }}
+      pinColor="blue"
+      onPress={() => {
+        handleMarkerPress(pin.token);
+      }}
+      calloutEnabled={false}
+      tracksViewChanges={false}
+    />
+  ))
 
   return (
     <View style={{ flex: 1 }}>
-      <MapView style={{ flex: 1, justifyContent: "flex-end" }} initialRegion={initialRegion}>
+      <MapView style={{ flex: 1, justifyContent: "flex-end" }} initialRegion={initialRegion} onLayout={() => setMapLoaded(true)}>
         {currentPosition && <Marker coordinate={currentPosition} pinColor="red" />}
-        {uniquePin.map((pin, i) => (
-          <Marker
-            key={`${pin.token}-${selectedPin === pin.token ? "selected" : "default"}`}
-            token={pin.token}
-            coordinate={{
-              latitude: pin.lat,
-              longitude: pin.long,
-            }}
-            pinColor="blue"
-            onPress={() => {
-              handleMarkerPress(pin.token);
-            }}
-            calloutEnabled={false}
-            tracksViewChanges={false}
-          />
-        ))}
+        {markers}
+      </MapView>
+      {pinsLoading && (
+        <View style={styles.loaderOverlay}>
+          <ActivityIndicator size="large" color="#2D5334" />
+        </View>
+      )}
+
+      {mapLoaded && (
         <View style={styles.containBtn}>
           <TouchableOpacity style={styles.bottomBtn} onPress={fetchItems}>
             <FontAwesome5 name="sync-alt" size={20} color="#F1F0E9" />
@@ -187,13 +198,8 @@ export default function MapScreen() {
             <FontAwesome5 name="plus" size={20} solid={true} color="white" />
           </TouchableOpacity>
         </View>
-      </MapView>
-      {pinsLoading && (
-        <View style={styles.loaderOverlay}>
-          <ActivityIndicator size="large" color="#2D5334" />
-        </View>
       )}
-
+      
       <Modal visible={modalVisible} animationType="fade" transparent>
         <View style={styles.modalContainer}>
           <SafeAreaView style={styles.modal}>
@@ -262,6 +268,8 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255,255,255,0.6)", // pour atténuer la vue en dessous
   },
   containBtn: {
+    position: "absolute",
+    bottom: 0,
     width: "100%",
     height: "15%",
     flexDirection: "row",
