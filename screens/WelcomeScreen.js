@@ -2,8 +2,21 @@ import { Image, KeyboardAvoidingView, Platform, StyleSheet, View } from "react-n
 import { useNavigation } from "@react-navigation/native";
 import RegisterButton from "../components/RegisterButton";
 
+import { useEffect } from "react";
+
+import { useSelector } from "react-redux";
+
 export default function WelcomeScreen() {
   const navigation = useNavigation();
+
+  const userInStore = useSelector((state) => state.user.value);
+
+  // check si l'user est déjà connecté, si oui redirection vers HomeScreen
+  useEffect(() => {
+    if (userInStore.token !== null){
+      navigation.navigate("TabNavigator", { screen: "Home" })
+    }
+  }, [])
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"}>

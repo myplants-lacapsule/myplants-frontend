@@ -209,7 +209,7 @@ export default function SearchScreen() {
 
         const plantCuisine = cuisine ? "Is edible" : "Is not edible";
 
-        const plantPhotoApi = cloudinaryUrl ?? data.default_image.regular_url;
+        const plantPhotoApi = cloudinaryUrl ? cloudinaryUrl : (data.default_image.regular_url ? data.default_image.regular_url : data.default_image.original_url);
 
         setPlantsData({
           name: plantName,
