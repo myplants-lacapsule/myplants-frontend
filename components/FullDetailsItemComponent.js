@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     width: 130,
     paddingVertical: 8,
     paddingHorizontal: 15,
-    borderRadius: 5,
+    borderRadius: 25,
     backgroundColor: "#2D5334",
     alignItems: "center",
     justifyContent: "space-around",
@@ -151,8 +151,7 @@ const styles = StyleSheet.create({
   },
   badgeText: {
     color: "#F1F0E9",
-    fontFamily: "OpenSans-Regular",
-    fontWeight: "bold",
+    fontFamily: "OpenSans-Bold",
   },
   description: {
     width: "85%",
