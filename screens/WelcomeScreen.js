@@ -21,7 +21,7 @@ export default function WelcomeScreen() {
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"}>
       <Image style={styles.image} source={require("../assets/logo.jpg")} />
-      <Text style={styles.title}>myPlants</Text>
+      <Text style={styles.title}><Text style={styles.ttitle}>my</Text>Plants</Text>
       <View style={styles.buttonContainer}>
         <RegisterButton title="Sign in" onPress={() => navigation.navigate("SignInScreen")} />
         <RegisterButton title="Sign up" onPress={() => navigation.navigate("SignUpScreen")} />
@@ -56,5 +56,9 @@ const styles = StyleSheet.create({
     fontFamily: "Merriweather-Bold",
     fontSize: 40,
     paddingBottom: 40,
+  },
+  ttitle:{
+    fontFamily: "Merriweather-Black",
+    fontSize: 35,
   }
 });
