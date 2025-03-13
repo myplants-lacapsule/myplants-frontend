@@ -28,6 +28,8 @@ export default function MapScreen() {
   });
   const [uniquePin, setUniquePin] = useState([]);
   const [selectedPin, setSelectedPin] = useState(null);
+  console.log(selectedPin);
+  
 
   // Récupération de la position actuelle de l'utilisateur
   useEffect(() => {
@@ -103,9 +105,11 @@ export default function MapScreen() {
   };
 
   // Affichage de la modale lorsque l'utilisateur appuie sur un marqueur
-  const handleMarkerPress = async (userToken) => {
+  const handleMarkerPress = async (pinToken) => {
+    setSelectedPin(pinToken); // Mise à jour de l'état du marker sélectionné
+
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/items/byUser/${userToken}`);
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/items/byUser/${pinToken}`);
       const data = await response.json();
       if (data.result) {
         setItemsData(data.items);
@@ -168,7 +172,6 @@ export default function MapScreen() {
             }}
             pinColor="blue"
             onPress={() => {
-              setSelectedPin(pin.token); // Mise à jour de l'état du marker sélectionné
               handleMarkerPress(pin.token);
             }}
             calloutEnabled={false}
