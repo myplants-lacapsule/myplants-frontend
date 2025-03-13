@@ -28,8 +28,6 @@ export default function MapScreen() {
   });
   const [uniquePin, setUniquePin] = useState([]);
   const [selectedPin, setSelectedPin] = useState(null);
-  console.log(selectedPin);
-  
 
   // Récupération de la position actuelle de l'utilisateur
   useEffect(() => {
@@ -202,7 +200,7 @@ export default function MapScreen() {
         <Text style={styles.myItemsFosSaleButtonText}>My items for sale</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
-        <Text style={styles.addButtonText}>+</Text>
+        <FontAwesome5 name="plus" size={20} solid={true} color="white" />
       </TouchableOpacity>
     </View>
   );
@@ -265,13 +263,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 6,
     elevation: 10,
-  },
-  addButtonText: {
-    color: "#F1F0E9",
-    fontWeight: "bold",
-    fontSize: 30,
-    textAlign: "center",
-    transform: [{ translateY: -2 }], // pour centrer le + dans le bouton
   },
   loaderOverlay: {
     position: "absolute",
