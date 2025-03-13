@@ -23,12 +23,27 @@ import AddLocationScreen from "./screens/AddLocationScreen";
 import NewItemScreen from "./screens/NewItemScreen";
 
 import { Provider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { persistStore, persistReducer } from 'redux-persist';
+import { PersistGate } from 'redux-persist/integration/react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import user from "./reducers/user";
 
+
+// persistance du store
+const reducers = combineReducers({ user })
+const persistConfig = {
+  key: 'myPlants',
+  storage: AsyncStorage,
+};
 const store = configureStore({
-  reducer: { user },
+  reducer: persistReducer(persistConfig, reducers),
+  middleware: (getDefaultMiddleware) => 
+    getDefaultMiddleware({ serializableCheck: false})
 });
+const persistor = persistStore(store)
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -100,21 +115,23 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
-          <Stack.Screen name="SignInScreen" component={SignInScreen} />
-          <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
-          <Stack.Screen name="TabNavigator" component={TabNavigator} />
-          <Stack.Screen name="NotificationScreen" component={NotificationScreen} />
-          <Stack.Screen name="UserScreen" component={UserScreen} />
-          <Stack.Screen name="UserItemsDetailsScreen" component={UserItemsDetailsScreen} />
-          <Stack.Screen name="FullDetailsPlant" component={FullDetailsPlant} />
-          <Stack.Screen name="FullDetailsItem" component={FullDetailsItem} />
-          <Stack.Screen name="AddLocationScreen" component={AddLocationScreen} />
-          <Stack.Screen name="NewItemScreen" component={NewItemScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <PersistGate persistor={persistor}>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+            <Stack.Screen name="SignInScreen" component={SignInScreen} />
+            <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
+            <Stack.Screen name="TabNavigator" component={TabNavigator} />
+            <Stack.Screen name="NotificationScreen" component={NotificationScreen} />
+            <Stack.Screen name="UserScreen" component={UserScreen} />
+            <Stack.Screen name="UserItemsDetailsScreen" component={UserItemsDetailsScreen} />
+            <Stack.Screen name="FullDetailsPlant" component={FullDetailsPlant} />
+            <Stack.Screen name="FullDetailsItem" component={FullDetailsItem} />
+            <Stack.Screen name="AddLocationScreen" component={AddLocationScreen} />
+            <Stack.Screen name="NewItemScreen" component={NewItemScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PersistGate>
     </Provider>
   );
 }
@@ -124,5 +141,5 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans-Regular",
     fontSize: 12,
   },
-	
+
 });
