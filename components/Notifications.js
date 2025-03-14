@@ -18,17 +18,17 @@ export default function Notifications(props) {
   return (
     <TouchableOpacity style={styles.container} onPress={() => navigation.navigate("FullDetailsPlant", { plantDetails: props })} >
       <View style={styles.contentContainer}>
-        <FontAwesome name="exclamation-triangle" size={30} color="#BC4749" />
+        <View style={styles.containIcon}>
+          <FontAwesome name="exclamation-triangle" size={30} color="#BC4749" />
+        </View>
         <View style={styles.textContainer}>
           <Text style={styles.text}>
             Your plant <Text style={styles.boldText}>{props.name}</Text> needs water !
-          </Text>
-          <Text style={styles.text}>
-            The last watering was on: <Text style={styles.boldText}>{lastWatered}</Text>
+            Last watering on <Text style={styles.boldText}>{lastWatered}</Text>
           </Text>
         </View>
       </View>
-    </TouchableOpacity>
+    </TouchableOpacity >
   );
 }
 
@@ -41,10 +41,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: 'white',
   },
-  text: {
-    fontFamily: "OpenSans-Regular",
-    fontSize: 14,
-  },
   boldText: {
     fontFamily: "OpenSans-Bold",
     color: "#2D5334",
@@ -52,8 +48,20 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flexDirection: "row",
+    gap: 10,
+  },
+  textContainer: {
+    width: "90%",
+    height: 80,
+    justifyContent: "center",
+  },
+  text: {
+    fontFamily: "OpenSans-Regular",
+    fontSize: 14,
+  },
+  containIcon: {
+    width: "10%",
     justifyContent: "center",
     alignItems: "center",
-    gap: 10,
   }
 });

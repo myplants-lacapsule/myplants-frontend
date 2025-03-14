@@ -178,7 +178,7 @@ export default function SearchScreen() {
       const idPerenual = dataPerenual.data[0].id;
       if (idPerenual >= 3000) {
         setInputResearch("");
-        Alert.alert("The plant you are looking for is not in our database", "Please try another");
+        Alert.alert("Pas dans la liste", "Please try another");
         return;
       }
 
