@@ -25,6 +25,7 @@ export default function CameraSearch({ takePicture, cameraRef, showCamera, setSh
   );
 }
 
+
 const styles = StyleSheet.create({
   camera: {
     flex: 1,
