@@ -32,6 +32,8 @@
       },
       "permissions": [
         "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"
       ]
     },
@@ -42,12 +44,15 @@
       "**/*"
     ],
     "extra": {
+      "eas": {
+        "projectId": "d36b4086-d7c2-4389-b9e7-459e9a6a7543"
+      }
     },
     "runtimeVersion": {
       "policy": "appVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/938d3677-d0fb-4c85-803f-ade3fe2a9a1a"
+      "url": "https://u.expo.dev/d36b4086-d7c2-4389-b9e7-459e9a6a7543"
     },
     "owner": "myplants"
   }
