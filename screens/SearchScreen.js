@@ -12,9 +12,6 @@ import SuggestionPlantCard from "../components/SuggestionPlantCard";
 import Facts from "../components/Facts";
 
 export default function SearchScreen() {
-  // Clés API pour la reconnaissance et la recherche de plantes
-  const perenualKey = "sk-Ilcc67d2fb1e16a919137";
-  const plantidKey = "tPXaERP2cR0qfAc6nhYvaOV8UNReBf79Rt8CsJXJAt0DTb97H6";
 
   const userInStore = useSelector((state) => state.user.value);
   const navigation = useNavigation();
@@ -105,7 +102,7 @@ export default function SearchScreen() {
   // Fonction pour identifier la plante en envoyant l'image à l'API de reconnaissance
   const identificationPlantId = async (cloudinaryUrl) => {
     var myHeaders = new Headers();
-    myHeaders.append("Api-Key", plantidKey);
+    myHeaders.append("Api-Key", process.env.EXPO_PUBLIC_PLANTID_KEY);
     myHeaders.append("Content-Type", "application/json");
 
     var raw = JSON.stringify({
@@ -121,7 +118,7 @@ export default function SearchScreen() {
     };
 
     try {
-      const response = await fetch("https://plant.id/api/v3/identification", requestOptions);
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}`, requestOptions);
       // console.log("reponse from identificaiton", response)
 
       if (!response.ok) {
@@ -151,7 +148,7 @@ export default function SearchScreen() {
   const idenficationDetailsPlant = async (plantName, cloudinaryUrl) => {
     try {
       setLoading(true);
-      const responsePerenual = await fetch(`https://perenual.com/api/v2/species-list?key=${perenualKey}&q=${plantName}`);
+      const responsePerenual = await fetch(`https://perenual.com/api/v2/species-list?key=${process.env.EXPO_PUBLIC_PERENUAL_KEY}&q=${plantName}`);
       // console.log("responsePerenual ", responsePerenual)
 
       if (!responsePerenual.ok) {
@@ -184,7 +181,7 @@ export default function SearchScreen() {
 
       // Récupération des détails de la plante
       if (idPerenual) {
-        const fetchPerenualDetails = await fetch(`https://perenual.com/api/v2/species/details/${idPerenual}?key=${perenualKey}`);
+        const fetchPerenualDetails = await fetch(`https://perenual.com/api/v2/species/details/${idPerenual}?key=${process.env.EXPO_PUBLIC_PERENUAL_KEY}`);
         if (!fetchPerenualDetails.ok) {
           throw new Error("Invalid data received from Perenual API");
         }
