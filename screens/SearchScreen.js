@@ -118,7 +118,7 @@ export default function SearchScreen() {
     };
 
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}`, requestOptions);
+      const response = await fetch(process.env.EXPO_PUBLIC_PLANTID_IDENTIFICATION_URL, requestOptions);
       // console.log("reponse from identificaiton", response)
 
       if (!response.ok) {
