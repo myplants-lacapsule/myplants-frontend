@@ -1,5 +1,5 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, StyleSheet, Text, View, ScrollView } from "react-native";
 
 import ReturnButton from "../components/ReturnButton";
 import Notifications from "../components/Notifications";
@@ -16,7 +16,7 @@ export default function NotificationScreen({ route }) {
   return (
     <SafeAreaView style={styles.container}>
       <ReturnButton title={"Notifications"} />
-      {notificationsUnwateredPlant ? <View style={styles.containerNotifications}>{notificationsUnwateredPlant}</View> : <Text style={styles.noNotificationsMessage}>No notifications.</Text>}
+      {notificationsUnwateredPlant ? <ScrollView style={styles.containerNotifications}>{notificationsUnwateredPlant}</ScrollView> : <Text style={styles.noNotificationsMessage}>No notifications.</Text>}
     </SafeAreaView>
   );
 }
@@ -30,8 +30,6 @@ const styles = StyleSheet.create({
   containerNotifications: {
     width: "100%",
     marginTop: 40,
-    alignItems: "center",
-    justifyContent: "center",
   },
   noNotificationsMessage: {
     color: "#2D5334",
